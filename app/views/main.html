@@ -1,0 +1,46 @@
+<div class="hero-unit">
+  <h1>Apps Script Library Box</h1>
+</div>
+<div class="row-fluid">
+  <div class="span12">
+    Search : <input type="text" ng-model="search.$">
+  </div>
+</div>
+<h1>Your Libraries</h1>
+<div class="row-fluid" ng-repeat="item in libraries | filter:search">
+  <div class="span12">
+    <div ng-show="!modify">
+      <h2 class="page-header">
+        {{item.label}}
+        <small><a href="{{item.sourceUrl}}" target="_blank">View Source</a></small>
+      </h2>
+      <p ng-show="item.desc">Description: {{item.desc}}</p>
+      <div class="well well-small">
+        <button class="btn btn-primary" ng-click="modify=!modify">Modify</button>
+        <button class="btn btn-danger" ng-disabled="delete" ng-click="delete = true;deleteLibrary(item)">Delete</button>
+      </div>
+    </div>
+    <div ng-show="modify">
+      <form class="form-horizontal" name="modifyLib" ng-init="modifyLibrary={label:item.label, desc:item.desc}">
+        <fieldset>
+          <legend>Change <strong>{{item.label}}</strong> Library description <br/><small><span class="label label-warning">Warning</span> This setting will be effect to only Library Box. It's not effect to Apps Script Project.</small></legend>
+          <div class="control-group">
+              <label class="control-label" for="label{{$index}}">Name</label>
+              <div class="controls">
+                <input id="label{{$index}}" name="label" ng-model="modifyLibrary.label" required>
+              </div>
+          </div>
+          <div class="control-group">
+              <label class="control-label" for="desc{{$index}}">Description</label>
+              <div class="controls">
+                <input id="label{{$index}}" name="desc" ng-model="modifyLibrary.desc">
+              </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" ng-click="modifyLibs(modifyLibrary, item); modify=false">Modify</button>
+            <button class="btn" ng-click="modify=!modify">Cancel</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+{
+  "name": "gas-library-searcher",
+  "version": "0.0.0",
+  "dependencies": {
+    "jquery": "~2.0.3",
+    "select2": "~3.4.1",
+    "jquery-ui": "~1.10.3",
+    "jquery-ui-bootstrap": "~0.2.5"
+  },
+  "devDependencies": {}
+}

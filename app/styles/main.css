@@ -1,0 +1,23 @@
+/* Will be compiled down to a single stylesheet with your sass files */
+
+@-webkit-keyframes showDependencyDialog {  
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+@-webkit-keyframes showProperteisBox {  
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+div.dependency-dialog input.gwt-TextBox.textbox {
+  -webkit-animation: showDependencyDialog 0.001s 1;
+}
+
+div.properties-box {
+  -webkit-animation: showProperteisBox 0.001s 1;
+}
+
+.ui-autocomplete {
+  z-index: 9999!important;
+}

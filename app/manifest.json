@@ -1,0 +1,57 @@
+{
+    "name": "__MSG_appName__",
+    "version": "0.0.1",
+    "manifest_version": 2,
+    "description": "__MSG_appDescription__",
+    "icons": {
+        "16": "images/icon-16.png",
+        "128": "images/icon-128.png"
+    },
+    "default_locale": "en",
+    "background": {
+        "scripts": [
+            "scripts/background.js"
+        ]
+    },
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "http://script.google.com/*",
+        "https://script.google.com/*"
+      ],
+      "css": [
+        "bower_components/jquery-ui/themes/base/jquery-ui.css",
+        "styles/main.css"
+      ],
+      "js": [
+        "bower_components/jquery/jquery.min.js",
+        "bower_components/jquery-ui/ui/jquery-ui.js",
+        "scripts/contentscript.js"
+      ],
+      "run_at": "document_end",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources" : [
+    "bower_components/jquery-ui/themes/base/images/animated-overlay.gif",
+    "bower_components/jquery-ui/themes/base/images/ui-bg_flat_0_aaaaaa_40x100.png",
+    "bower_components/jquery-ui/themes/base/images/ui-bg_flat_75_ffffff_40x100.png",
+    "bower_components/jquery-ui/themes/base/images/ui-bg_glass_55_fbf9ee_1x400.png",
+    "bower_components/jquery-ui/themes/base/images/ui-bg_glass_65_ffffff_1x400.png",
+    "bower_components/jquery-ui/themes/base/images/ui-bg_glass_75_dadada_1x400.png",
+    "bower_components/jquery-ui/themes/base/images/ui-bg_glass_75_e6e6e6_1x400.png",
+    "bower_components/jquery-ui/themes/base/images/ui-bg_glass_95_fef1ec_1x400.png",
+    "bower_components/jquery-ui/themes/base/images/ui-bg_highlight-soft_75_cccccc_1x100.png",
+    "bower_components/jquery-ui/themes/base/images/ui-icons_222222_256x240.png",
+    "bower_components/jquery-ui/themes/base/images/ui-icons_2e83ff_256x240.png",
+    "bower_components/jquery-ui/themes/base/images/ui-icons_454545_256x240.png",
+    "bower_components/jquery-ui/themes/base/images/ui-icons_888888_256x240.png",
+    "bower_components/jquery-ui/themes/base/images/ui-icons_cd0a0a_256x240.png"
+  ],
+  "permissions": [
+    "storage",
+    "http://script.google.com/*",
+    "https://script.google.com/*"
+  ]
+}

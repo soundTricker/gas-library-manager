@@ -1,0 +1,52 @@
+{
+  "appName": {
+    "message": "Apps Script Library Box",
+    "description": "The name of the application"
+  },
+  "appDescription": {
+    "message": "Google Apps Script Library Box.",
+    "description": "The description of the application"
+  },
+  "saveButton" : {
+    "message" : "Save to Library Box",
+    "description" : "Save button label"
+  },
+  "saved" : {
+    "message" : "Saved $name$ to Library Box",
+    "placeholders" : {
+      "name" : {
+        "content" : "$1",
+        "example": "script name"
+      }
+    }
+  },
+  "myLibraryList" : {
+    "message" : "Your Libraries"
+  },
+  "viewSource" : {
+    "message" : "View Source"
+  },
+  "description" : {
+    "message" : "Description"
+  },
+  "delete": {
+    "message" : "Delete"
+  },
+  "modify" : {
+    "message" : "Modify"
+  },
+  "modifyTitle" : {
+    "message" : "Change $name$ Library description<br/><small><span class=\"label label-warning\">Warning</span> This setting will be effect to only Library Box, It's not effect to Apps Script Project.</small>",
+    "placeholders" : {
+      "name": {
+        "content" : "$1"
+      }
+    }
+  },
+  "name" : {
+    "message" : "Name"
+  },
+  "cancel" : {
+    "message" : "Cancel"
+  }
+}
