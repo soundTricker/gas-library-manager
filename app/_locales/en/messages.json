@@ -33,7 +33,7 @@
     "message" : "Delete"
   },
   "modify" : {
-    "message" : "Modify"
+    "message" : "Modify description"
   },
   "modifyTitle" : {
     "message" : "Change $name$ Library description<br/><small><span class=\"label label-warning\">Warning</span> This setting will be effect to only Library Box, It's not effect to Apps Script Project.</small>",
@@ -48,5 +48,17 @@
   },
   "cancel" : {
     "message" : "Cancel"
+  },
+  "search" : {
+    "message" : "Search"
+  },
+  "registeredAt" : {
+    "message" : "Registered At"
+  },
+  "modifiedAt" : {
+    "message" : "Modified At"
+  },
+  "errorsRequired" : {
+    "message" : "Please input."
   }
 }

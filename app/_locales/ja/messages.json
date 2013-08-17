@@ -19,6 +19,38 @@
         "example": "script name"
       }
     }
+  },
+  "myLibraryList" : {
+    "message" : "ライブラリ一覧"
+  },
+  "viewSource" : {
+    "message" : "コードを見る"
+  },
+  "description" : {
+    "message" : "詳細"
+  },
+  "delete": {
+    "message" : "Library Boxから削除"
+  },
+  "modify" : {
+    "message" : "詳細を修正"
+  },
+  "modifyTitle" : {
+    "message" : "ライブラリ詳細修正<br/><small><span class=\"label label-warning\">注意</span> ここでの修正はLibrary Box内でのみ有効です。 GASプロジェクトには修正が反映されません。</small>"
+  },
+  "name" : {
+    "message" : "ライブラリ名"
+  },
+  "cancel" : {
+    "message" : "キャンセル"
+  },
+  "registeredAt" : {
+    "message" : "登録日"
+  },
+  "modifiedAt" : {
+    "message" : "修正日"
+  },
+  "errorsRequired" : {
+    "message" : "入力してください"
   }
-
 }

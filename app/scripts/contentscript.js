@@ -14,9 +14,19 @@
         "sourceUrl": location.href
       };
       return chrome.storage.sync.get("libraries", function(res) {
-        var libraries;
+        var libraries, origin;
         libraries = (res != null ? res.libraries : void 0) || {};
-        libraries[item.key] = item;
+        if (libraries[item.key]) {
+          origin = libraries[item.key];
+          origin.label = item.label;
+          origin.desc = item.desc;
+          origin.modifiedAt = new Date().getTime();
+          libraries[item.key] = origin;
+        } else {
+          item.registeredAt = new Date().getTime();
+          item.modifiedAt = item.registeredAt;
+          libraries[item.key] = item;
+        }
         return chrome.storage.sync.set({
           "libraries": libraries
         }, function() {

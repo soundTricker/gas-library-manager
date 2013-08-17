@@ -18,6 +18,7 @@ module.exports = (grunt) ->
   
   # configurable paths
   yeomanConfig =
+    src: "src/main"
     app: "app"
     dist: "dist"
 
@@ -28,7 +29,7 @@ module.exports = (grunt) ->
         spawn: false
 
       coffee:
-        files: ["<%= yeoman.app %>/scripts/{,*/}*.coffee"]
+        files: ["<%= yeoman.src %>/coffee/{,*/}*.coffee"]
         tasks: ["coffee:dist"]
 
       coffeeTest:
@@ -75,7 +76,7 @@ module.exports = (grunt) ->
       dist:
         files: [
           expand: true
-          cwd: "<%= yeoman.app %>/scripts"
+          cwd: "<%= yeoman.src %>/coffee"
           src: "{,*/}*.coffee"
           dest: "<%= yeoman.app %>/scripts"
           ext: ".js"

@@ -1,11 +1,17 @@
 {
-  "name": "gas-library-searcher",
+  "name": "LibraryBox",
   "version": "0.0.0",
   "dependencies": {
     "jquery": "~2.0.3",
-    "select2": "~3.4.1",
     "jquery-ui": "~1.10.3",
-    "jquery-ui-bootstrap": "~0.2.5"
+    "jquery-ui-bootstrap": "~0.2.5",
+    "angular": "~1.0.7",
+    "angular-ui": "~0.4.0",
+    "angular-ui-bootstrap-bower": "~0.5.0",
+    "angular-sanitize": "~1.0.7",
+    "angular-resource": "~1.0.7",
+    "bootstrap": "2.3.2",
+    "font-awesome": "~3.2.1"
   },
   "devDependencies": {}
 }

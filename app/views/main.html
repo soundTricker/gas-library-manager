@@ -1,46 +1,65 @@
 <div class="hero-unit">
-  <h1>Apps Script Library Box</h1>
+  <h1>{{i18n("appName")}}</h1>
+  <p>{{i18n("appDescription")}}</p>
 </div>
+<h1 class="page-header">{{i18n("myLibraryList")}}</h1>
 <div class="row-fluid">
   <div class="span12">
-    Search : <input type="text" ng-model="search.$">
+    {{i18n("search")}} : <input type="text" ng-model="search.$">
   </div>
 </div>
-<h1>Your Libraries</h1>
-<div class="row-fluid" ng-repeat="item in libraries | filter:search">
+<div class="row-fluid" ng-repeat="item in libraries | filter:search" ng-controller="PrivateLibraryCtrl">
   <div class="span12">
-    <div ng-show="!modify">
+    <div>
       <h2 class="page-header">
         {{item.label}}
-        <small><a href="{{item.sourceUrl}}" target="_blank">View Source</a></small>
       </h2>
-      <p ng-show="item.desc">Description: {{item.desc}}</p>
-      <div class="well well-small">
-        <button class="btn btn-primary" ng-click="modify=!modify">Modify</button>
-        <button class="btn btn-danger" ng-disabled="delete" ng-click="delete = true;deleteLibrary(item)">Delete</button>
+      <div ng-show="!modify">
+        <dl class="dl-horizontal">
+          <dt ng-show="item.registeredAt">{{i18n("registeredAt")}}</dt>
+          <dd ng-show="item.registeredAt">{{item.registeredAt | date}}</dd>
+          <dt ng-show="item.modifiedAt">{{i18n("modifiedAt")}}</dt>
+          <dd ng-show="item.modifiedAt">{{item.modifiedAt | date}}</dd>
+          <dt ng-show="item.desc">{{i18n("description")}}</dt>
+          <dd ng-show="item.desc" ng-bind-html="item.desc | escape | break2br"></dd>
+        </dl>
+        <hr/>
+        <div class="">
+          <div class="btn-group">
+            <a class="btn btn-link" href="{{item.sourceUrl}}" target="_blank"><i class="icon-external-link"></i> {{i18n("viewSource")}}</a>
+            <button class="btn btn-link" ng-click="modify=!modify"> 
+              <i class="icon-wrench"></i> {{i18n("modify")}}
+            </button>
+            <button class="btn btn-link" ng-disabled="delete" ng-click="delete = true;deleteLibrary(item)">
+              <i class="icon-remove-sign"></i> {{i18n("delete")}}
+            </button>
+          </div>
+        </div>
+        <hr/>
       </div>
-    </div>
     <div ng-show="modify">
-      <form class="form-horizontal" name="modifyLib" ng-init="modifyLibrary={label:item.label, desc:item.desc}">
+      <form class="form-horizontal" name="modifyLib" ng-init="label=item.label; desc=item.desc;">
         <fieldset>
-          <legend>Change <strong>{{item.label}}</strong> Library description <br/><small><span class="label label-warning">Warning</span> This setting will be effect to only Library Box. It's not effect to Apps Script Project.</small></legend>
-          <div class="control-group">
-              <label class="control-label" for="label{{$index}}">Name</label>
+          <legend ng-bind-html="i18n('modifyTitle')"></legend>
+          <div class="control-group" ng-class="{error : !modifyLib.label.$valid}">
+              <label class="control-label" for="label{{$index}}">{{i18n("name")}}</label>
               <div class="controls">
-                <input id="label{{$index}}" name="label" ng-model="modifyLibrary.label" required>
+                <input type="text" id="label{{$index}}" class="span12" name="label" ng-model="label" required>
+                <span class="help-inline" ng-show="modifyLib.label.$error.required">{{i18n("errorsRequired")}}</span>
               </div>
           </div>
           <div class="control-group">
-              <label class="control-label" for="desc{{$index}}">Description</label>
+              <label class="control-label" for="desc{{$index}}">{{i18n("description")}}</label>
               <div class="controls">
-                <input id="label{{$index}}" name="desc" ng-model="modifyLibrary.desc">
+                <textarea class="span12" rows="5" id="desc{{$index}}" name="desc" ng-model="desc"></textarea>
               </div>
           </div>
           <div class="form-actions">
-            <button class="btn btn-primary" ng-click="modifyLibs(modifyLibrary, item); modify=false">Modify</button>
-            <button class="btn" ng-click="modify=!modify">Cancel</button>
+            <button class="btn btn-primary" ng-disabled="!modifyLib.$valid" ng-click="modifyLibs()">{{i18n("modify")}}</button>
+            <button class="btn" ng-click="modify=!modify">{{i18n("cancel")}}</button>
           </div>
         </fieldset>
       </form>
+    </div>
     </div>
 </div>
