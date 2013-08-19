@@ -1,4 +1,4 @@
-#jshint camelcase: false
+melcase: false
 
 # Generated on 2013-08-05 using generator-chrome-extension 0.2.3
 "use strict"
@@ -60,12 +60,6 @@ module.exports = (grunt) ->
         ]
 
       server: ".tmp"
-
-    jshint:
-      options:
-        jshintrc: ".jshintrc"
-
-      all: ["Gruntfile.js", "<%= yeoman.app %>/scripts/{,*/}*.js", "test/spec/{,*/}*.js"]
 
     jasmine:
       all:
@@ -223,4 +217,4 @@ module.exports = (grunt) ->
 
   grunt.registerTask "test", ["clean:server", "concurrent:test", "connect:test", "jasmine"]
   grunt.registerTask "build", ["clean:dist", "chromeManifest:dist", "useminPrepare", "concurrent:dist", "cssmin", "concat", "uglify", "copy", "usemin", "compress"]
-  grunt.registerTask "default", ["jshint", "test", "build"]
+  grunt.registerTask "default", ["test", "build"]
