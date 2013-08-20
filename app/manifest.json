@@ -14,6 +14,7 @@
         ]
     },
   "options_page": "options.html",
+
   "content_scripts": [
     {
       "matches": [
@@ -49,9 +50,19 @@
     "bower_components/jquery-ui/themes/base/images/ui-icons_888888_256x240.png",
     "bower_components/jquery-ui/themes/base/images/ui-icons_cd0a0a_256x240.png"
   ],
+  "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
   "permissions": [
     "storage",
     "http://script.google.com/*",
     "https://script.google.com/*"
-  ]
+  ],
+  "oauth2": {
+    "client_id": "664413555370.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/plus.login", 
+      "https://www.googleapis.com/auth/plus.me",
+      "https://www.googleapis.com/auth/userinfo.email", 
+      "https://www.googleapis.com/auth/userinfo.profile"
+    ]
+  }
 }
