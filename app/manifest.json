@@ -1,20 +1,19 @@
 {
-    "name": "__MSG_appName__",
-    "version": "0.0.1",
-    "manifest_version": 2,
-    "description": "__MSG_appDescription__",
-    "icons": {
-        "16": "images/icon-16.png",
-        "128": "images/icon-128.png"
-    },
-    "default_locale": "en",
-    "background": {
-        "scripts": [
-            "scripts/background.js"
-        ]
-    },
+  "name": "__MSG_appName__",
+  "version": "0.0.5",
+  "manifest_version": 2,
+  "description": "__MSG_appDescription__",
+  "icons": {
+    "16": "images/icon-16.png",
+    "128": "images/icon-128.png"
+  },
+  "default_locale": "en",
+  "background": {
+    "scripts": [
+      "scripts/background.js"
+    ]
+  },
   "options_page": "options.html",
-
   "content_scripts": [
     {
       "matches": [
@@ -34,7 +33,7 @@
       "all_frames": false
     }
   ],
-  "web_accessible_resources" : [
+  "web_accessible_resources": [
     "bower_components/jquery-ui/themes/base/images/animated-overlay.gif",
     "bower_components/jquery-ui/themes/base/images/ui-bg_flat_0_aaaaaa_40x100.png",
     "bower_components/jquery-ui/themes/base/images/ui-bg_flat_75_ffffff_40x100.png",
@@ -48,20 +47,26 @@
     "bower_components/jquery-ui/themes/base/images/ui-icons_2e83ff_256x240.png",
     "bower_components/jquery-ui/themes/base/images/ui-icons_454545_256x240.png",
     "bower_components/jquery-ui/themes/base/images/ui-icons_888888_256x240.png",
-    "bower_components/jquery-ui/themes/base/images/ui-icons_cd0a0a_256x240.png"
+    "bower_components/jquery-ui/themes/base/images/ui-icons_cd0a0a_256x240.png",
+    "bridge.html",
+    "scripts/bridge.js",
+    "views/main.html",
+    "views/register.html"
   ],
   "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
   "permissions": [
+    "identity",
     "storage",
     "http://script.google.com/*",
-    "https://script.google.com/*"
+    "https://script.google.com/*",
+    "https://apis.google.com/*"
   ],
   "oauth2": {
-    "client_id": "664413555370.apps.googleusercontent.com",
+    "client_id": "664413555370-u5kilhggebn43esh6bkrcs5rb9q6571v.apps.googleusercontent.com",
     "scopes": [
-      "https://www.googleapis.com/auth/plus.login", 
+      "https://www.googleapis.com/auth/plus.login",
       "https://www.googleapis.com/auth/plus.me",
-      "https://www.googleapis.com/auth/userinfo.email", 
+      "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/userinfo.profile"
     ]
   }
