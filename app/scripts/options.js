@@ -6,7 +6,7 @@
     return window.gapiIsLoaded();
   };
 
-  angular.module('LibraryBoxApp', ['ngSanitize', 'cgNotify']).config([
+  angular.module('LibraryBoxApp', ['ngSanitize', 'cgNotify', 'ui.bootstrap', 'ui.directives', 'markdown']).config([
     "$routeProvider", function($routeProvider) {
       return $routeProvider.when('/', {
         templateUrl: 'views/main.html',

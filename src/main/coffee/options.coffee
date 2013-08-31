@@ -2,7 +2,7 @@
 
 @gapiIsLoaded = ()-> window.gapiIsLoaded()
 
-angular.module('LibraryBoxApp', ['ngSanitize','cgNotify'])
+angular.module('LibraryBoxApp', ['ngSanitize','cgNotify','ui.bootstrap', 'ui.directives', 'markdown'])
   .config(["$routeProvider", ($routeProvider) ->
     $routeProvider
       .when '/',

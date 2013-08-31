@@ -27,7 +27,7 @@
     "message" : "View Source"
   },
   "description" : {
-    "message" : "Description"
+    "message" : "Short Description"
   },
   "delete": {
     "message" : "Delete"

@@ -1,7 +1,7 @@
 'use strict'
 
 libraryBoxApp = angular.module('LibraryBoxApp')
-libraryBoxApp.controller 'MainCtrl', ($scope) ->
+libraryBoxApp.controller 'MainCtrl',["$scope" ,($scope) ->
   chrome.storage.onChanged.addListener (changes, areaName)->
     return if areaName != "sync"
 
@@ -11,7 +11,7 @@ libraryBoxApp.controller 'MainCtrl', ($scope) ->
   chrome.storage.sync.get "libraries" , (res)->
     $scope.libraries = (item for key, item of (res?.libraries || {}) when item.key)
     $scope.$apply()
-
+]
 
 libraryBoxApp.controller 'PrivateLibraryCtrl',["$scope", "$window", ($scope,$window)->
     $scope.modify = false
@@ -31,6 +31,7 @@ libraryBoxApp.controller 'PrivateLibraryCtrl',["$scope", "$window", ($scope,$win
     $scope.modifyLibs = ()->
       $scope.item.label = $scope.label
       $scope.item.desc = $scope.desc
+      $scope.item.longDesc = $scope.longDesc
       $scope.item.modifiedAt = new Date().getTime()
       chrome.storage.sync.get "libraries" , (res)->
         libraries = res?.libraries || {}

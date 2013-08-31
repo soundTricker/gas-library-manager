@@ -27,7 +27,7 @@
     "message" : "コードを見る"
   },
   "description" : {
-    "message" : "詳細"
+    "message" : "説明"
   },
   "delete": {
     "message" : "Library Boxから削除"
