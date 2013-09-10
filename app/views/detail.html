@@ -1,0 +1,215 @@
+<div class="pull-right">
+  <a href="#/{{activeMenu}}">Back to list</a>
+</div>
+<div class="row-fluid">
+  <div class="span3">
+    <div ui-scrollfix="-50">
+      <ul class="nav nav-list well well-small" style="width:268px;">
+        <li class="nav-header">List</li>
+        <li>
+          <input accesskey="f" type="search" class="search-query" ng-model="search.$" placeholder="{{i18n('search')}}">
+        </li>
+        <li class="divider"></li>
+        <li ng-if="(libraries | filter:search).length === 0" class="muted">There is no library.</li>
+        <li ng-repeat="item in libraries | filter:search track by $index" ng-controller="PrivateLibraryCtrl">
+          <a href="#/{{activeMenu}}/{{item.key}}" scroll-easing="easeInOutBack" scroll-duration="slow" scroll-offset="-30">{{item.label}}</a>
+        </li>
+      </ul>
+    </div><!-- /scrollfix -->
+  </div><!-- /left side bar-->
+  <div class="span9 library-list" ng-controller="PrivateLibraryCtrl" ng-init="item = library; modify=false">
+    <h1 class="page-header">{{item.label}}</h1>
+    <div ng-show="!modify">
+      <div class="pull-right">
+        <div class="pull-right" ng-switch="activeMenu">
+          <div class="well well-small" ng-switch-when="mine">
+            <h5>Author</h5>
+            <div class="media">
+              <a ng-href="{{loginUser.url}}" target="_blank" class="pull-left">
+                <img src="" alt="" class="media-object" ng-src="{{loginUser.userIconUrl}}">
+              </a>
+              <div class="media-body">
+                <h6 class="media-heading">
+                  <a ng-show="loginUser" ng-href="{{loginUser.url}}" target="_blank">{{loginUser.nickname}}</a>
+                  <span ng-hide="loginUser">you</span>
+                </h6>
+              </div>
+            </div>
+            <div>{{i18n("registeredAt")}} : {{item.registeredAt | date}}</div>
+            <div>{{i18n("modifiedAt")}} : {{item.modifiedAt | date}}</div>
+          </div>
+        </div>
+      </div> <!-- right dates -->
+      <h5>{{i18n("description")}}</h5>
+      <div ng-show="item.desc" ng-bind-html="library.desc | escape | break2br">
+      </div>
+      <div ng-hide="item.desc" class="clearfix">
+        (No description)
+      </div>
+      <h5>{{i18n("longDescription")}}</h5>
+      <div ng-show="item.longDesc" ng-bind-html="library.longDesc | markdown">
+      </div>
+      <hr/>
+      <div class="btn-group">
+        <a class="btn btn-link" href="{{item.sourceUrl}}" target="_blank"><i class="icon-external-link"></i> {{i18n("viewSource")}}</a>
+        <button class="btn btn-link" ng-click="modify = !modify"> 
+          <i class="icon-wrench"></i> {{i18n("modify")}}
+        </button>
+        <button class="btn btn-link" ng-disabled="delete" ng-click="delete = true;deleteLibrary(item)">
+          <i class="icon-remove-sign"></i> {{i18n("delete")}}
+        </button>
+        <span ng-show="loggedin" ng-controller="PublishCtrl">
+          <button ng-show="!item.published" class="btn btn-link" ng-click="openDialog=true">
+            <i class="icon-share"></i> {{i18n("publish")}}
+          </button>
+          <div modal="openDialog" close="openDialog=false" options="opts">
+              <div class="modal-header">
+                <h3>Publish library to GAS Library Box Sites</h3>
+              </div>
+              <div class="modal-body">
+                <p>Your library will be published to GAS Library Box Sites with your profile, user icon, nickname and Google+ Profile URL. If you want to change library descriptions, please close this dialog and click <code>{{i18n('modify')}}</code> button.
+                </p>
+                <h4>Library Infomation</h4>
+                <p>
+                  <dl>
+                    <dt>{{i18n('name')}}</dt>
+                    <dd>{{item.label}}</dd>
+                    <dt>{{i18n('description')}}</dt>
+                    <dd>{{item.desc}}</dd>
+                    <dt>{{i18n('longDescription')}}</dt>
+                    <dd>
+                      <div ng-bind-html="item.longDesc | markdown">
+                      </div>
+                    </dd>
+                  </dl>
+                </p>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn btn-info" ng-click="publish()">
+                    <i class="icon-share"></i> {{i18n("publish")}}
+                  </button>
+                  <button class="btn btn-warning cancel" ng-click="openDialog=false">
+                    {{i18n("cancel")}}
+                  </button>
+              </div>
+          </div>
+        </span>
+        <span ng-show="loggedin" ng-controller="PublishCtrl">
+          <button ng-show="item.published" class="btn btn-link" ng-click="openModifyDialog=true">
+            <i class="icon-share"></i> {{i18n("updatePublished")}}
+          </button>
+          <div modal="openModifyDialog" close="openModifyDialog=false" options="opts">
+              <div class="modal-header">
+                <h3>Update published library on GAS Library Box Sites</h3>
+              </div>
+              <div class="modal-body">
+                <p>
+                  If you want to change library descriptions, please close this dialog and click <code>"{{i18n('modify')}}"</code> button.
+                </p>
+                <h4>Library Infomation</h4>
+                <p>
+                  <dl>
+                    <dt>{{i18n('name')}}</dt>
+                    <dd>{{item.label}}</dd>
+                    <dt>{{i18n('description')}}</dt>
+                    <dd>{{item.desc}}</dd>
+                    <dt>{{i18n('longDescription')}}</dt>
+                    <dd>
+                      <div ng-bind-html="item.longDesc | markdown">
+                      </div>
+                    </dd>
+                  </dl>
+                </p>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn btn-info" ng-click="update()">
+                    <i class="icon-share"></i> {{i18n("publish")}}
+                  </button>
+                  <button class="btn btn-warning cancel" ng-click="openModifyDialog=false">
+                    {{i18n("cancel")}}
+                  </button>
+              </div>
+          </div>
+        </span>
+        <span ng-show="loggedin" ng-controller="PublishCtrl">
+          <button ng-show="item.published" class="btn btn-link" ng-click="openDeleteDialog=true">
+            <i class="icon-share"></i> {{i18n("deletePublished")}}
+          </button>
+          <div modal="openDeleteDialog" close="openDeleteDialog=false" options="opts">
+              <div class="modal-header">
+                <h3>Delete published library from GAS Library Box Sites</h3>
+              </div>
+              <div class="modal-body">
+                <h4>Library Infomation</h4>
+                <p>
+                  <dl>
+                    <dt>{{i18n('name')}}</dt>
+                    <dd>{{item.label}}</dd>
+                    <dt>{{i18n('description')}}</dt>
+                    <dd>{{item.desc}}</dd>
+                    <dt>{{i18n('longDescription')}}</dt>
+                    <dd>
+                      <div ng-bind-html="item.longDesc | markdown">
+                      </div>
+                    </dd>
+                  </dl>
+                </p>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn btn-info" ng-click="delete()">
+                    <i class="icon-share"></i> {{i18n("delete")}}
+                  </button>
+                  <button class="btn btn-warning cancel" ng-click="openDeleteDialog=false">
+                    {{i18n("cancel")}}
+                  </button>
+              </div>
+          </div>
+        </span>
+      </div>
+      <hr/>
+    </div><!--detail-->
+    <div ng-show="modify">
+      <form name="modifyLib" ng-init="label=item.label; desc=item.desc; longDesc=item.longDesc;">
+        <fieldset>
+          <legend ng-bind-html="i18n('modifyTitle')"></legend>
+          <div class="control-group" ng-class="{error : !modifyLib.label.$valid}">
+              <label class="control-label" for="label{{$index}}">{{i18n("name")}}</label>
+              <div class="controls">
+                <input type="text" placeholder="Write library name" ng-maxlength="100" maxlength="100" id="label{{$index}}" class="span12" name="label" ng-model="label" required>
+                <span class="help-inline" ng-show="modifyLib.label.$error.required">{{i18n("errorsRequired")}}</span>
+              </div>
+          </div>
+          <div class="control-group" ng-class="{error : !modifyLib.desc.$valid}">
+              <label class="control-label" for="desc{{$index}}">{{i18n("description")}}</label>
+              <div class="controls">
+                <input type="text" class="span12"  placeholder="Write this library short description, it's shown in script editor." ng-maxlength="80" maxlength="80" id="desc{{$index}}" name="desc" ng-model="desc">
+              </div>
+          </div>
+          <div class="control-group" ng-class="{error : !modifyLib.longDesc.$valid}">
+              <div class="row-fluid">
+                <div class="span6">
+                  <label class="control-label" for="longDesc{{$index}}">{{i18n("description")}}</label>
+                </div>
+                <div class="span6">
+                  <label class="control-label" for="longDesc{{$index}}">Preview</label>
+                </div>
+              <div class="controls">
+                <span class="help-inline">You can write this as markdwon format.</span>
+                <div class="row-fluid">
+                  <div class="span6">
+                    <textarea class="span12" rows="5" id="longDesc{{$index}}" name="longDesc" ng-model="longDesc" ng-maxlength="2000"></textarea>
+                  </div>
+                  <div class="span6" ng-bind-html="longDesc | markdown"></div>
+                </div>
+
+              </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" ng-disabled="!modifyLib.$valid" ng-click="modifyLibs()">{{i18n("modify")}}</button>
+            <button class="btn" ng-click="modify=!modify">{{i18n("cancel")}}</button>
+          </div>
+        </fieldset>
+      </form>
+    </div><!--modify div-->
+  </div><!-- /right-->
+</div>

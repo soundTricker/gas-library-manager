@@ -3,7 +3,6 @@
   angular.module('LibraryBoxApp').controller('optionPageCtrl', [
     '$scope', '$rootScope', '$window', '$q', 'notify', '$location', (function($scope, $rootScope, $window, $q, notify, $location) {
       $rootScope.$on("loggedin", function(e, info) {
-        console.log(info);
         info.userIconUrl = info.userIconUrl || "";
         $scope.loginStatus = "loggedin";
         $scope.userIconUrl = info.userIconUrl.replace(/\?sz=\d+/, "?sz=30");
@@ -52,10 +51,8 @@
                   });
                   $scope.loginStatus = "givenRegister";
                 } else {
-                  $rootScope.$broadcast("loggedin", {
-                    userIconUrl: result.userIconUrl,
-                    nickname: result.nickname
-                  });
+                  $rootScope.loginUser = result;
+                  $rootScope.$broadcast("loggedin", result);
                 }
                 $rootScope.loggedin = result.code !== 404;
                 $rootScope.gapiLoaded = true;

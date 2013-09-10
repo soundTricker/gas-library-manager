@@ -11,7 +11,6 @@
   angular.module('markdown', ['markdown.config']).service('$markdown', [
     'markdown.config', Markdown = (function() {
       function Markdown(config) {
-        console.log(config);
         marked.setOptions(config);
       }
 

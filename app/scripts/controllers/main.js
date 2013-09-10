@@ -5,41 +5,25 @@
   libraryBoxApp = angular.module('LibraryBoxApp');
 
   libraryBoxApp.controller('MainCtrl', [
-    "$scope", function($scope) {
-      chrome.storage.onChanged.addListener(function(changes, areaName) {
-        var item, key;
-        if (areaName !== "sync") {
-          return;
-        }
-        $scope.libraries = (function() {
-          var _ref, _ref1, _results;
-          _ref1 = (changes != null ? (_ref = changes.libraries) != null ? _ref.newValue : void 0 : void 0) || {};
-          _results = [];
-          for (key in _ref1) {
-            item = _ref1[key];
-            if (item.key) {
-              _results.push(item);
-            }
-          }
-          return _results;
-        })();
-        return $scope.$apply();
+    "$scope", '$rootScope', '$filter', function($scope, $rootScope, $filter) {
+      var filter;
+      $rootScope.activeMenu = "mine";
+      $scope.currentPage = 1;
+      $scope.maxSize = 3;
+      $scope.entryLimit = 20;
+      filter = function() {
+        return $filter('limitTo')($filter('startFrom')($filter('filter')($rootScope.libraries, $scope.search), ($scope.currentPage - 1) * $scope.entryLimit), $scope.entryLimit);
+      };
+      $scope.filtered = filter();
+      $scope.$watch("search.$", function() {
+        return $scope.filtered = filter();
       });
-      return chrome.storage.sync.get("libraries", function(res) {
-        var item, key;
-        $scope.libraries = (function() {
-          var _ref, _results;
-          _ref = (res != null ? res.libraries : void 0) || {};
-          _results = [];
-          for (key in _ref) {
-            item = _ref[key];
-            if (item.key) {
-              _results.push(item);
-            }
-          }
-          return _results;
-        })();
-        return $scope.$apply();
+      $scope.noOfPages = Math.ceil($rootScope.libraries.length / $scope.entryLimit);
+      $scope.setPage = function(pageNo) {
+        return $scope.currentPage = pageNo;
+      };
+      return $scope.$watch('filtered', function() {
+        return $scope.noOfPages = Math.ceil($scope.filtered.length / $scope.entryLimit);
       });
     }
   ]);

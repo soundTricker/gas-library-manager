@@ -29,6 +29,9 @@
   "description" : {
     "message" : "説明"
   },
+  "longDescription" : {
+    "message" : "詳細"
+  },
   "delete": {
     "message" : "Library Boxから削除"
   },
@@ -52,5 +55,16 @@
   },
   "errorsRequired" : {
     "message" : "入力してください"
+  },
+  "publish" : {
+    "message" : "Libraryを公開"
+  },
+  "updatePublished" : {
+    "message" : "公開されたLibraryを修正"
+  },
+  "deletePublished" : {
+    "message" : "公開されたLibraryを削除"
   }
+
+
 }

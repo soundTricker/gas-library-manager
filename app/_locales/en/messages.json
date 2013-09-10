@@ -29,6 +29,9 @@
   "description" : {
     "message" : "Short Description"
   },
+  "longDescription" : {
+    "message" : "Long Description"
+  },
   "delete": {
     "message" : "Delete"
   },
@@ -60,5 +63,16 @@
   },
   "errorsRequired" : {
     "message" : "Please input."
+  },
+  "publish" : {
+    "message" : "Publish as Global Library"
+  },
+  "updatePublished" : {
+    "message" : "Update Published library"
+  },
+  "deletePublished" : {
+    "message" : "Delete Published library"
   }
+
+
 }

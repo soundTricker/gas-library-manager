@@ -3,7 +3,7 @@
 angular.module('markdown')
   .filter 'markdown', ['$markdown', ($markdown) ->
     (input) ->
-      console.log $markdown
+      return input if !input
       $markdown.marked input
 
   ]

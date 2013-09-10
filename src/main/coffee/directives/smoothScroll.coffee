@@ -51,6 +51,12 @@ angular.module('LibraryBoxApp')
     link: (scope, element, attrs) ->
       target = attrs.smoothScroll or $window
       element.bind 'click', ()->
-        console.log "hoge"
+        $this = angular.element(element)
+        target = $this.attr("smooth-scroll") || $window
+        attrs = 
+          scrollDuration : $this.attr "scroll-duration"
+          scrollEasing : $this.attr "scroll-easing"
+          scrollOffset : $this.attr "scroll-offset"
+
         new SmoothScroll().to target, attrs.scrollDuration, attrs.scrollEasing, null , null, parseInt attrs.scrollOffset || "0"
   ]

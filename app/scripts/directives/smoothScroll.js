@@ -77,7 +77,14 @@
           var target;
           target = attrs.smoothScroll || $window;
           return element.bind('click', function() {
-            console.log("hoge");
+            var $this;
+            $this = angular.element(element);
+            target = $this.attr("smooth-scroll") || $window;
+            attrs = {
+              scrollDuration: $this.attr("scroll-duration"),
+              scrollEasing: $this.attr("scroll-easing"),
+              scrollOffset: $this.attr("scroll-offset")
+            };
             return new SmoothScroll().to(target, attrs.scrollDuration, attrs.scrollEasing, null, null, parseInt(attrs.scrollOffset || "0"));
           });
         }
