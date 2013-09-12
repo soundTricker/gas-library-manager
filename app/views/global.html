@@ -5,7 +5,12 @@
       <ul class="nav nav-list well well-small" style="width:268px;">
         <li class="nav-header">List</li>
         <li>
-          <input accesskey="f" type="search" class="search-query" ng-model="search.$" placeholder="{{i18n('search')}}">
+          <form class="form-search">
+            <div class="input-append">
+              <input accesskey="f" class="search-query" type="search" ng-model="search.$" placeholder="{{i18n('search')}}">
+              <button class="btn" ng-click="query()"><i class="icon-search"></i></button>
+            </div>
+          </form>
         </li>
         <li class="divider"></li>
         <li ng-if="filtered.length === 0" class="muted">There is no library.</li>

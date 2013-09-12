@@ -3,6 +3,7 @@
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- build:css({.tmp,app}) css/app.css -->
       <link href="bower_components/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet">
       <link href="bower_components/bootstrap/docs/assets/css/bootstrap-responsive.css" res="stylesheet">
       <link rel="stylesheet" href="bower_components/angular-ui/build/angular-ui.min.css">
@@ -10,6 +11,8 @@
       <link rel="stylesheet" href="styles/angular-notify.min.css">
       <link href="styles/main.css" rel="stylesheet">
       <link href="styles/options.css" rel="stylesheet">
+      <!-- endbuild -->
+
       <title>{{i18n('appName')}}</title>
     </head>
     <body ng-controller="optionPageCtrl">
@@ -77,6 +80,7 @@
       <script src="scripts/controllers/detail.js"></script>
       <script src="scripts/controllers/publish.js"></script>
       <script src="scripts/controllers/global.js"></script>
+      <script src="scripts/controllers/loading.js"></script>
 
       <!-- directives -->
       <script src="scripts/directives/smoothScroll.js"></script>

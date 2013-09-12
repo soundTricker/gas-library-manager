@@ -1,14 +1,15 @@
 'use strict'
 
 angular.module('LibraryBoxApp')
-  .controller 'GlobalCtrl', ['$scope','$rootScope','$filter','libraries', ($scope, $rootScope, $filter, libraries) ->
-    console.log "hoge"
+  .controller 'GlobalCtrl', ['$scope','$rootScope','$route','$filter','$location','libraries', ($scope, $rootScope,$route, $filter,$location, libraries) ->
     console.log libraries
     $rootScope.activeMenu = "global"
 
     $scope.currentPage = 1 #current page
     $scope.maxSize = 3 #pagination max size
     $scope.entryLimit = 20 #max rows for data table
+
+    $scope.search = $ : $route.current.params.q
 
     filter = ()->
       $filter('limitTo')(
@@ -31,4 +32,8 @@ angular.module('LibraryBoxApp')
         $scope.currentPage = pageNo
     $scope.$watch 'filtered' , ()->
         $scope.noOfPages = Math.ceil $scope.filtered.length / $scope.entryLimit
+
+    $scope.query = ()->
+      location.hash = "#/global?q=#{$scope.search.$}" 
+
   ]

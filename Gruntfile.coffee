@@ -181,7 +181,13 @@ module.exports = (grunt) ->
           dot: true
           cwd: "<%= yeoman.app %>"
           dest: "<%= yeoman.dist %>"
-          src: ["*.{ico,png,txt}", "images/{,*/}*.{webp,gif}", "_locales/{,*/}*.json"]
+          src: ["*.{ico,png,txt}","views/{,*/}*.html","app/bower_components/jquery-ui/themes/base/images/*", "images/{,*/}*.{webp,gif}", "_locales/{,*/}*.json"]
+        ,
+          expand: true
+          flatten: true
+          cwd: "<%= yeoman.app %>"
+          dest: "<%= yeoman.dist %>/font"
+          src: ["bower_components/font-awesome/font/*"]
         ,
           expand: true
           cwd: ".tmp/images"
@@ -206,7 +212,7 @@ module.exports = (grunt) ->
     compress:
       dist:
         options:
-          archive: "package/gas library searcher.zip"
+          archive: "package/gas-library-box.zip"
 
         files: [
           expand: true

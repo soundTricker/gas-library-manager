@@ -41,8 +41,17 @@
         controller: 'GlobalCtrl',
         resolve: {
           'libraries': [
-            '$route', '$rootScope', '$q', function($route, $rootScope, $q) {
+            '$route', '$rootScope', '$q', 'notify', function($route, $rootScope, $q, notify) {
               var d, list, search;
+              notify({
+                message: "Now on loading...",
+                template: "views/loadingNotify.html",
+                scope: {
+                  title: "Got error",
+                  type: "alert-error",
+                  hideEvent: "hide"
+                }
+              });
               d = $q.defer();
               search = function() {
                 var param;
@@ -77,11 +86,13 @@
                 }
                 return list();
               }
-              $rootScope.$on("gapiLoaded", function() {});
-              if ($route.current.params.q) {
-                return search();
-              }
-              return list();
+              $rootScope.$on("gapiLoaded", function() {
+                if ($route.current.params.q) {
+                  return search();
+                }
+                return list();
+              });
+              return d.promise;
             }
           ]
         }

@@ -29,8 +29,15 @@ angular.module('LibraryBoxApp', ['ngSanitize','cgNotify','ui.bootstrap', 'ui.dir
         templateUrl: 'views/global.html'
         controller: 'GlobalCtrl'
         resolve : 
-          'libraries' : ['$route','$rootScope','$q', ($route, $rootScope, $q)->
+          'libraries' : ['$route','$rootScope','$q','notify', ($route, $rootScope, $q, notify)->
 
+            notify
+              message : "Now on loading..."
+              template : "views/loadingNotify.html"
+              scope : 
+                title : "Got error"
+                type : "alert-error"
+                hideEvent : "hide"
             d = $q.defer()
 
             search = ()->
@@ -55,8 +62,9 @@ angular.module('LibraryBoxApp', ['ngSanitize','cgNotify','ui.bootstrap', 'ui.dir
               return list()
 
             $rootScope.$on "gapiLoaded", ()->
-            return search() if $route.current.params.q
-            return list()
+              return search() if $route.current.params.q
+              return list()
+            d.promise
           ]
 
       .when '/register',
