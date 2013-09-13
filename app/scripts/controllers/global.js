@@ -3,7 +3,6 @@
   angular.module('LibraryBoxApp').controller('GlobalCtrl', [
     '$scope', '$rootScope', '$route', '$filter', '$location', 'libraries', function($scope, $rootScope, $route, $filter, $location, libraries) {
       var filter;
-      console.log(libraries);
       $rootScope.activeMenu = "global";
       $scope.currentPage = 1;
       $scope.maxSize = 3;

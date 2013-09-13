@@ -13,7 +13,7 @@
       <link href="styles/options.css" rel="stylesheet">
       <!-- endbuild -->
 
-      <title>{{i18n('appName')}}</title>
+      <title ng-bind="i18n('appName')"></title>
     </head>
     <body ng-controller="optionPageCtrl">
       <div class="navbar navbar-inverse navbar-fixed-top">
@@ -51,8 +51,9 @@
         </div>
       </div>      
       <div notifications="bottom right"></div>
-      <div class="container-fluid" ng-view="" style="margin-top:45px;">
-        <i class="icon-spinner icon-spin"></i> Now loading...
+      <div ng-show="isViewLoading" style="margin-top:45px;"><i class="icon-spinner icon-spin"></i> Now loading...</div>
+
+      <div ng-hide="isViewLoading" class="container-fluid" ng-view="" style="margin-top:45px;">
       </div>
       <!-- build:js scripts/modules.js -->
       <script src="bower_components/jquery/jquery.min.js" type="text/javascript"></script>

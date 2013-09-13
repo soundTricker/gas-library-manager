@@ -2,7 +2,7 @@
 
 angular.module('LibraryBoxApp')
   .controller 'GlobalCtrl', ['$scope','$rootScope','$route','$filter','$location','libraries', ($scope, $rootScope,$route, $filter,$location, libraries) ->
-    console.log libraries
+
     $rootScope.activeMenu = "global"
 
     $scope.currentPage = 1 #current page

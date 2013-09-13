@@ -36,22 +36,45 @@
             return 'mine';
           }
         }
+      }).when('/global/:key', {
+        templateUrl: 'views/globalDetail.html',
+        controller: 'DetailCtrl',
+        resolve: {
+          'library': [
+            '$route', '$rootScope', '$q', function($route, $rootScope, $q) {
+              var d, get;
+              d = $q.defer();
+              get = (function(key) {
+                return function() {
+                  gapi.client.libraries.get({
+                    key: key
+                  }).execute(function(result) {
+                    d.resolve(result);
+                    return $rootScope.$apply();
+                  });
+                  return d.promise;
+                };
+              })($route.current.params.key);
+              if ($rootScope.gapiLoaded) {
+                return get();
+              }
+              $rootScope.$on("gapiLoaded", function() {
+                return get();
+              });
+              return d.promise;
+            }
+          ],
+          'type': function() {
+            return "global";
+          }
+        }
       }).when('/global', {
         templateUrl: 'views/global.html',
         controller: 'GlobalCtrl',
         resolve: {
           'libraries': [
-            '$route', '$rootScope', '$q', 'notify', function($route, $rootScope, $q, notify) {
+            '$route', '$rootScope', '$q', function($route, $rootScope, $q) {
               var d, list, search;
-              notify({
-                message: "Now on loading...",
-                template: "views/loadingNotify.html",
-                scope: {
-                  title: "Got error",
-                  type: "alert-error",
-                  hideEvent: "hide"
-                }
-              });
               d = $q.defer();
               search = function() {
                 var param;
@@ -63,6 +86,7 @@
                 }
                 gapi.client.libraries.search(param).execute(function(result) {
                   var _ref;
+                  console.log(result);
                   d.resolve((_ref = result.items) != null ? _ref : []);
                   return $rootScope.$apply();
                 });

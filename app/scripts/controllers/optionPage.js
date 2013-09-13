@@ -2,6 +2,15 @@
   'use strict';
   angular.module('LibraryBoxApp').controller('optionPageCtrl', [
     '$scope', '$rootScope', '$window', '$q', 'notify', '$location', (function($scope, $rootScope, $window, $q, notify, $location) {
+      $rootScope.$on("$routeChangeStart", function() {
+        return $rootScope.isViewLoading = true;
+      });
+      $rootScope.$on("$routeChangeSuccess", function() {
+        return $rootScope.isViewLoading = false;
+      });
+      $rootScope.$on("$routeChangeError", function() {
+        return $rootScope.isViewLoading = false;
+      });
       $rootScope.$on("loggedin", function(e, info) {
         info.userIconUrl = info.userIconUrl || "";
         $scope.loginStatus = "loggedin";

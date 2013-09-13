@@ -8,14 +8,14 @@
           <form class="form-search">
             <div class="input-append">
               <input accesskey="f" class="search-query" type="search" ng-model="search.$" placeholder="{{i18n('search')}}">
-              <button class="btn" ng-click="query()"><i class="icon-search"></i></button>
+              <button tooltip="Search from global site" class="btn" ng-click="query()"><i class="icon-search"></i></button>
             </div>
           </form>
         </li>
         <li class="divider"></li>
         <li ng-if="filtered.length === 0" class="muted">There is no library.</li>
         <li ng-repeat="i in filtered track by $index">
-          <a smooth-scroll="#{{i.key}}" scroll-easing="easeInOutBack" scroll-duration="slow" scroll-offset="-30">{{i.label}}</a>
+          <a smooth-scroll="#{{i.libraryKey}}" scroll-easing="easeInOutBack" scroll-duration="slow" scroll-offset="-30">{{i.label}}</a>
         </li>
         <li>
       <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="currentPage" max-size="maxSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
@@ -26,9 +26,9 @@
   </div><!-- /left side bar-->
   <div class="span9 library-list">
     <div class="row-fluid" ng-repeat="item in filtered track by $index" ng-controller="PrivateLibraryCtrl">
-      <div id="{{item.key}}" class="span12">
+      <div id="{{item.libraryKey}}" class="span12">
           <h2 class="page-header">
-            <a href="#/mine/{{item.key}}">{{item.label}}</a>
+            <a href="#/global/{{item.libraryKey}}">{{item.label}}</a>
           </h2>
           <div ng-show="!modify">
             <div class="pull-right">

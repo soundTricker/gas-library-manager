@@ -25,25 +25,38 @@ angular.module('LibraryBoxApp', ['ngSanitize','cgNotify','ui.bootstrap', 'ui.dir
             d.promise
           ]
           'type' : ()->'mine'
+      .when '/global/:key',
+        templateUrl: 'views/globalDetail.html'
+        controller: 'DetailCtrl'
+        resolve:
+          'library' : ['$route', '$rootScope', '$q',($route,$rootScope, $q)->
+            d = $q.defer()
+            get = do(key=$route.current.params.key)->
+              return ()->
+                gapi.client.libraries.get(key : key).execute (result)->
+                  d.resolve result
+                  $rootScope.$apply()
+                d.promise
+            return get() if $rootScope.gapiLoaded
+              
+            $rootScope.$on "gapiLoaded", ()->
+              get()
+            d.promise
+          ]
+          'type' : ()-> "global"
       .when '/global',
         templateUrl: 'views/global.html'
         controller: 'GlobalCtrl'
         resolve : 
-          'libraries' : ['$route','$rootScope','$q','notify', ($route, $rootScope, $q, notify)->
+          'libraries' : ['$route','$rootScope','$q', ($route, $rootScope, $q)->
 
-            notify
-              message : "Now on loading..."
-              template : "views/loadingNotify.html"
-              scope : 
-                title : "Got error"
-                type : "alert-error"
-                hideEvent : "hide"
             d = $q.defer()
 
             search = ()->
               param = query : $route.current.params.q
               param.next = parseInt $route.current.params.next if $route.current.params.next
               gapi.client.libraries.search(param).execute (result)->
+                console.log result
                 d.resolve result.items ? []
                 $rootScope.$apply()
               d.promise

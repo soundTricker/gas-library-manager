@@ -1,11 +1,17 @@
 
-<div class="alert {{type}} alert-block showing"  ng-controller="LoadingCtrl">
+<div class="alert {{type}} alert-block showing" ng-class="{hide : hide == true}" ng-controller="LoadingCtrl">
   <style>
     .showing {
       position:fixed;
       right:0;
       bottom:0;
       z-index: 9999;
+
+      -webkit-transition: top 0.5s ease-out,opacity 0.5s ease-out 5s; /* 4 sec delay for longer message visibility */
+      -moz-transition: top 0.5s ease-out,opacity 0.5s ease-out 5s;
+      -o-transition: top 0.5s ease-out,opacity 0.5s ease-out 5s;
+      transition: top 0.5s ease-out,opacity 0.5s ease-out 5s;
+      
     }
 
     .hide {
