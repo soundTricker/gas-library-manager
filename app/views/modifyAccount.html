@@ -1,0 +1,39 @@
+<div class="row-fluid">
+  <div class="span12">
+    <div ng-hide="loaded">
+      <i class="icon-spinner icon-spin"></i> Now loading your account infomation...
+    </div>
+    <form name="modifyForm" class="form-horizontal" ng-show="loaded">
+      <legend id="">Modify your account</legend>
+      <div class="control-group" ng-class="{error : !modifyForm.name.$valid}">
+        <label for="name" class="control-label">Nickname</label>
+        <div class="controls">
+          <input id="name" type="text" name="name" ng-model="nickname" placeholder="Set your account name" required max-length="50" ng-trim="true">
+          <span class="help-inline" ng-show="modifyForm.name.$error.required">{{i18n("errorsRequired")}}</span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="useIcon" class="control-label">Profile Icon</label>
+        <div class="controls">
+          <div class="media">
+            <div class="pull-left">
+              <img class="media-object" ng-show="useIcon == 'use'" ng-src="{{userIconUrl}}" ng-show="modifyForm">
+            </div>
+            <div class="media-body">
+              <label for="useIcon" class="radio inline" ng-init="useIcon = 'use'">
+                <input type="radio" id="useIcon" ng-model="useIcon" name="useIcon" value="use" checked>Use Google+ Icon</input>
+              </label>
+              <label for="notUsing" class="radio inline">
+                <input type="radio" id="notUsing" ng-model="useIcon" ng-value="" name="useIcon" value="not">Not set it.</input>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" ng-disabled="!modifyForm.$valid || processing" ng-click="processing = true;modify()">Modify Account</button>
+        <button class="btn" type="cancel">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

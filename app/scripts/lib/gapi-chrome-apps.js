@@ -78,7 +78,11 @@
     if (typeof args.path !== 'string')
       throw new Error('path required');
 
-    var path = 'https://www.googleapis.com' + args.path;
+    if(args.path.indexOf("http") != 0) {
+      var path = 'https://www.googleapis.com' + args.path;
+    } else {
+      var path = args.path;
+    }
     if (typeof args.params === 'object') {
       var deliminator = '?';
       for (var i in args.params) {

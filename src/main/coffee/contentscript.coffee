@@ -12,7 +12,7 @@ do($=jQuery, global=@) ->
       "key"  : $(propertyRows.get(2)).val()
       "sourceUrl"  : location.href
 
-    chrome.storage.sync.get "libraries" , (res)->
+    chrome.storage.local.get "libraries" , (res)->
       libraries = res?.libraries || {}
 
       if libraries[item.key]
@@ -26,7 +26,7 @@ do($=jQuery, global=@) ->
         item.modifiedAt = item.registeredAt
         libraries[item.key] = item
 
-      chrome.storage.sync.set {"libraries" : libraries} , ()->
+      chrome.storage.local.set {"libraries" : libraries} , ()->
         $saveMessageBox.text chrome.i18n.getMessage("saved", item.label)
 
   document.addEventListener "webkitAnimationStart", ((event) ->
@@ -39,7 +39,7 @@ do($=jQuery, global=@) ->
     $('.properties-box').closest('.dialogMiddle').find('.buttons').append($saveButton.clone(true)).append($saveMessageBox)
 
   global.showDependencyDialog = (event)->
-    chrome.storage.sync.get "libraries",(res)->
+    chrome.storage.local.get "libraries",(res)->
       console.log res
       libraries = res?.libraries || {}
 

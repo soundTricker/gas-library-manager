@@ -2,38 +2,71 @@
 
 @gapiIsLoaded = ()-> window.gapiIsLoaded()
 
-angular.module('LibraryBoxApp', ['ngSanitize','cgNotify','ui.bootstrap', 'ui.directives', 'markdown'])
-  .config(["$routeProvider",'$compileProvider', ($routeProvider,$compileProvider) ->
+angular.module('LibraryBoxApp', ['ngSanitize','cgNotify','ui.bootstrap', 'ui.directives','ui.router', 'markdown'])
+  .config(["$stateProvider","$urlRouterProvider",'$compileProvider', ($stateProvider,$urlRouterProvider,$compileProvider) ->
     $compileProvider.urlSanitizationWhitelist /^\s*(https?|ftp|mailto|chrome-extension):/
 
-    $routeProvider
-      .when '/',
+    $urlRouterProvider.otherwise '/'
+
+    $stateProvider
+      .state 'top',
+        url: '/'
         templateUrl: 'views/index.html'
         controller: 'IndexCtrl'
-      .when '/mine',
+      .state 'mine', 
+        url: '/mine'
         templateUrl: 'views/main.html'
         controller: 'MainCtrl'
-      .when '/mine/:key',
+      .state 'mine.detail',
+        url: '/detail/:key'
         templateUrl: 'views/detail.html'
         controller: 'DetailCtrl'
         resolve :
-          'library' : ['$route','$rootScope', '$q',($route, $rootScope, $q)->
-            return $rootScope.libraryMap[$route.current.params.key] if $rootScope.libraryMap
+          'library' : ['$stateParams', 'storage',($stateParams, storage)-> storage.getLibrary $stateParams.key]
+      .state 'global',
+        url: '/global?q&next'
+        templateUrl: 'views/global.html'
+        controller: 'GlobalCtrl'
+        resolve : 
+          'result' : ['$stateParams','$rootScope','$q', ($stateParams, $rootScope, $q)->
             d = $q.defer()
-            $rootScope.$on 'loadedLibraries', ()->
-              d.resolve $rootScope.libraryMap[$route.current.params.key]
+
+            search = ()->
+              param =
+                query : $stateParams.q,
+              $stateParams.next || param.nextToken = $stateParams.next
+              gapi.client.libraries.search(param).execute (result)->
+                d.resolve result
+                $rootScope.$apply()
+              d.promise
+
+            list = ()->
+              param = {}
+              $stateParams.next || param.cursor = $stateParams.next
+              gapi.client.libraries.list(param).execute (result)-> 
+                d.resolve result
+                $rootScope.$apply()
+              d.promise
+
+            if $rootScope.gapiLoaded
+              return search() if $stateParams.q
+              return list()
+
+            $rootScope.$on "gapiLoaded", ()->
+              return search() if $stateParams.q
+              return list()
             d.promise
           ]
-          'type' : ()->'mine'
-      .when '/global/:key',
+      .state 'global.detail',
+        url: '/detail/:key'
         templateUrl: 'views/globalDetail.html'
         controller: 'DetailCtrl'
         resolve:
-          'library' : ['$route', '$rootScope', '$q',($route,$rootScope, $q)->
+          'library' : ['$stateParams', '$rootScope', '$q',($stateParams,$rootScope, $q)->
             d = $q.defer()
-            get = do(key=$route.current.params.key)->
+            get = do(key=$stateParams.key)->
               return ()->
-                gapi.client.libraries.get(key : key).execute (result)->
+                gapi.client.libraries.get(libraryKey : key).execute (result)->
                   d.resolve result
                   $rootScope.$apply()
                 d.promise
@@ -43,65 +76,29 @@ angular.module('LibraryBoxApp', ['ngSanitize','cgNotify','ui.bootstrap', 'ui.dir
               get()
             d.promise
           ]
-          'type' : ()-> "global"
-      .when '/global',
-        templateUrl: 'views/global.html'
-        controller: 'GlobalCtrl'
-        resolve : 
-          'libraries' : ['$route','$rootScope','$q', ($route, $rootScope, $q)->
-
-            d = $q.defer()
-
-            search = ()->
-              param = query : $route.current.params.q
-              param.next = parseInt $route.current.params.next if $route.current.params.next
-              gapi.client.libraries.search(param).execute (result)->
-                console.log result
-                d.resolve result.items ? []
-                $rootScope.$apply()
-              d.promise
-
-            list = ()->
-              gapi.client.libraries.list().execute (result)-> 
-                $rootScope.globalLibraries = result.items
-                d.resolve result.items ? []
-                $rootScope.$apply()
-              d.promise
-
-            return $rootScope.globalLibraries if $rootScope.globalLibraries
-
-            if $rootScope.gapiLoaded
-              return search() if $route.current.params.q
-              return list()
-
-            $rootScope.$on "gapiLoaded", ()->
-              return search() if $route.current.params.q
-              return list()
-            d.promise
-          ]
-
-      .when '/register',
+      .state 'account',
+        url: '/account',
+        templateUrl: 'views/modifyAccount.html'
+        controller: 'ModifyAccountCtrl'
+      .state 'register',
+        url: '/register',
         templateUrl: 'views/register.html'
         controller: 'RegisterCtrl'
-      .otherwise
-        redirectTo: '/'
   ])
-  .run ["$rootScope", ($rootScope)->
+  .run ["$rootScope",'storage', ($rootScope, storage)->
     $rootScope.i18n = (key, args...)->
       if args.length > 0
         chrome.i18n.getMessage.apply chrome.i18n, [key].concat(args)
       else
         chrome.i18n.getMessage.apply chrome.i18n, [key]
-    chrome.storage.onChanged.addListener (changes, areaName)->
-      return if areaName != "sync"
-      $rootScope.libraryMap = changes.libraries.newValue
-      $rootScope.libraries = (item for key, item of (changes?.libraries?.newValue || {}) when item.key)
+    $rootScope.$on 'addLibrary', (result)->
+      $rootScope.libraryMap = result.changes.libraries.newValue
+      $rootScope.libraries = (item for key, item of (result.changes?.libraries?.newValue || {}) when item.key)
       $rootScope.$apply()
 
-    chrome.storage.sync.get "libraries" , (res)->
-      $rootScope.libraryMap = res.libraries
-      $rootScope.libraries = (item for key, item of (res?.libraries || {}) when item.key)
+    storage.getLibraries().then (libraries)->
+      $rootScope.libraryMap = libraries
+      $rootScope.libraries = (item for key, item of (libraries || {}) when item.key)
       $rootScope.$broadcast 'loadedLibraries'
-      $rootScope.$apply()
 
   ]

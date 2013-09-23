@@ -44,14 +44,13 @@
         return gapi.client.plus.people.get({
           userId: "me"
         }).execute(function(result) {
-          console.log(result);
           if (result.error) {
             return notify({
-              message: "You are not registered to gas-library-box service.<br> If you want to publish your library to gas-library-box , please sign up.",
+              message: result.error.message,
               template: "views/notify.html",
               scope: {
-                title: "Please Sign Up",
-                type: "alert-info"
+                title: "Got Error, Please reflesh page",
+                type: "alert-error"
               }
             });
           }

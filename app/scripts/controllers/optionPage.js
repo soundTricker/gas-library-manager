@@ -1,14 +1,15 @@
 (function() {
   'use strict';
   angular.module('LibraryBoxApp').controller('optionPageCtrl', [
-    '$scope', '$rootScope', '$window', '$q', 'notify', '$location', (function($scope, $rootScope, $window, $q, notify, $location) {
-      $rootScope.$on("$routeChangeStart", function() {
+    '$scope', '$state', '$rootScope', '$window', '$q', 'notify', '$location', 'storage', (function($scope, $state, $rootScope, $window, $q, notify, $location, storage) {
+      $rootScope.$state = $state;
+      $rootScope.$on("$stateChangeStart", function() {
         return $rootScope.isViewLoading = true;
       });
-      $rootScope.$on("$routeChangeSuccess", function() {
+      $rootScope.$on("$stateChangeSuccess", function() {
         return $rootScope.isViewLoading = false;
       });
-      $rootScope.$on("$routeChangeError", function() {
+      $rootScope.$on("$stateChangeError", function() {
         return $rootScope.isViewLoading = false;
       });
       $rootScope.$on("loggedin", function(e, info) {
@@ -39,7 +40,7 @@
             }
             return d.promise;
           };
-          return $q.all([loadApiDefer("plus", "v1"), loadApiDefer("libraries", "v1", "https://gas-library-box.appspot.com/_ah/api"), loadApiDefer("members", "v1", "https://gas-library-box.appspot.com/_ah/api")]).then(function() {
+          return $q.all([loadApiDefer("plus", "v1"), loadApiDefer("drive", "v2"), loadApiDefer("libraries", "v1", "https://gas-library-box.appspot.com/_ah/api"), loadApiDefer("members", "v1", "https://gas-library-box.appspot.com/_ah/api")]).then(function() {
             return chrome.identity.getAuthToken({
               interactive: true
             }, function(token) {
@@ -61,11 +62,11 @@
                   $scope.loginStatus = "givenRegister";
                 } else {
                   $rootScope.loginUser = result;
-                  $rootScope.$broadcast("loggedin", result);
+                  $rootScope.$emit("loggedin", result);
                 }
                 $rootScope.loggedin = result.code !== 404;
                 $rootScope.gapiLoaded = true;
-                $rootScope.$broadcast('gapiLoaded');
+                $rootScope.$emit('gapiLoaded');
                 return $scope.$apply();
               });
             });

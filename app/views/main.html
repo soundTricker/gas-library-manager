@@ -1,7 +1,23 @@
 <h1 class="page-header">{{i18n("myLibraryList")}}</h1>
+<div class="pull-right" ng-if="gapiLoaded">
+  <div class="btn-group pull-right">
+    <button class="btn btn-link" ng-disabled="uploading" ng-click="uploadLibraries()">Export My Libraries</button>
+    <button class="btn btn-link" ng-click="isCollapsed = !isCollapsed">Import My Libraries</button>
+  </div>
+  <div class="clearfix"></div>
+  <div collapse="isCollapsed">
+    <div class="well well-large">
+      <form name="importForm" class="form-inline">
+        <input type="text" class="input-xlarge" name="fileId" placeholder="input library file key of Google Drive" ng-model="fileId" required>
+        <button class="btn" ng-click="import(fileId)">Import</button> 
+      </form>
+    </div> 
+  </div>
+</div>
+<div class="clearfix"></div>
 <div class="row-fluid">
   <div class="span3">
-    <div ui-scrollfix="-50">
+    <div ui-scrollfix="110">
       <ul class="nav nav-list well well-small" style="width:268px;">
         <li class="nav-header">List</li>
         <li>
@@ -10,20 +26,21 @@
         <li class="divider"></li>
         <li ng-if="filtered.length === 0" class="muted">There is no library.</li>
         <li ng-repeat="i in filtered track by $index">
-          <a smooth-scroll="#{{i.key}}" scroll-easing="easeInOutBack" scroll-duration="slow" scroll-offset="-30">{{i.label}}</a>
+          <a ng-if="$state.is('mine')" smooth-scroll="#{{i.key}}" scroll-easing="easeInOutBack" scroll-duration="slow" scroll-offset="-30">{{i.label}}</a>
+          <a ng-if="$state.is('mine.detail')" ng-href="#/mine/detail/{{i.key}}">{{i.label}}</a>
         </li>
-        <li>
       <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="currentPage" max-size="maxSize" class="pagination-small" data-previous-text="&laquo;" data-next-text="&raquo;"></pagination>
         </li>
       </ul>
 
     </div><!-- /scrollfix -->
   </div><!-- /left side bar-->
-  <div class="span9 library-list">
+  <div class="span9 library-list" ng-if="$state.is('mine.detail')" ui-view></div>
+  <div class="span9 library-list" ng-if="$state.is('mine')">
     <div class="row-fluid" ng-repeat="item in filtered track by $index" ng-controller="PrivateLibraryCtrl">
       <div id="{{item.key}}" class="span12">
           <h2 class="page-header">
-            <a href="#/mine/{{item.key}}">{{item.label}}</a>
+            <a href="#/mine/detail/{{item.key}}">{{item.label}}</a>
           </h2>
           <div ng-show="!modify">
             <div class="pull-right">
@@ -193,7 +210,7 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                  <button class="btn btn-primary" ng-disabled="!modifyLib.$valid" ng-click="modifyLibs()">{{i18n("modify")}}</button>
+                  <button class="btn btn-primary" ng-disabled="!modifyLib.$valid || saving" ng-click="saving = true;modifyLibs()">{{i18n("modify")}}</button>
                   <button class="btn" ng-click="modify=!modify">{{i18n("cancel")}}</button>
                 </div>
               </fieldset>

@@ -1,8 +1,7 @@
 (function() {
   'use strict';
   angular.module('LibraryBoxApp').controller('DetailCtrl', [
-    '$scope', '$rootScope', 'type', 'library', function($scope, $rootScope, type, library) {
-      $rootScope.activeMenu = type;
+    '$scope', '$rootScope', 'library', function($scope, $rootScope, library, $filter) {
       $scope.library = library;
       return $scope.item = library;
     }

@@ -10,9 +10,7 @@
   },
   "default_locale": "en",
   "background": {
-    "scripts": [
-      "scripts/background.js"
-    ]
+    "page" : "background.html"
   },
   "options_page": "options.html",
   "content_scripts": [
@@ -39,10 +37,12 @@
     "font/*",
     "views/*"
   ],
-  "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://apis.google.com https://www.google-analytics.com; object-src 'self'",
   "permissions": [
     "identity",
     "storage",
+    "tabs",
+    "unlimitedStorage",
     "http://script.google.com/*",
     "https://script.google.com/*",
     "https://apis.google.com/*"
@@ -53,7 +53,10 @@
       "https://www.googleapis.com/auth/plus.login",
       "https://www.googleapis.com/auth/plus.me",
       "https://www.googleapis.com/auth/userinfo.email",
-      "https://www.googleapis.com/auth/userinfo.profile"
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/drive.file",
+      "https://www.googleapis.com/auth/drive",
+      "https://www.googleapis.com/auth/drive.appdata"
     ]
   }
 }

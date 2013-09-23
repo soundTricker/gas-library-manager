@@ -1,62 +1,149 @@
 'use strict'
 
 libraryBoxApp = angular.module('LibraryBoxApp')
-libraryBoxApp.controller 'MainCtrl',["$scope",'$rootScope','$filter' ,($scope, $rootScope, $filter) ->
-  $rootScope.activeMenu = "mine"
+libraryBoxApp.controller 'MainCtrl',
+  ["$scope",'$rootScope','$state','$filter', 'storage', 'notify'
+  ($scope, $rootScope, $state, $filter,storage, notify) ->
+    $scope.uploading = off
+    $scope.isCollapsed = on
+    $scope.currentPage = 1 #current page
+    $scope.maxSize = 3 #pagination max size
+    $scope.entryLimit = 20 #max rows for data table
 
-  $scope.currentPage = 1 #current page
-  $scope.maxSize = 3 #pagination max size
-  $scope.entryLimit = 20 #max rows for data table
+    libraries = (item for item in $rootScope.libraries when !item.isExternal)
+    libraries = libraries.sort (i1,i2)-> i1.label.toLowerCase() > i2.label.toLowerCase()
 
+    filter = ()->
+      $filter('limitTo')(
+        $filter('startFrom')(
+          $filter('filter')(
+            libraries,
+            $scope.search
+          ), ($scope.currentPage-1)*$scope.entryLimit
+        ), $scope.entryLimit
+      )
 
-  filter = ()->
-    $filter('limitTo')(
-      $filter('startFrom')(
-        $filter('filter')(
-          $rootScope.libraries,
-          $scope.search
-        ), ($scope.currentPage-1)*$scope.entryLimit
-      ), $scope.entryLimit
-    )
-
-  $scope.filtered = filter()
-
-  $scope.$watch "search.$" , ()-> 
     $scope.filtered = filter()
 
-  # init pagination with $scope.list
-  $scope.noOfPages = Math.ceil $rootScope.libraries.length / $scope.entryLimit
-  $scope.setPage = (pageNo)->
-      $scope.currentPage = pageNo
-  $scope.$watch 'filtered' , ()->
-      $scope.noOfPages = Math.ceil $scope.filtered.length / $scope.entryLimit
-]
+    $scope.$watch "search.$" , ()-> 
+      $scope.filtered = filter()
 
-libraryBoxApp.controller 'PrivateLibraryCtrl',["$scope", "$window", ($scope,$window)->
+    $scope.$on "deleted" , (event , key)->
+      console.log key
+      libraries = libraries.filter (library)-> library.key != key
+      $scope.filtered = filter()
+
+    # init pagination with $scope.list
+    $scope.noOfPages = Math.ceil libraries.length / $scope.entryLimit
+    $scope.setPage = (pageNo)->
+        $scope.currentPage = pageNo
+    $scope.$watch 'filtered' , ()->
+        $scope.noOfPages = Math.ceil $scope.filtered.length / $scope.entryLimit
+    $scope.uploadLibraries = ()->
+      $scope.uploading = on
+      storage.getLibraries().then (libraries)->
+        boundary = '-------' + new Date().getTime();
+        delimiter = "--#{boundary}"
+        close_delim = "--#{boundary}--"
+
+        json = JSON.stringify(libraries, "" , 2)
+        metadata = 
+          'title' : "gas-library-box-libraries.json"
+          'mimeType' : "application/json"
+
+        multipartRequestBody = """
+#{delimiter}
+Content-Type: application/json
+
+#{JSON.stringify(metadata)}
+#{delimiter}
+Content-Type: application/json
+Content-Transfer-Encoding: base64
+
+#{btoa(json)}
+#{close_delim}
+"""
+
+        gapi.client.request(
+          'path' : '/upload/drive/v2/files'
+          'method' : 'POST'
+          'params': 
+            'uploadType': 'multipart'
+          'headers':
+            'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
+          'body': multipartRequestBody
+        ).execute (result)->
+
+          $scope.$apply ()->
+            $scope.uploading = off
+            if result.error
+              notify
+                message : result.error.message
+                template : "views/notify.html"
+                scope :
+                  title : "Got Error"
+                  type : "alert-error"
+            else
+              notify
+                message : "Exported your libraries to Google Drive.<br/> Please see <a href=\"#{result.alternateLink}\" target=\"_blank\">Google Drive</a>"
+                template : "views/notify.html"
+                scope :
+                  title : "Exported your libraries"
+                  type : "alert-info"
+    $scope.import = (fileId)->
+      $scope.importing = on
+      gapi.client.drive.files.get( "fileId" : fileId , "fields" : "downloadUrl").execute (result)->
+        if result.error
+          notify
+            message : result.error.message
+            template : "views/notify.html"
+            scope :
+              title : "Got Error"
+              type : "alert-error"
+          return
+
+        $.ajax result.downloadUrl,
+          headers :
+            "Authorization" : "Bearer #{gapi.auth.getToken().access_token}"
+        .then (result)->
+          console.log result
+          storage.addLibraries(result).then ()->
+            $scope.isCollapsed = on
+            storage.getLibraries().then (libs)->
+              libraries = (item for key, item of libs when !item.isExternal)
+              libraries = libraries.sort (i1,i2)-> i1.label.toLowerCase() > i2.label.toLowerCase()
+              $scope.filtered = filter()
+
+              notify
+                message : "Success importing your libraries"
+                template : "views/notify.html"
+                scope :
+                  title : "Import your libraries"
+                  type : "alert-info"
+
+  ]
+
+libraryBoxApp.controller 'PrivateLibraryCtrl',["$scope", "$window", 'storage' , ($scope,$window, storage)->
 
   $scope.modify = false
   $scope.delete = false
+  $scope.saving = off
   $scope.deleteLibrary = ()->
     if $window.confirm("Are you sure delete #{$scope.item.label} ?")
-      chrome.storage.sync.get "libraries" , (res)->
-        libraries = res?.libraries || {}
-        libraries[$scope.item.key] = undefined
-        chrome.storage.sync.set {"libraries" : libraries} , ()->
-          alert "deleted"
-          $scope.$apply ()->
-            $scope.delete = false
+      storage.removeLibrary($scope.item.key).then ()->
+        alert "deleted"
+        $scope.$parent.$emit "deleted" , $scope.item.key
+        $scope.delete = false
     else
       $scope.delete = false
 
   $scope.modifyLibs = ()->
+    $scope.saving = on
     $scope.item.label = $scope.label
     $scope.item.desc = $scope.desc
     $scope.item.longDesc = $scope.longDesc
     $scope.item.modifiedAt = new Date().getTime()
-    chrome.storage.sync.get "libraries" , (res)->
-      libraries = res?.libraries || {}
-      libraries[$scope.item.key] = $scope.item
-      chrome.storage.sync.set {"libraries" : libraries} , ()->
-        $scope.$apply ()->
-          $scope.modify = false
+    storage.addLibrary($scope.item).then ()->
+      $scope.modify = false
+      $scope.saving = off
   ]

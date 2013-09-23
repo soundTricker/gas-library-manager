@@ -1,22 +1,10 @@
 (function() {
   'use strict';
   angular.module('LibraryBoxApp').controller('PublishCtrl', [
-    '$scope', '$rootScope', '$q', 'notify', function($scope, $rootScope, $q, notify) {
+    '$scope', '$rootScope', 'notify', 'storage', function($scope, $rootScope, notify, storage) {
       $scope.opts = {
         backdropFade: true,
         dialogFade: true
-      };
-      $scope.isPublishedLibrary = function(key) {
-        var d, _ref;
-        if ($rootScope.libraryMap) {
-          return (_ref = $rootScope.libraryMap[key]) != null ? _ref.published : void 0;
-        }
-        d = $q.defer();
-        $rootScope.$on('loadedLibraries', function() {
-          var _ref1;
-          return d.resolve((_ref1 = $rootScope.libraryMap[key]) != null ? _ref1.published : void 0);
-        });
-        return d.promise;
       };
       $scope.publish = function() {
         var item, loginUser;
@@ -32,18 +20,10 @@
           authorUrl: loginUser.url,
           authorKey: loginUser.key
         }).execute(function(result) {
-          console.log(result);
           if (result.error) {
             if (result.error.code === 409) {
-              chrome.storage.sync.get("libraries", function(res) {
-                var libraries;
-                libraries = (res != null ? res.libraries : void 0) || {};
-                item.published = true;
-                libraries[item.key] = item;
-                return chrome.storage.sync.set({
-                  "libraries": libraries
-                });
-              });
+              item.published = true;
+              storage.addLibrary(item);
             }
             $scope.openDialog = false;
             notify({
@@ -56,25 +36,16 @@
             });
             $scope.$apply();
           } else {
-            return chrome.storage.sync.get("libraries", function(res) {
-              var libraries;
-              libraries = (res != null ? res.libraries : void 0) || {};
-              item.published = true;
-              libraries[item.key] = item;
-              return chrome.storage.sync.set({
-                "libraries": libraries
-              }, function() {
-                return $scope.$apply(function() {
-                  $scope.openDialog = false;
-                  notify({
-                    message: "Success Publish Library",
-                    template: "views/notify.html",
-                    scope: {
-                      title: "Published Library",
-                      type: "alert-success"
-                    }
-                  });
-                });
+            item.published = true;
+            return storage.addLibrary(item).then(function() {
+              $scope.openDialog = false;
+              return notify({
+                message: "Success Publish Library",
+                template: "views/notify.html",
+                scope: {
+                  title: "Published Library",
+                  type: "alert-success"
+                }
               });
             });
           }
@@ -94,18 +65,10 @@
           authorUrl: loginUser.url,
           authorKey: loginUser.key
         }).execute(function(result) {
-          console.log(result);
           if (result.error) {
             if (result.error.code === 404) {
-              chrome.storage.sync.get("libraries", function(res) {
-                var libraries;
-                libraries = (res != null ? res.libraries : void 0) || {};
-                item.published = false;
-                libraries[item.key] = item;
-                return chrome.storage.sync.set({
-                  "libraries": libraries
-                });
-              });
+              item.published = false;
+              storage.addLibrary(item);
             }
             $scope.openModifyDialog = false;
             notify({
@@ -116,17 +79,17 @@
                 type: "alert-error"
               }
             });
-          } else {
-            $scope.openModifyDialog = false;
-            notify({
-              message: "Success Update published library",
-              template: "views/notify.html",
-              scope: {
-                title: "Update published library",
-                type: "alert-success"
-              }
-            });
+            return;
           }
+          $scope.openModifyDialog = false;
+          notify({
+            message: "Success Update published library",
+            template: "views/notify.html",
+            scope: {
+              title: "Update published library",
+              type: "alert-success"
+            }
+          });
           return $scope.$apply();
         });
       };
@@ -136,8 +99,11 @@
         return gapi.client.libraries["delete"]({
           libraryKey: item.key
         }).execute(function(result) {
-          console.log(result);
           if (result.error) {
+            if (result.error.code === 404) {
+              item.published = false;
+              storage.addLibrary(item);
+            }
             return $scope.$apply(function() {
               $scope.openDeleteDialog = false;
               return notify({
@@ -150,26 +116,17 @@
               });
             });
           } else {
-            return chrome.storage.sync.get("libraries", function(res) {
-              var libraries;
-              libraries = (res != null ? res.libraries : void 0) || {};
-              item.published = false;
-              libraries[item.key] = item;
-              return chrome.storage.sync.set({
-                "libraries": libraries
-              }, function() {
-                return $scope.$apply(function() {
-                  $scope.openDeleteDialog = false;
-                  $scope.item.published = false;
-                  return notify({
-                    message: "Success Delete published library",
-                    template: "views/notify.html",
-                    scope: {
-                      title: "Delete published library",
-                      type: "alert-success"
-                    }
-                  });
-                });
+            item.published = false;
+            return storage.addLibrary(item).then(function() {
+              $scope.openDeleteDialog = false;
+              $scope.item.published = false;
+              return notify({
+                message: "Success Delete published library",
+                template: "views/notify.html",
+                scope: {
+                  title: "Delete published library",
+                  type: "alert-success"
+                }
               });
             });
           }

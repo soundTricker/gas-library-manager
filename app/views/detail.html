@@ -1,28 +1,12 @@
 <div class="pull-right">
-  <a href="#/{{activeMenu}}">Back to list</a>
+  <a href="#/mine">Back to list</a>
 </div>
-<div class="row-fluid">
-  <div class="span3">
-    <div ui-scrollfix="-50">
-      <ul class="nav nav-list well well-small" style="width:268px;">
-        <li class="nav-header">List</li>
-        <li>
-          <input accesskey="f" type="search" class="search-query" ng-model="search.$" placeholder="{{i18n('search')}}">
-        </li>
-        <li class="divider"></li>
-        <li ng-if="(libraries | filter:search).length === 0" class="muted">There is no library.</li>
-        <li ng-repeat="item in libraries | filter:search track by $index" ng-controller="PrivateLibraryCtrl">
-          <a href="#/{{activeMenu}}/{{item.key}}" scroll-easing="easeInOutBack" scroll-duration="slow" scroll-offset="-30">{{item.label}}</a>
-        </li>
-      </ul>
-    </div><!-- /scrollfix -->
-  </div><!-- /left side bar-->
-  <div class="span9 library-list" ng-controller="PrivateLibraryCtrl" ng-init="item = library; modify=false">
+  <div class="library-list" ng-controller="PrivateLibraryCtrl" ng-init="item = library; modify=false">
     <h1 class="page-header">{{item.label}}</h1>
     <div ng-show="!modify">
       <div class="pull-right">
-        <div class="pull-right" ng-switch="activeMenu">
-          <div class="well well-small" ng-switch-when="mine">
+        <div class="pull-right">
+          <div class="well well-small">
             <h5>Author</h5>
             <div class="media">
               <a ng-href="{{loginUser.url}}" target="_blank" class="pull-left">
@@ -30,8 +14,8 @@
               </a>
               <div class="media-body">
                 <h6 class="media-heading">
-                  <a ng-show="loginUser" ng-href="{{loginUser.url}}" target="_blank">{{loginUser.nickname}}</a>
-                  <span ng-hide="loginUser">you</span>
+                  <a ng-if="loginUser" ng-href="{{loginUser.url}}" target="_blank">{{loginUser.nickname}}</a>
+                  <span ng-if="!loginUser">you</span>
                 </h6>
               </div>
             </div>
@@ -212,4 +196,3 @@
       </form>
     </div><!--modify div-->
   </div><!-- /right-->
-</div>

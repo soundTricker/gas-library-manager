@@ -13,7 +13,7 @@
         "key": $(propertyRows.get(2)).val(),
         "sourceUrl": location.href
       };
-      return chrome.storage.sync.get("libraries", function(res) {
+      return chrome.storage.local.get("libraries", function(res) {
         var libraries, origin;
         libraries = (res != null ? res.libraries : void 0) || {};
         if (libraries[item.key]) {
@@ -27,7 +27,7 @@
           item.modifiedAt = item.registeredAt;
           libraries[item.key] = item;
         }
-        return chrome.storage.sync.set({
+        return chrome.storage.local.set({
           "libraries": libraries
         }, function() {
           return $saveMessageBox.text(chrome.i18n.getMessage("saved", item.label));
@@ -44,7 +44,7 @@
       return $('.properties-box').closest('.dialogMiddle').find('.buttons').append($saveButton.clone(true)).append($saveMessageBox);
     };
     global.showDependencyDialog = function(event) {
-      return chrome.storage.sync.get("libraries", function(res) {
+      return chrome.storage.local.get("libraries", function(res) {
         var $info, $text, item, key, libraries, source;
         console.log(res);
         libraries = (res != null ? res.libraries : void 0) || {};

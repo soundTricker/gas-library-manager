@@ -6,112 +6,68 @@
     return window.gapiIsLoaded();
   };
 
-  angular.module('LibraryBoxApp', ['ngSanitize', 'cgNotify', 'ui.bootstrap', 'ui.directives', 'markdown']).config([
-    "$routeProvider", '$compileProvider', function($routeProvider, $compileProvider) {
+  angular.module('LibraryBoxApp', ['ngSanitize', 'cgNotify', 'ui.bootstrap', 'ui.directives', 'ui.router', 'markdown']).config([
+    "$stateProvider", "$urlRouterProvider", '$compileProvider', function($stateProvider, $urlRouterProvider, $compileProvider) {
       $compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
-      return $routeProvider.when('/', {
+      $urlRouterProvider.otherwise('/');
+      return $stateProvider.state('top', {
+        url: '/',
         templateUrl: 'views/index.html',
         controller: 'IndexCtrl'
-      }).when('/mine', {
+      }).state('mine', {
+        url: '/mine',
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
-      }).when('/mine/:key', {
+      }).state('mine.detail', {
+        url: '/detail/:key',
         templateUrl: 'views/detail.html',
         controller: 'DetailCtrl',
         resolve: {
           'library': [
-            '$route', '$rootScope', '$q', function($route, $rootScope, $q) {
-              var d;
-              if ($rootScope.libraryMap) {
-                return $rootScope.libraryMap[$route.current.params.key];
-              }
-              d = $q.defer();
-              $rootScope.$on('loadedLibraries', function() {
-                return d.resolve($rootScope.libraryMap[$route.current.params.key]);
-              });
-              return d.promise;
+            '$stateParams', 'storage', function($stateParams, storage) {
+              return storage.getLibrary($stateParams.key);
             }
-          ],
-          'type': function() {
-            return 'mine';
-          }
+          ]
         }
-      }).when('/global/:key', {
-        templateUrl: 'views/globalDetail.html',
-        controller: 'DetailCtrl',
-        resolve: {
-          'library': [
-            '$route', '$rootScope', '$q', function($route, $rootScope, $q) {
-              var d, get;
-              d = $q.defer();
-              get = (function(key) {
-                return function() {
-                  gapi.client.libraries.get({
-                    key: key
-                  }).execute(function(result) {
-                    d.resolve(result);
-                    return $rootScope.$apply();
-                  });
-                  return d.promise;
-                };
-              })($route.current.params.key);
-              if ($rootScope.gapiLoaded) {
-                return get();
-              }
-              $rootScope.$on("gapiLoaded", function() {
-                return get();
-              });
-              return d.promise;
-            }
-          ],
-          'type': function() {
-            return "global";
-          }
-        }
-      }).when('/global', {
+      }).state('global', {
+        url: '/global?q&next',
         templateUrl: 'views/global.html',
         controller: 'GlobalCtrl',
         resolve: {
-          'libraries': [
-            '$route', '$rootScope', '$q', function($route, $rootScope, $q) {
+          'result': [
+            '$stateParams', '$rootScope', '$q', function($stateParams, $rootScope, $q) {
               var d, list, search;
               d = $q.defer();
               search = function() {
                 var param;
                 param = {
-                  query: $route.current.params.q
+                  query: $stateParams.q
                 };
-                if ($route.current.params.next) {
-                  param.next = parseInt($route.current.params.next);
-                }
+                $stateParams.next || (param.nextToken = $stateParams.next);
                 gapi.client.libraries.search(param).execute(function(result) {
-                  var _ref;
-                  console.log(result);
-                  d.resolve((_ref = result.items) != null ? _ref : []);
+                  d.resolve(result);
                   return $rootScope.$apply();
                 });
                 return d.promise;
               };
               list = function() {
-                gapi.client.libraries.list().execute(function(result) {
-                  var _ref;
-                  $rootScope.globalLibraries = result.items;
-                  d.resolve((_ref = result.items) != null ? _ref : []);
+                var param;
+                param = {};
+                $stateParams.next || (param.cursor = $stateParams.next);
+                gapi.client.libraries.list(param).execute(function(result) {
+                  d.resolve(result);
                   return $rootScope.$apply();
                 });
                 return d.promise;
               };
-              if ($rootScope.globalLibraries) {
-                return $rootScope.globalLibraries;
-              }
               if ($rootScope.gapiLoaded) {
-                if ($route.current.params.q) {
+                if ($stateParams.q) {
                   return search();
                 }
                 return list();
               }
               $rootScope.$on("gapiLoaded", function() {
-                if ($route.current.params.q) {
+                if ($stateParams.q) {
                   return search();
                 }
                 return list();
@@ -120,15 +76,48 @@
             }
           ]
         }
-      }).when('/register', {
+      }).state('global.detail', {
+        url: '/detail/:key',
+        templateUrl: 'views/globalDetail.html',
+        controller: 'DetailCtrl',
+        resolve: {
+          'library': [
+            '$stateParams', '$rootScope', '$q', function($stateParams, $rootScope, $q) {
+              var d, get;
+              d = $q.defer();
+              get = (function(key) {
+                return function() {
+                  gapi.client.libraries.get({
+                    libraryKey: key
+                  }).execute(function(result) {
+                    d.resolve(result);
+                    return $rootScope.$apply();
+                  });
+                  return d.promise;
+                };
+              })($stateParams.key);
+              if ($rootScope.gapiLoaded) {
+                return get();
+              }
+              $rootScope.$on("gapiLoaded", function() {
+                return get();
+              });
+              return d.promise;
+            }
+          ]
+        }
+      }).state('account', {
+        url: '/account',
+        templateUrl: 'views/modifyAccount.html',
+        controller: 'ModifyAccountCtrl'
+      }).state('register', {
+        url: '/register',
         templateUrl: 'views/register.html',
         controller: 'RegisterCtrl'
-      }).otherwise({
-        redirectTo: '/'
       });
     }
   ]).run([
-    "$rootScope", function($rootScope) {
+    "$rootScope", 'storage', function($rootScope, storage) {
       $rootScope.i18n = function() {
         var args, key;
         key = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
@@ -138,18 +127,15 @@
           return chrome.i18n.getMessage.apply(chrome.i18n, [key]);
         }
       };
-      chrome.storage.onChanged.addListener(function(changes, areaName) {
+      $rootScope.$on('addLibrary', function(result) {
         var item, key;
-        if (areaName !== "sync") {
-          return;
-        }
-        $rootScope.libraryMap = changes.libraries.newValue;
+        $rootScope.libraryMap = result.changes.libraries.newValue;
         $rootScope.libraries = (function() {
-          var _ref, _ref1, _results;
-          _ref1 = (changes != null ? (_ref = changes.libraries) != null ? _ref.newValue : void 0 : void 0) || {};
+          var _ref, _ref1, _ref2, _results;
+          _ref2 = ((_ref = result.changes) != null ? (_ref1 = _ref.libraries) != null ? _ref1.newValue : void 0 : void 0) || {};
           _results = [];
-          for (key in _ref1) {
-            item = _ref1[key];
+          for (key in _ref2) {
+            item = _ref2[key];
             if (item.key) {
               _results.push(item);
             }
@@ -158,12 +144,12 @@
         })();
         return $rootScope.$apply();
       });
-      return chrome.storage.sync.get("libraries", function(res) {
+      return storage.getLibraries().then(function(libraries) {
         var item, key;
-        $rootScope.libraryMap = res.libraries;
+        $rootScope.libraryMap = libraries;
         $rootScope.libraries = (function() {
           var _ref, _results;
-          _ref = (res != null ? res.libraries : void 0) || {};
+          _ref = libraries || {};
           _results = [];
           for (key in _ref) {
             item = _ref[key];
@@ -173,8 +159,7 @@
           }
           return _results;
         })();
-        $rootScope.$broadcast('loadedLibraries');
-        return $rootScope.$apply();
+        return $rootScope.$broadcast('loadedLibraries');
       });
     }
   ]);
