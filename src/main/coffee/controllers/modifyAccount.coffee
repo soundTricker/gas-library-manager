@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module('LibraryBoxApp')
-  .controller 'ModifyAccountCtrl', ['$scope','$rootScope','notify','$state','$q', ($scope,$rootScope,notify,$state, $q) ->
+  .controller 'ModifyAccountCtrl', ['$scope','$rootScope','$notify','$state','$q', ($scope,$rootScope,$notify,$state, $q) ->
 
     $scope.processing = off
 
@@ -11,37 +11,19 @@ angular.module('LibraryBoxApp')
         url : $scope.result.url
         userIconUrl : if $scope.useIcon is "use" then $scope.userIconUrl else ""
       .execute (result)->
-        if result.error
-          return notify 
-            message : result.error.message
-            template : "views/notify.html"
-            scope :
-              title : "Got Error"
-              type : "alert-error"
+        return $notify.error "Got Error", result.error.message if result.error
 
-        notify
-          message : "Updated"
-          template : "views/notify.html"
-          scope :
-            title : "Update your account to gas-library-box"
-            type : "alert-success"
-        $rootScope.$broadcast "loggedin" , {
+        $notify.success "Update your account" , "Updated"
+        $rootScope.$broadcast "loggedin",
           userIconUrl : result.userIconUrl
           nickname : result.nickname
-        }
         $scope.processing = off
         $state.go 'top'
-        return
 
     loadInitialData = ()->
 
       if !$rootScope.loggedin
-        notify
-          message : "You are not registered gas-library-box"
-          template : "views/notify.html"
-          scope :
-            title : "Warnning"
-            type : "alert-warnning"
+        $notify.warn "Warnning" , "You are not registered gas-library-box, Please register account"
         $state.go 'register'
         return
 
@@ -59,13 +41,7 @@ angular.module('LibraryBoxApp')
       $q.all([people(), members()]).then (results)->
         people = results[0]
         me = results[1]
-        if people.error || me.error
-          return notify 
-            message : people.error?.message || me.error.message
-            template : "views/notify.html"
-            scope :
-              title : "Got Error, Please reflesh page"
-              type : "alert-error"
+        return $notify.error("Got Error, Please reflesh page", people.error?.message || me.error.message) if people.error || me.error
 
         $scope.result = me
         $scope.nickname = me.nickname

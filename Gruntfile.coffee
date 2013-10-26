@@ -26,8 +26,11 @@ module.exports = (grunt) ->
     yeoman: yeomanConfig
     watch:
       options:
+        livereload : on
         spawn: false
-
+      livereload:
+        files: ["<%= yeoman.app%>/{,*/}*"]
+        tasks: []
       coffee:
         files: ["<%= yeoman.src %>/coffee/{,*/}*.coffee"]
         tasks: ["coffee:dist"]
@@ -46,6 +49,10 @@ module.exports = (grunt) ->
         
         # change this to '0.0.0.0' to access the server from outside
         hostname: "localhost"
+      keepalive:
+        options:
+          middleware: (connect)->
+            [mountFolder(connect, "app")]
 
       test:
         options:
@@ -120,7 +127,7 @@ module.exports = (grunt) ->
       options:
         dest: "<%= yeoman.dist %>"
 
-      html: ["<%= yeoman.app %>/popup.html", "<%= yeoman.app %>/options.html"]
+      html: ["<%= yeoman.app %>/popup.html", "<%= yeoman.app %>/options.html", "<%= yeoman.app %>/background.html"]
 
     usemin:
       options:

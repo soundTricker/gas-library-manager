@@ -2,8 +2,8 @@
 
 libraryBoxApp = angular.module('LibraryBoxApp')
 libraryBoxApp.controller 'MainCtrl',
-  ["$scope",'$rootScope','$state','$filter', 'storage', 'notify'
-  ($scope, $rootScope, $state, $filter,storage, notify) ->
+  ["$scope",'$rootScope','$state','$filter', 'storage', '$notify'
+  ($scope, $rootScope, $state, $filter,storage, $notify) ->
     $scope.uploading = off
     $scope.isCollapsed = on
     $scope.currentPage = 1 #current page
@@ -76,37 +76,18 @@ Content-Transfer-Encoding: base64
 
           $scope.$apply ()->
             $scope.uploading = off
-            if result.error
-              notify
-                message : result.error.message
-                template : "views/notify.html"
-                scope :
-                  title : "Got Error"
-                  type : "alert-error"
-            else
-              notify
-                message : "Exported your libraries to Google Drive.<br/> Please see <a href=\"#{result.alternateLink}\" target=\"_blank\">Google Drive</a>"
-                template : "views/notify.html"
-                scope :
-                  title : "Exported your libraries"
-                  type : "alert-info"
+            return $notify.error "Got Error", result.error.message if result.error
+            $notify.info "Your libraries are exported", "Exported your libraries to Google Drive.<br/> Please see <a href=\"#{result.alternateLink}\" target=\"_blank\">Google Drive</a>"
     $scope.import = (fileId)->
       $scope.importing = on
       gapi.client.drive.files.get( "fileId" : fileId , "fields" : "downloadUrl").execute (result)->
-        if result.error
-          notify
-            message : result.error.message
-            template : "views/notify.html"
-            scope :
-              title : "Got Error"
-              type : "alert-error"
-          return
+        return $notify.error "Got Error", result.error.message if result.error
 
         $.ajax result.downloadUrl,
           headers :
             "Authorization" : "Bearer #{gapi.auth.getToken().access_token}"
         .then (result)->
-          console.log result
+          return $notify.error "Got Error", result.error.message if result.error
           storage.addLibraries(result).then ()->
             $scope.isCollapsed = on
             storage.getLibraries().then (libs)->
@@ -114,16 +95,11 @@ Content-Transfer-Encoding: base64
               libraries = libraries.sort (i1,i2)-> i1.label.toLowerCase() > i2.label.toLowerCase()
               $scope.filtered = filter()
 
-              notify
-                message : "Success importing your libraries"
-                template : "views/notify.html"
-                scope :
-                  title : "Import your libraries"
-                  type : "alert-info"
+              $notify.info "Import your libraries", "Success importing your libraries"
 
   ]
 
-libraryBoxApp.controller 'PrivateLibraryCtrl',["$scope", "$window", 'storage' , ($scope,$window, storage)->
+libraryBoxApp.controller 'PrivateLibraryCtrl',["$scope", "$window", 'storage', '$notify' , ($scope,$window, storage, $notify)->
 
   $scope.modify = false
   $scope.delete = false
@@ -131,7 +107,7 @@ libraryBoxApp.controller 'PrivateLibraryCtrl',["$scope", "$window", 'storage' , 
   $scope.deleteLibrary = ()->
     if $window.confirm("Are you sure delete #{$scope.item.label} ?")
       storage.removeLibrary($scope.item.key).then ()->
-        alert "deleted"
+        $notify.info "Deleted", "#{$scope.item.label} is deleted."
         $scope.$parent.$emit "deleted" , $scope.item.key
         $scope.delete = false
     else

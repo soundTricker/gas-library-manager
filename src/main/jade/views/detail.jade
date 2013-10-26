@@ -1,0 +1,144 @@
+.pull-right
+    a(href='#/mine') Back to list
+    .library-list(ng-controller='PrivateLibraryCtrl', ng-init='item = library; modify=false')
+      h1.page-header {{item.label}}
+      div(ng-show='!modify')
+        .pull-right
+          .pull-right
+            .well.well-small
+              h5 Author
+              .media
+                a.pull-left(ng-href='{{loginUser.url}}', target='_blank')
+                  img.media-object(src='', alt='', ng-src='{{loginUser.userIconUrl}}')
+                .media-body
+                  h6.media-heading
+                    a(ng-if='loginUser', ng-href='{{loginUser.url}}', target='_blank') {{loginUser.nickname}}
+                    span(ng-if='!loginUser') you
+              div {{i18n("registeredAt")}} : {{item.registeredAt | date}}
+              div {{i18n("modifiedAt")}} : {{item.modifiedAt | date}}
+        h5 {{i18n("description")}}
+        div(ng-show='item.desc', ng-bind-html='library.desc | escape | break2br')
+        .clearfix(ng-hide='item.desc')
+          | (No description)
+        h5 {{i18n("longDescription")}}
+        div(ng-show='item.longDesc', ng-bind-html='library.longDesc | markdown')
+        hr
+        .btn-group
+          a.btn.btn-link(href='{{item.sourceUrl}}', target='_blank')
+            i.icon-external-link
+            | {{i18n("viewSource")}}
+          button.btn.btn-link(ng-click='modify = !modify')
+            i.icon-wrench
+            | {{i18n("modify")}}
+          button.btn.btn-link(ng-disabled='delete', ng-click='delete = true;deleteLibrary(item)')
+            i.icon-remove-sign
+            | {{i18n("delete")}}
+          span(ng-show='loggedin', ng-controller='PublishCtrl')
+            button.btn.btn-link(ng-show='!item.published', ng-click='openDialog=true')
+              i.icon-share
+              | {{i18n("publish")}}
+            div(modal='openDialog', close='openDialog=false', options='opts')
+              .modal-header
+                h3 Publish library to GAS Library Box Sites
+              .modal-body
+                p
+                  | Your library will be published to GAS Library Box Sites with your profile, user icon, nickname and Google+ Profile URL. If you want to change library descriptions, please close this dialog and click
+                  code {{i18n('modify')}}
+                  | button.
+                h4 Library Infomation
+                p
+                  dl
+                    dt {{i18n('name')}}
+                    dd {{item.label}}
+                    dt {{i18n('description')}}
+                    dd {{item.desc}}
+                    dt {{i18n('longDescription')}}
+                    dd
+                      div(ng-bind-html='item.longDesc | markdown')
+              .modal-footer
+                button.btn.btn-info(ng-click='publish()')
+                  i.icon-share
+                  | {{i18n("publish")}}
+                button.btn.btn-warning.cancel(ng-click='openDialog=false')
+                  | {{i18n("cancel")}}
+          span(ng-show='loggedin', ng-controller='PublishCtrl')
+            button.btn.btn-link(ng-show='item.published', ng-click='openModifyDialog=true')
+              i.icon-share
+              | {{i18n("updatePublished")}}
+            div(modal='openModifyDialog', close='openModifyDialog=false', options='opts')
+              .modal-header
+                h3 Update published library on GAS Library Box Sites
+              .modal-body
+                p
+                  | If you want to change library descriptions, please close this dialog and click
+                  code "{{i18n('modify')}}"
+                  | button.
+                h4 Library Infomation
+                p
+                  dl
+                    dt {{i18n('name')}}
+                    dd {{item.label}}
+                    dt {{i18n('description')}}
+                    dd {{item.desc}}
+                    dt {{i18n('longDescription')}}
+                    dd
+                      div(ng-bind-html='item.longDesc | markdown')
+              .modal-footer
+                button.btn.btn-info(ng-click='update()')
+                  i.icon-share
+                  | {{i18n("publish")}}
+                button.btn.btn-warning.cancel(ng-click='openModifyDialog=false')
+                  | {{i18n("cancel")}}
+          span(ng-show='loggedin', ng-controller='PublishCtrl')
+            button.btn.btn-link(ng-show='item.published', ng-click='openDeleteDialog=true')
+              i.icon-share
+              | {{i18n("deletePublished")}}
+            div(modal='openDeleteDialog', close='openDeleteDialog=false', options='opts')
+              .modal-header
+                h3 Delete published library from GAS Library Box Sites
+              .modal-body
+                h4 Library Infomation
+                p
+                  dl
+                    dt {{i18n('name')}}
+                    dd {{item.label}}
+                    dt {{i18n('description')}}
+                    dd {{item.desc}}
+                    dt {{i18n('longDescription')}}
+                    dd
+                      div(ng-bind-html='item.longDesc | markdown')
+              .modal-footer
+                button.btn.btn-info(ng-click='delete()')
+                  i.icon-share
+                  | {{i18n("delete")}}
+                button.btn.btn-warning.cancel(ng-click='openDeleteDialog=false')
+                  | {{i18n("cancel")}}
+        hr
+      div(ng-show='modify')
+        form(name='modifyLib', ng-init='label=item.label; desc=item.desc; longDesc=item.longDesc;')
+          fieldset
+            legend(ng-bind-html='i18n(\'modifyTitle\')')
+            .control-group(ng-class='{error : !modifyLib.label.$valid}')
+              label.control-label(for='label{{$index}}') {{i18n("name")}}
+              .controls
+                input#label{{$index}}.span12(type='text', placeholder='Write library name', ng-maxlength='100', maxlength='100', name='label', ng-model='label', required='required')
+                span.help-inline(ng-show='modifyLib.label.$error.required') {{i18n("errorsRequired")}}
+            .control-group(ng-class='{error : !modifyLib.desc.$valid}')
+              label.control-label(for='desc{{$index}}') {{i18n("description")}}
+              .controls
+                input#desc{{$index}}.span12(type='text', placeholder='Write this library short description, it\'s shown in script editor.', ng-maxlength='80', maxlength='80', name='desc', ng-model='desc')
+            .control-group(ng-class='{error : !modifyLib.longDesc.$valid}')
+              .row-fluid
+                .span6
+                  label.control-label(for='longDesc{{$index}}') {{i18n("description")}}
+                .span6
+                  label.control-label(for='longDesc{{$index}}') Preview
+                .controls
+                  span.help-inline You can write this as markdwon format.
+                  .row-fluid
+                    .span6
+                      textarea#longDesc{{$index}}.span12(rows='5', name='longDesc', ng-model='longDesc', ng-maxlength='2000')
+                    .span6(ng-bind-html='longDesc | markdown')
+              .form-actions
+                button.btn.btn-primary(ng-disabled='!modifyLib.$valid', ng-click='modifyLibs()') {{i18n("modify")}}
+                button.btn(ng-click='modify=!modify') {{i18n("cancel")}}

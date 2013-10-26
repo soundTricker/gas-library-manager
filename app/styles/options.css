@@ -1,10 +1,23 @@
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/app\/styles\/options\.scss}line{font-family:\000031}}
+/* line 2, options.scss */
 .ui-scrollfix {
   position: fixed;
   top: 60px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/app\/styles\/options\.scss}line{font-family:\000036}}
+/* line 7, options.scss */
 .library-list {
   padding-right: 5px;
+}
+
+/* line 12, options.scss */
+.notify {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  -webkit-transition: top 0.5s ease-out, opacity 0.5s ease-out;
+  -webkit-transition-delay: 0s, 5s;
+  -moz-transition: top 0.5s ease-out, opacity 0.5s ease-out 5s;
+  -o-transition: top 0.5s ease-out, opacity 0.5s ease-out 5s;
+  transition: top 0.5s ease-out, opacity 0.5s ease-out 5s;
 }

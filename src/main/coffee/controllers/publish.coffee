@@ -2,8 +2,8 @@
 
 angular.module('LibraryBoxApp')
   .controller 'PublishCtrl',
-    ['$scope','$rootScope','notify','storage', 
-    ($scope, $rootScope, notify, storage) ->
+    ['$scope','$rootScope','$notify','storage', 
+    ($scope, $rootScope, $notify, storage) ->
       $scope.opts = 
         backdropFade : yes
         dialogFade : yes
@@ -30,24 +30,13 @@ angular.module('LibraryBoxApp')
               storage.addLibrary item
 
             $scope.openDialog = no
-            notify
-                message : result.error.message
-                template : "views/notify.html"
-                scope :
-                  title : "Got error"
-                  type : "alert-error"
+            $notify.error "Got error", result.error.message
             $scope.$apply()
             return
-          else
-            item.published = yes
-            storage.addLibrary(item).then ()->
-              $scope.openDialog = no
-              notify
-                  message : "Success Publish Library"
-                  template : "views/notify.html"
-                  scope :
-                    title : "Published Library"
-                    type : "alert-success"
+          item.published = yes
+          storage.addLibrary(item).then ()->
+            $scope.openDialog = no
+            $notify.success "Success publishing library", "#{item.label} is plublished"
 
       $scope.update = ()->
         item = $scope.item
@@ -69,20 +58,10 @@ angular.module('LibraryBoxApp')
               storage.addLibrary item
 
             $scope.openModifyDialog = no
-            notify
-                message : result.error.message
-                template : "views/notify.html"
-                scope :
-                  title : "Got error"
-                  type : "alert-error"
+            $notify.error "Got error", result.error.message
             return
           $scope.openModifyDialog = no
-          notify
-              message : "Success Update published library"
-              template : "views/notify.html"
-              scope :
-                title : "Update published library"
-                type : "alert-success"
+          $notify.success "Success updating library", "#{item.label} is updated"
           $scope.$apply()
       $scope.delete = ()->
         item = $scope.item
@@ -93,21 +72,11 @@ angular.module('LibraryBoxApp')
               storage.addLibrary item
             $scope.$apply ()->
               $scope.openDeleteDialog = no
-              notify
-                message : result.error.message
-                template : "views/notify.html"
-                scope : 
-                  title : "Got error"
-                  type : "alert-error"
+              $notify.error "Got error", result.error.message
           else
             item.published = no
             storage.addLibrary(item).then ()->
               $scope.openDeleteDialog = no
               $scope.item.published = no
-              notify
-                  message : "Success Delete published library"
-                  template : "views/notify.html"
-                  scope :
-                    title : "Delete published library"
-                    type : "alert-success"
+              $notify.success "Success deleting published library", "#{item.label} is deleted"
     ]

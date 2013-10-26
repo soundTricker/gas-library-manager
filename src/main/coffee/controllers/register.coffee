@@ -1,49 +1,33 @@
 'use strict'
 
 angular.module('LibraryBoxApp')
-  .controller 'RegisterCtrl', ['$scope','$rootScope','notify','$location', ($scope,$rootScope,notify,$location) ->
+  .controller 'RegisterCtrl', ['$scope','$rootScope','$notify','$state', ($scope,$rootScope,$notify,$state) ->
+    $scope.processing = off
     $scope.register = ()->
+      $scope.processing = on
       gapi.client.members.register
         nickname : $scope.nickname
         url : $scope.plusResult.url
         userIconUrl : if $scope.useIcon is "use" then $scope.userIconUrl else ""
       .execute (result)->
-        console.log result
-        return if result.error
+        return $notify.error "Got Error", result.error.message if result.error
+        $notify.success "Registered your account to gas-library-box", "Registered"
 
-        notify
-          message : "Registered"
-          template : "views/notify.html"
-          scope :
-            title : "Registered your account to gas-library-box"
-            type : "alert-success"
-        $rootScope.$broadcast "loggedin" , {
+        $rootScope.$broadcast "loggedin" ,
           userIconUrl : result.userIconUrl
           nickname : result.nickname
-        }
-        $location.path '/'
+        $state.go 'top'
         return
 
     loadInitialData = ()->
 
       if $rootScope.loggedin
-        notify
-          message : "You are already registered gas-library-box"
-          template : "views/notify.html"
-          scope :
-            title : "Warnning"
-            type : "alert-warnning"
-        $location.path '/'
+        $notify.warn "Warnning", "You are already registered gas-library-box"
+        $state.go 'top'
         return
 
-      gapi.client.plus.people.get({userId : "me"}).execute (result)->
-        if result.error
-          return notify 
-            message : result.error.message
-            template : "views/notify.html"
-            scope :
-              title : "Got Error, Please reflesh page"
-              type : "alert-error"
+      gapi.client.plus.people.get(userId : "me").execute (result)->
+        return $notify.error "Got Error, Please refresh page", result.error.message if result.error
 
         $scope.plusResult = result
         $scope.nickname = result.nickname

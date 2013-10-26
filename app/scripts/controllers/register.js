@@ -1,58 +1,38 @@
 (function() {
   'use strict';
   angular.module('LibraryBoxApp').controller('RegisterCtrl', [
-    '$scope', '$rootScope', 'notify', '$location', function($scope, $rootScope, notify, $location) {
+    '$scope', '$rootScope', '$notify', '$state', function($scope, $rootScope, $notify, $state) {
       var loadInitialData;
+      $scope.processing = false;
       $scope.register = function() {
+        $scope.processing = true;
         return gapi.client.members.register({
           nickname: $scope.nickname,
           url: $scope.plusResult.url,
           userIconUrl: $scope.useIcon === "use" ? $scope.userIconUrl : ""
         }).execute(function(result) {
-          console.log(result);
           if (result.error) {
-            return;
+            return $notify.error("Got Error", result.error.message);
           }
-          notify({
-            message: "Registered",
-            template: "views/notify.html",
-            scope: {
-              title: "Registered your account to gas-library-box",
-              type: "alert-success"
-            }
-          });
+          $notify.success("Registered your account to gas-library-box", "Registered");
           $rootScope.$broadcast("loggedin", {
             userIconUrl: result.userIconUrl,
             nickname: result.nickname
           });
-          $location.path('/');
+          $state.go('top');
         });
       };
       loadInitialData = function() {
         if ($rootScope.loggedin) {
-          notify({
-            message: "You are already registered gas-library-box",
-            template: "views/notify.html",
-            scope: {
-              title: "Warnning",
-              type: "alert-warnning"
-            }
-          });
-          $location.path('/');
+          $notify.warn("Warnning", "You are already registered gas-library-box");
+          $state.go('top');
           return;
         }
         return gapi.client.plus.people.get({
           userId: "me"
         }).execute(function(result) {
           if (result.error) {
-            return notify({
-              message: result.error.message,
-              template: "views/notify.html",
-              scope: {
-                title: "Got Error, Please reflesh page",
-                type: "alert-error"
-              }
-            });
+            return $notify.error("Got Error, Please refresh page", result.error.message);
           }
           $scope.plusResult = result;
           $scope.nickname = result.nickname;

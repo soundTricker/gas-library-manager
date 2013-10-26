@@ -1,8 +1,7 @@
 {
   "name": "__MSG_appName__",
-  "version": "0.0.2",
+  "version": "0.0.7",
   "manifest_version": 2,
-  "key" : "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDRwCm7CmpT+0HEvGGKuZ2W9swbnA5YDfsBUt6Bt/fO6csTNxPmWoGrvlC7D6jdQuw4TEX6JAWFqLpYQ+JccAsA3mh1mnABH9fr5JkkVSeMYMaC4qfwOEtlSucgVtqQrbwm75J02nivxIHmjDNSV4nEHGewHLWYrbnEi5ReL5DIcwIDAQAB",
   "description": "__MSG_appDescription__",
   "icons": {
     "16": "images/icon-16.png",
@@ -10,7 +9,7 @@
   },
   "default_locale": "en",
   "background": {
-    "page" : "background.html"
+    "page": "background.html"
   },
   "options_page": "options.html",
   "content_scripts": [

@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   angular.module('LibraryBoxApp').controller('optionPageCtrl', [
-    '$scope', '$state', '$rootScope', '$window', '$q', 'notify', '$location', 'storage', (function($scope, $state, $rootScope, $window, $q, notify, $location, storage) {
+    '$scope', '$state', '$rootScope', '$window', '$q', '$notify', 'storage', (function($scope, $state, $rootScope, $window, $q, $notify, storage) {
       $rootScope.$state = $state;
       $rootScope.$on("$stateChangeStart", function() {
         return $rootScope.isViewLoading = true;
@@ -51,14 +51,7 @@
                 userKey: "me"
               }).execute(function(result) {
                 if (result.code === 404) {
-                  notify({
-                    message: "You are not registered to gas-library-box service.<br> If you want to publish your library to gas-library-box , please sign up.",
-                    template: "views/notify.html",
-                    scope: {
-                      title: "Please Sign Up",
-                      type: "alert-info"
-                    }
-                  });
+                  $notify.info("Please Sign Up", "You are not registered to gas-library-box service.<br> If you want to publish your library to gas-library-box , please sign up.");
                   $scope.loginStatus = "givenRegister";
                 } else {
                   $rootScope.loginUser = result;
@@ -74,7 +67,7 @@
         });
       };
       return $scope.showRegister = function() {
-        return $location.path("/register");
+        return $state.go("register");
       };
     })
   ]);

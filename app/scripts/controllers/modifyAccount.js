@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   angular.module('LibraryBoxApp').controller('ModifyAccountCtrl', [
-    '$scope', '$rootScope', 'notify', '$state', '$q', function($scope, $rootScope, notify, $state, $q) {
+    '$scope', '$rootScope', '$notify', '$state', '$q', function($scope, $rootScope, $notify, $state, $q) {
       var loadInitialData;
       $scope.processing = false;
       $scope.modify = function() {
@@ -11,42 +11,21 @@
           userIconUrl: $scope.useIcon === "use" ? $scope.userIconUrl : ""
         }).execute(function(result) {
           if (result.error) {
-            return notify({
-              message: result.error.message,
-              template: "views/notify.html",
-              scope: {
-                title: "Got Error",
-                type: "alert-error"
-              }
-            });
+            return $notify.error("Got Error", result.error.message);
           }
-          notify({
-            message: "Updated",
-            template: "views/notify.html",
-            scope: {
-              title: "Update your account to gas-library-box",
-              type: "alert-success"
-            }
-          });
+          $notify.success("Update your account", "Updated");
           $rootScope.$broadcast("loggedin", {
             userIconUrl: result.userIconUrl,
             nickname: result.nickname
           });
           $scope.processing = false;
-          $state.go('top');
+          return $state.go('top');
         });
       };
       loadInitialData = function() {
         var members, people;
         if (!$rootScope.loggedin) {
-          notify({
-            message: "You are not registered gas-library-box",
-            template: "views/notify.html",
-            scope: {
-              title: "Warnning",
-              type: "alert-warnning"
-            }
-          });
+          $notify.warn("Warnning", "You are not registered gas-library-box, Please register account");
           $state.go('register');
           return;
         }
@@ -79,14 +58,7 @@
           people = results[0];
           me = results[1];
           if (people.error || me.error) {
-            return notify({
-              message: ((_ref = people.error) != null ? _ref.message : void 0) || me.error.message,
-              template: "views/notify.html",
-              scope: {
-                title: "Got Error, Please reflesh page",
-                type: "alert-error"
-              }
-            });
+            return $notify.error("Got Error, Please reflesh page", ((_ref = people.error) != null ? _ref.message : void 0) || me.error.message);
           }
           $scope.result = me;
           $scope.nickname = me.nickname;

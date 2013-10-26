@@ -5,7 +5,7 @@
   libraryBoxApp = angular.module('LibraryBoxApp');
 
   libraryBoxApp.controller('MainCtrl', [
-    "$scope", '$rootScope', '$state', '$filter', 'storage', 'notify', function($scope, $rootScope, $state, $filter, storage, notify) {
+    "$scope", '$rootScope', '$state', '$filter', 'storage', '$notify', function($scope, $rootScope, $state, $filter, storage, $notify) {
       var filter, item, libraries;
       $scope.uploading = false;
       $scope.isCollapsed = true;
@@ -75,24 +75,9 @@
             return $scope.$apply(function() {
               $scope.uploading = false;
               if (result.error) {
-                return notify({
-                  message: result.error.message,
-                  template: "views/notify.html",
-                  scope: {
-                    title: "Got Error",
-                    type: "alert-error"
-                  }
-                });
-              } else {
-                return notify({
-                  message: "Exported your libraries to Google Drive.<br/> Please see <a href=\"" + result.alternateLink + "\" target=\"_blank\">Google Drive</a>",
-                  template: "views/notify.html",
-                  scope: {
-                    title: "Exported your libraries",
-                    type: "alert-info"
-                  }
-                });
+                return $notify.error("Got Error", result.error.message);
               }
+              return $notify.info("Your libraries are exported", "Exported your libraries to Google Drive.<br/> Please see <a href=\"" + result.alternateLink + "\" target=\"_blank\">Google Drive</a>");
             });
           });
         });
@@ -104,22 +89,16 @@
           "fields": "downloadUrl"
         }).execute(function(result) {
           if (result.error) {
-            notify({
-              message: result.error.message,
-              template: "views/notify.html",
-              scope: {
-                title: "Got Error",
-                type: "alert-error"
-              }
-            });
-            return;
+            return $notify.error("Got Error", result.error.message);
           }
           return $.ajax(result.downloadUrl, {
             headers: {
               "Authorization": "Bearer " + (gapi.auth.getToken().access_token)
             }
           }).then(function(result) {
-            console.log(result);
+            if (result.error) {
+              return $notify.error("Got Error", result.error.message);
+            }
             return storage.addLibraries(result).then(function() {
               $scope.isCollapsed = true;
               return storage.getLibraries().then(function(libs) {
@@ -139,14 +118,7 @@
                   return i1.label.toLowerCase() > i2.label.toLowerCase();
                 });
                 $scope.filtered = filter();
-                return notify({
-                  message: "Success importing your libraries",
-                  template: "views/notify.html",
-                  scope: {
-                    title: "Import your libraries",
-                    type: "alert-info"
-                  }
-                });
+                return $notify.info("Import your libraries", "Success importing your libraries");
               });
             });
           });
@@ -156,14 +128,14 @@
   ]);
 
   libraryBoxApp.controller('PrivateLibraryCtrl', [
-    "$scope", "$window", 'storage', function($scope, $window, storage) {
+    "$scope", "$window", 'storage', '$notify', function($scope, $window, storage, $notify) {
       $scope.modify = false;
       $scope["delete"] = false;
       $scope.saving = false;
       $scope.deleteLibrary = function() {
         if ($window.confirm("Are you sure delete " + $scope.item.label + " ?")) {
           return storage.removeLibrary($scope.item.key).then(function() {
-            alert("deleted");
+            $notify.info("Deleted", "" + $scope.item.label + " is deleted.");
             $scope.$parent.$emit("deleted", $scope.item.key);
             return $scope["delete"] = false;
           });

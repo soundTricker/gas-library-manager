@@ -35,6 +35,7 @@
             }
             return _results;
           })();
+          _this.$rootScope.libraries = _this.libraries;
           return $rootScope.$apply();
         });
       }

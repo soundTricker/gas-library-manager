@@ -10,6 +10,7 @@ angular.module('LibraryBoxApp')
           changes : changes
         @libraryMap = changes.libraries.newValue
         @libraries = (item for key, item of (changes?.libraries?.newValue || {}) when item.key)
+        @$rootScope.libraries = @libraries
         $rootScope.$apply()
 
     getLibrary:(libraryKey)=>

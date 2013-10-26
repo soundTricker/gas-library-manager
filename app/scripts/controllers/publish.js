@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   angular.module('LibraryBoxApp').controller('PublishCtrl', [
-    '$scope', '$rootScope', 'notify', 'storage', function($scope, $rootScope, notify, storage) {
+    '$scope', '$rootScope', '$notify', 'storage', function($scope, $rootScope, $notify, storage) {
       $scope.opts = {
         backdropFade: true,
         dialogFade: true
@@ -26,29 +26,15 @@
               storage.addLibrary(item);
             }
             $scope.openDialog = false;
-            notify({
-              message: result.error.message,
-              template: "views/notify.html",
-              scope: {
-                title: "Got error",
-                type: "alert-error"
-              }
-            });
+            $notify.error("Got error", result.error.message);
             $scope.$apply();
-          } else {
-            item.published = true;
-            return storage.addLibrary(item).then(function() {
-              $scope.openDialog = false;
-              return notify({
-                message: "Success Publish Library",
-                template: "views/notify.html",
-                scope: {
-                  title: "Published Library",
-                  type: "alert-success"
-                }
-              });
-            });
+            return;
           }
+          item.published = true;
+          return storage.addLibrary(item).then(function() {
+            $scope.openDialog = false;
+            return $notify.success("Success publishing library", "" + item.label + " is plublished");
+          });
         });
       };
       $scope.update = function() {
@@ -71,25 +57,11 @@
               storage.addLibrary(item);
             }
             $scope.openModifyDialog = false;
-            notify({
-              message: result.error.message,
-              template: "views/notify.html",
-              scope: {
-                title: "Got error",
-                type: "alert-error"
-              }
-            });
+            $notify.error("Got error", result.error.message);
             return;
           }
           $scope.openModifyDialog = false;
-          notify({
-            message: "Success Update published library",
-            template: "views/notify.html",
-            scope: {
-              title: "Update published library",
-              type: "alert-success"
-            }
-          });
+          $notify.success("Success updating library", "" + item.label + " is updated");
           return $scope.$apply();
         });
       };
@@ -106,28 +78,14 @@
             }
             return $scope.$apply(function() {
               $scope.openDeleteDialog = false;
-              return notify({
-                message: result.error.message,
-                template: "views/notify.html",
-                scope: {
-                  title: "Got error",
-                  type: "alert-error"
-                }
-              });
+              return $notify.error("Got error", result.error.message);
             });
           } else {
             item.published = false;
             return storage.addLibrary(item).then(function() {
               $scope.openDeleteDialog = false;
               $scope.item.published = false;
-              return notify({
-                message: "Success Delete published library",
-                template: "views/notify.html",
-                scope: {
-                  title: "Delete published library",
-                  type: "alert-success"
-                }
-              });
+              return $notify.success("Success deleting published library", "" + item.label + " is deleted");
             });
           }
         });

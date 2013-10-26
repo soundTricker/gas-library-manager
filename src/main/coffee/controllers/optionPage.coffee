@@ -2,8 +2,8 @@
 
 angular.module('LibraryBoxApp')
   .controller 'optionPageCtrl',
-    ['$scope','$state','$rootScope', '$window', '$q', 'notify','$location','storage',
-    (($scope,$state,$rootScope, $window, $q, notify, $location,storage) ->
+    ['$scope','$state','$rootScope','$window','$q','$notify','storage',
+    (($scope , $state , $rootScope , $window , $q , $notify , storage) ->
       $rootScope.$state = $state
       $rootScope.$on "$stateChangeStart", ()-> $rootScope.isViewLoading = on
       $rootScope.$on "$stateChangeSuccess", ()-> $rootScope.isViewLoading = off
@@ -37,28 +37,23 @@ angular.module('LibraryBoxApp')
             loadApiDefer "libraries", "v1", "https://gas-library-box.appspot.com/_ah/api"
             loadApiDefer "members", "v1","https://gas-library-box.appspot.com/_ah/api"
           ]).then ()-> 
-            chrome.identity.getAuthToken interactive : true, (token)->
+            chrome.identity.getAuthToken interactive : on, (token)->
               gapi.auth.setToken "access_token" : token
               gapi.client.members.get
                 userKey : "me"
               .execute (result)->
                 if result.code is 404
-                  notify
-                    message : "You are not registered to gas-library-box service.<br> If you want to publish your library to gas-library-box , please sign up."
-                    template : "views/notify.html"
-                    scope :
-                      title : "Please Sign Up"
-                      type : "alert-info"
+                  $notify.info "Please Sign Up", "You are not registered to gas-library-box service.<br> If you want to publish your library to gas-library-box , please sign up."
                   $scope.loginStatus = "givenRegister"
                 else
                   $rootScope.loginUser = result
                   $rootScope.$emit "loggedin" , result
 
                 $rootScope.loggedin = result.code isnt 404
-                $rootScope.gapiLoaded = true
+                $rootScope.gapiLoaded = on
                 $rootScope.$emit 'gapiLoaded'
                 $scope.$apply()
 
       $scope.showRegister = ()->
-        $location.path "/register"
+        $state.go "register"
     )]
