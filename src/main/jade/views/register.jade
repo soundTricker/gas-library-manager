@@ -1,0 +1,28 @@
+.row-fluid
+  .span12
+    div(ng-hide='loaded')
+      i.icon-spinner.icon-spin
+      | Now loading your account infomation from google+...
+    form.form-horizontal(name='registerForm', ng-show='loaded')
+      legend Register your account
+      .control-group(ng-class='{error : !registerForm.name.$valid}')
+        label.control-label(for='name') Nickname
+        .controls
+          input#name(type='text', name='name', ng-model='nickname', placeholder='Set your account name', required='required', max-length='50', ng-trim='true')
+          span.help-inline(ng-show='registerForm.name.$error.required') {{i18n("errorsRequired")}}
+      .control-group
+        label.control-label(for='useIcon') Profile Icon
+        .controls
+          .media
+            .pull-left
+              img.media-object(ng-show='registerForm', ng-src='{{userIconUrl}}')
+            .media-body
+              label.radio.inline(for='useIcon', ng-init='useIcon = \'use\'')
+                input#useIcon(type='radio', ng-model='useIcon', name='useIcon', value='use', checked='checked')
+                | Use Google+ Icon
+              label.radio.inline(for='notUsing')
+                input#notUsing(type='radio', ng-model='useIcon', ng-value='', name='useIcon', value='not')
+                | Not set it.
+      .form-actions
+        button.btn.btn-primary(ng-disabled='!registerForm.$valid || processing', ng-click='register()') Register Account
+        button.btn(type='cancel') Cancel

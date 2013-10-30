@@ -31,6 +31,10 @@ module.exports = (grunt) ->
       livereload:
         files: ["<%= yeoman.app%>/{,*/}*"]
         tasks: []
+      jade:
+        files: ["<%= yeoman.src %>/jade/{,*/}*.jade"]
+        tasks: ["jade:local"]
+
       coffee:
         files: ["<%= yeoman.src %>/coffee/{,*/}*.coffee"]
         tasks: ["coffee:dist"]
@@ -51,6 +55,8 @@ module.exports = (grunt) ->
         hostname: "localhost"
       keepalive:
         options:
+          keepalive:on
+          livereload:on
           middleware: (connect)->
             [mountFolder(connect, "app")]
 
@@ -109,6 +115,29 @@ module.exports = (grunt) ->
       server:
         options:
           debugInfo: true
+    jade:
+      local:
+          options:
+            pretty: on
+            data :
+              livereload:on
+          files: [
+            expand: true
+            cwd: "<%= yeoman.src %>/jade"
+            src: "{,*/}*.jade"
+            dest: "<%= yeoman.app %>/"
+            ext: ".html"
+          ]
+      dist:
+          options:
+            pretty: on
+          files: [
+            expand: true
+            cwd: "<%= yeoman.src %>/jade"
+            src: "{,*/}*.jade"
+            dest: "<%= yeoman.app %>/"
+            ext: ".html"
+          ]
 
     
     # not used since Uglify task does concat,
@@ -205,7 +234,7 @@ module.exports = (grunt) ->
     concurrent:
       server: ["coffee:dist", "compass:server"]
       test: ["coffee", "compass"]
-      dist: ["coffee", "compass:dist", "imagemin", "svgmin", "htmlmin"]
+      dist: ["coffee","jade:dist", "compass:dist", "imagemin", "svgmin", "htmlmin"]
 
     chromeManifest:
       dist:
