@@ -7,13 +7,13 @@ h1.page-header {{i18n("myLibraryList")}}
             li
               form.form-search
                 .input-append
-                  input.search-query(accesskey='f', type='search', ng-model='search.$', placeholder='{{i18n(\'search\')}}')
+                  input.search-query(accesskey='f', type='search', ng-model='search.$', placeholder="{{i18n('search')}}")
                   button.btn(tooltip='Search from global site', ng-click='query()')
                     i.icon-search
             li.divider
             li.muted(ng-if='filtered.length === 0') There is no library.
             li(ng-repeat='i in filtered track by $index')
-              a(ng-if='$state.is(\'global\')', smooth-scroll='#{{i.libraryKey}}', scroll-easing='easeInOutBack', scroll-duration='slow', scroll-offset='-30') {{i.label}}
+              a(ng-if="$state.is('global')", smooth-scroll="{{'#' + i.libraryKey}}", scroll-easing='easeInOutBack', scroll-duration='slow', scroll-offset='-30') {{i.label}}
               a(ng-if='$state.is(\'global.detail\')', ng-href='#/global/detail/{{i.libraryKey}}') {{i.label}}
             li
               pagination.pagination-small(data-boundary-links='true', data-num-pages='noOfPages', data-current-page='currentPage', max-size='maxSize', data-previous-text='«', data-next-text='»')
@@ -22,7 +22,7 @@ h1.page-header {{i18n("myLibraryList")}}
       .span9.library-list(ng-if='$state.is(\'global.detail\')', ui-view='ui-view')
       .span9.library-list(ng-if='$state.is(\'global\')')
         .row-fluid(ng-repeat='item in filtered track by $index', ng-controller='GlobalLibraryCtrl')
-          #{{item.libraryKey}}.span12
+          .span12(id="{{item.libraryKey}}")
             h2.page-header
               a(href='#/global/detail/{{item.libraryKey}}') {{item.label}}
             div(ng-show='!modify')

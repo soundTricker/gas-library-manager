@@ -20,13 +20,13 @@ h1.page-header {{i18n("myLibraryList")}}
             li.divider
             li.muted(ng-if='filtered.length === 0') There is no library.
             li(ng-repeat='i in filtered track by $index')
-              a(ng-if='$state.is(\'mine\')', smooth-scroll='#{{i.key}}', scroll-easing='easeInOutBack', scroll-duration='slow', scroll-offset='-30') {{i.label}}
+              a(ng-if='$state.is(\'mine\')', smooth-scroll="{{'#' + i.key}}", scroll-easing='easeInOutBack', scroll-duration='slow', scroll-offset='-30') {{i.label}}
               a(ng-if='$state.is(\'mine.detail\')', ng-href='#/mine/detail/{{i.key}}') {{i.label}}
             pagination.pagination-small(data-boundary-links='true', data-num-pages='noOfPages', data-current-page='currentPage', max-size='maxSize', data-previous-text='«', data-next-text='»')
       .span9.library-list(ng-if='$state.is(\'mine.detail\')', ui-view='ui-view')
       .span9.library-list(ng-if='$state.is(\'mine\')')
         .row-fluid(ng-repeat='item in filtered track by $index', ng-controller='PrivateLibraryCtrl')
-          #{{item.key}}.span12
+          .span12(id="{{item.key}}")
             h2.page-header
               a(href='#/mine/detail/{{item.key}}') {{item.label}}
             div(ng-show='!modify')

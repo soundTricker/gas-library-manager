@@ -1,6 +1,5 @@
-<div class="pull-right">
-  <a href="#/global">Back to list</a>
-</div>
+
+<div class="pull-right"><a href="#/global">Back to list</a>
   <div ng-init="item = library">
     <h1 class="page-header">{{item.label}}</h1>
     <div>
@@ -8,39 +7,27 @@
         <div class="pull-right">
           <div class="well well-small">
             <h5>Author</h5>
-            <div class="media">
-              <a ng-href="{{item.url}}" target="_blank" class="pull-left">
-                <img src="" alt="" class="media-object" ng-src="{{item.authorIconUrl}}">
-              </a>
+            <div class="media"><a ng-href="{{item.url}}" target="_blank" class="pull-left"><img src="" alt="" ng-src="{{item.authorIconUrl}}" class="media-object"/></a>
               <div class="media-body">
-                <h6 class="media-heading">
-                  <a ng-href="{{item.authorUrl}}" target="_blank">{{item.authorName}}</a>
-                </h6>
+                <h6 class="media-heading"><a ng-href="{{item.authorUrl}}" target="_blank">{{item.authorName}}</a></h6>
               </div>
             </div>
             <div>{{i18n("registeredAt")}} : {{item.registeredAt | date}}</div>
             <div>{{i18n("modifiedAt")}} : {{item.modifiedAt | date}}</div>
           </div>
         </div>
-      </div> <!-- right dates -->
+      </div>
       <h5>{{i18n("description")}}</h5>
-      <div ng-show="item.desc" ng-bind-html="library.desc | escape | break2br">
-      </div>
-      <div ng-hide="item.desc" class="clearfix">
-        (No description)
-      </div>
+      <div ng-show="item.desc" ng-bind-html="library.desc | escape | break2br"></div>
+      <div ng-hide="item.desc" class="clearfix">(No description)</div>
       <h5>{{i18n("longDescription")}}</h5>
-      <div ng-if="item.longDesc" ng-bind-html="library.longDesc | markdown">
-      </div>
-      <div ng-if="!item.longDesc" class="clearfix">
-        (No description)
+      <div ng-if="item.longDesc" ng-bind-html="library.longDesc | markdown"></div>
+      <div ng-if="!item.longDesc" class="clearfix">(No description)</div>
+      <hr/>
+      <div class="btn-group"><a href="{{item.sourceUrl}}" target="_blank" class="btn btn-link"><i class="icon-external-link"></i>{{i18n("viewSource")}}</a>
+        <button ng-if="!isStocked(item.libraryKey)" ng-click="stocked()" class="btn btn-link"></button>
       </div>
       <hr/>
-      <div class="btn-group">
-        <a class="btn btn-link" href="{{item.sourceUrl}}" target="_blank"><i class="icon-external-link"></i> {{i18n("viewSource")}}</a>
-        <button ng-if="!isStocked(item.libraryKey)" class="btn btn-link" ng-click="stocked()">
-      </div>
-      <hr/>
-    </div><!--detail-->
-  </div><!-- /right-->
+    </div>
+  </div>
 </div>
