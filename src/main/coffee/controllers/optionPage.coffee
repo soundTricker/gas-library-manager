@@ -2,8 +2,8 @@
 
 angular.module('LibraryBoxApp')
   .controller 'optionPageCtrl',
-    ['$scope','$state','$rootScope','$window','$q','$notify','storage',
-    (($scope , $state , $rootScope , $window , $q , $notify , storage) ->
+    ['$scope','$state','$rootScope','$window','$q','$notify','storage', 'apiUrl', 
+    (($scope , $state , $rootScope , $window , $q , $notify , storage, apiUrl) ->
       $rootScope.$state = $state
       $rootScope.$on "$stateChangeStart", ()-> $rootScope.isViewLoading = on
       $rootScope.$on "$stateChangeSuccess", ()-> $rootScope.isViewLoading = off
@@ -34,8 +34,8 @@ angular.module('LibraryBoxApp')
           $q.all([
             loadApiDefer "plus", "v1"
             loadApiDefer "drive", "v2"
-            loadApiDefer "libraries", "v1", "https://gas-library-box.appspot.com/_ah/api"
-            loadApiDefer "members", "v1","https://gas-library-box.appspot.com/_ah/api"
+            loadApiDefer "libraries", "v1", apiUrl
+            loadApiDefer "members", "v1", apiUrl
           ]).then ()-> 
             chrome.identity.getAuthToken interactive : on, (token)->
               gapi.auth.setToken "access_token" : token
@@ -52,6 +52,7 @@ angular.module('LibraryBoxApp')
                 $rootScope.loggedin = result.code isnt 404
                 $rootScope.gapiLoaded = on
                 $rootScope.$emit 'gapiLoaded'
+                console.log result
                 $scope.$apply()
 
       $scope.showRegister = ()->

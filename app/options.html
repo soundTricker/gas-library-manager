@@ -10,7 +10,7 @@
     <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles/angular-notify.min.css">
     <link href="styles/main.css" rel="stylesheet">
-    <link href="styles/options.css" rel="stylesheet">
+    <link href="styles/options.scss" rel="stylesheet">
     <!-- endbuild -->
     <title ng-bind="i18n('appName')"></title>
   </head>
@@ -27,25 +27,24 @@
               <li ng-class="{active : $state.is('register')}" ng-if="loginStatus == 'givenRegister'">Register</li>
             </ul>
             <ul ng-switch="loginStatus" class="nav pull-right">
-              <li ng-switch-when="loggedin" class="dropdown"><a class="dropdown-toggle">{{nickname}}<img ng-src="{{userIconUrl}}"></a>
+              <li ng-switch-when="loggedin" class="dropdown"><a class="dropdown-toggle">{{nickname}} &nbsp;<img ng-src="{{userIconUrl}}"></a>
                 <ul class="dropdown-menu">
                   <li><a ui-sref="account">Change Account Information</a></li>
                 </ul>
               </li>
               <li ng-switch-when="givenRegister" class="active"><a ng-click="showRegister()" class="navbar-link">Sign up</a></li>
               <li ng-switch-when="loadFinished" class="active"><a ng-click="login()" class="navbar-link">Sign in</a></li>
-              <li>.(ng-switch-default='ng-switch-default')
-                <p class="navbar-text"><i class="icon-spinner icon-spin"></i>Now loading...</p>
+              <li ng-switch-default="ng-switch-default">
+                <p class="navbar-text"><i class="icon-spinner icon-spin"> </i>&nbsp;Now loading...</p>
               </li>
             </ul>
           </div>
-          <!--/.nav-collapse -->
         </div>
       </div>
     </div>
     <div notifications="bottom right"></div>
     <div ng-show="isViewLoading" style="margin-top:50px;"><i class="icon-spinner icon-spin"></i>Now loading...</div>
-    <div ng-hide="isViewLoading" ui-view="" style="margin-top:50px;" class="container-fluid"></div>
+    <div ng-hide="isViewLoading" ui-view="container" style="margin-top:50px;" class="container-fluid"></div>
     <!-- build:js scripts/modules.js -->
     <script src="bower_components/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="bower_components/jquery-easing/jquery.easing.min.js"></script>
@@ -84,5 +83,6 @@
     <script src="scripts/lib/gapi-chrome-apps.js"></script>
     <!-- endbuild -->
     <script src="scripts/analytics.js"></script>
+    <script src="http://localhost:35729/livereload.js"></script>
   </body>
 </html>

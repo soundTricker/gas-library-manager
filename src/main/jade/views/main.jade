@@ -1,162 +1,46 @@
 h1.page-header {{i18n("myLibraryList")}}
-  .pull-right(ng-if='gapiLoaded')
-      .btn-group.pull-right
-        button.btn.btn-link(ng-disabled='uploading', ng-click='uploadLibraries()') Export My Libraries
-        button.btn.btn-link(ng-click='isCollapsed = !isCollapsed') Import My Libraries
+.row-fluid
+  .span3(ng-if='$state.is(\'mine.detail\')')
+    div(ui-scrollfix='110')
+      ul.nav.nav-list.well.well-small(style='width: 268px;')
+        li.nav-header List
+        li
+          input.search-query(accesskey='f', type='search', ng-model='search.$', placeholder='{{i18n(\'search\')}}')
+        li.divider
+        li.muted(ng-if='filtered.length === 0') There is no library.
+        li(ng-repeat='i in filtered track by $index', ng-class="{active : $state.params.key == i.key}")
+          a(ng-href='#/mine/detail/{{i.key}}') {{i.label}}
+        pagination.pagination-small(data-boundary-links='true', data-num-pages='noOfPages', data-current-page='currentPage', max-size='maxSize', data-previous-text='«', data-next-text='»')
+  .span9.library-list(ng-if='$state.is(\'mine.detail\')', ui-view="mine")
+  .span12.library-list(ng-if='$state.is(\'mine\')')
+    .well.well-small
+      .pull-left Search: 
+             input.search-query(type='search', ng-model='search.$', placeholder='{{i18n(\'search\')}}')
+      .pull-right(ng-if='gapiLoaded')
+        .btn-group.pull-right
+          button.btn.btn-link(tabindex="-1", ng-disabled='uploading', ng-click='uploadLibraries()') Export My Libraries
+          button.btn.btn-link(tabindex="-1", ng-click='isCollapsed = !isCollapsed') Import My Libraries
+        .clearfix
+        div(collapse='isCollapsed')
+          .well.well-large
+            form.form-inline(name='importForm')
+              input.input-xlarge(tabindex="-1", type='text', name='fileId', placeholder='input library file key of Google Drive', ng-model='fileId', required='required')
+              button.btn(tabindex="-1", ng-click='import(fileId)') Import
       .clearfix
-      div(collapse='isCollapsed')
-        .well.well-large
-          form.form-inline(name='importForm')
-            input.input-xlarge(type='text', name='fileId', placeholder='input library file key of Google Drive', ng-model='fileId', required='required')
-            button.btn(ng-click='import(fileId)') Import
-    .clearfix
+
     .row-fluid
-      .span3
-        div(ui-scrollfix='110')
-          ul.nav.nav-list.well.well-small(style='width: 268px;')
-            li.nav-header List
-            li
-              input.search-query(accesskey='f', type='search', ng-model='search.$', placeholder='{{i18n(\'search\')}}')
-            li.divider
-            li.muted(ng-if='filtered.length === 0') There is no library.
-            li(ng-repeat='i in filtered track by $index')
-              a(ng-if='$state.is(\'mine\')', smooth-scroll="{{'#' + i.key}}", scroll-easing='easeInOutBack', scroll-duration='slow', scroll-offset='-30') {{i.label}}
-              a(ng-if='$state.is(\'mine.detail\')', ng-href='#/mine/detail/{{i.key}}') {{i.label}}
-            pagination.pagination-small(data-boundary-links='true', data-num-pages='noOfPages', data-current-page='currentPage', max-size='maxSize', data-previous-text='«', data-next-text='»')
-      .span9.library-list(ng-if='$state.is(\'mine.detail\')', ui-view='ui-view')
-      .span9.library-list(ng-if='$state.is(\'mine\')')
-        .row-fluid(ng-repeat='item in filtered track by $index', ng-controller='PrivateLibraryCtrl')
-          .span12(id="{{item.key}}")
-            h2.page-header
-              a(href='#/mine/detail/{{item.key}}') {{item.label}}
-            div(ng-show='!modify')
-              .pull-right
-                div {{i18n("registeredAt")}} : {{item.registeredAt | date}}
-                div {{i18n("modifiedAt")}} : {{item.modifiedAt | date}}
-              //
-                 right dates 
-              div(ng-show='item.desc', ng-bind-html='item.desc | escape | break2br')
-              .clearfix(ng-hide='item.desc')
-                | (No description)
-              hr
-              .btn-group
-                a.btn.btn-link(href='{{item.sourceUrl}}', target='_blank')
-                  i.icon-external-link
-                  | {{i18n("viewSource")}}
-                button.btn.btn-link(ng-click='modify=!modify')
-                  i.icon-wrench
-                  | {{i18n("modify")}}
-                button.btn.btn-link(ng-disabled='delete', ng-click='delete = true;deleteLibrary(item)')
-                  i.icon-remove-sign
-                  | {{i18n("delete")}}
-                span(ng-show='loggedin', ng-controller='PublishCtrl')
-                  button.btn.btn-link(ng-show='!item.published', ng-click='openDialog=true')
-                    i.icon-share
-                    | {{i18n("publish")}}
-                  div(modal='openDialog', close='openDialog=false', options='opts')
-                    .modal-header
-                      h3 Publish library to GAS Library Box Sites
-                    .modal-body
-                      p
-                        | Your library will be published to GAS Library Box Sites with your profile, user icon, nickname and Google+ Profile URL. If you want to change library descriptions, please close this dialog and click
-                        code {{i18n('modify')}}
-                        | button.
-                      h4 Library Infomation
-                      p
-                        dl
-                          dt {{i18n('name')}}
-                          dd {{item.label}}
-                          dt {{i18n('description')}}
-                          dd {{item.desc}}
-                          dt {{i18n('longDescription')}}
-                          dd
-                            div(ng-bind-html='item.longDesc | markdown')
-                    .modal-footer
-                      button.btn.btn-info(ng-click='publish()')
-                        i.icon-share
-                        | {{i18n("publish")}}
-                      button.btn.btn-warning.cancel(ng-click='openDialog=false')
-                        | {{i18n("cancel")}}
-                span(ng-show='loggedin', ng-controller='PublishCtrl')
-                  button.btn.btn-link(ng-show='item.published', ng-click='openModifyDialog=true')
-                    i.icon-share
-                    | {{i18n("updatePublished")}}
-                  div(modal='openModifyDialog', close='openModifyDialog=false', options='opts')
-                    .modal-header
-                      h3 Update published library on GAS Library Box Sites
-                    .modal-body
-                      p
-                        | If you want to change library descriptions, please close this dialog and click
-                        code "{{i18n('modify')}}"
-                        | button.
-                      h4 Library Infomation
-                      p
-                        dl
-                          dt {{i18n('name')}}
-                          dd {{item.label}}
-                          dt {{i18n('description')}}
-                          dd {{item.desc}}
-                          dt {{i18n('longDescription')}}
-                          dd
-                            div(ng-bind-html='item.longDesc | markdown')
-                    .modal-footer
-                      button.btn.btn-info(ng-click='update()')
-                        i.icon-share
-                        | {{i18n("publish")}}
-                      button.btn.btn-warning.cancel(ng-click='openModifyDialog=false')
-                        | {{i18n("cancel")}}
-                span(ng-show='loggedin', ng-controller='PublishCtrl')
-                  button.btn.btn-link(ng-show='item.published', ng-click='openDeleteDialog=true')
-                    i.icon-share
-                    | {{i18n("deletePublished")}}
-                  div(modal='openDeleteDialog', close='openDeleteDialog=false', options='opts')
-                    .modal-header
-                      h3 Delete published library from GAS Library Box Sites
-                    .modal-body
-                      h4 Library Infomation
-                      p
-                        dl
-                          dt {{i18n('name')}}
-                          dd {{item.label}}
-                          dt {{i18n('description')}}
-                          dd {{item.desc}}
-                          dt {{i18n('longDescription')}}
-                          dd
-                            div(ng-bind-html='item.longDesc | markdown')
-                    .modal-footer
-                      button.btn.btn-info(ng-click='delete()')
-                        i.icon-share
-                        | {{i18n("delete")}}
-                      button.btn.btn-warning.cancel(ng-click='openDeleteDialog=false')
-                        | {{i18n("cancel")}}
-              hr
-            //
-              detail
-            div(ng-show='modify')
-              form(name='modifyLib', ng-init='label=item.label; desc=item.desc; longDesc=item.longDesc;')
-                fieldset
-                  legend(ng-bind-html='i18n(\'modifyTitle\')')
-                  .control-group(ng-class='{error : !modifyLib.label.$valid}')
-                    label.control-label(for='label{{$index}}') {{i18n("name")}}
-                    .controls
-                      input#label{{$index}}.span12(type='text', placeholder='Write library name', ng-maxlength='100', maxlength='100', name='label', ng-model='label', required='required')
-                      span.help-inline(ng-show='modifyLib.label.$error.required') {{i18n("errorsRequired")}}
-                  .control-group(ng-class='{error : !modifyLib.desc.$valid}')
-                    label.control-label(for='desc{{$index}}') {{i18n("description")}}
-                    .controls
-                      input#desc{{$index}}.span12(type='text', placeholder='Write this library short description, it\'s shown in script editor.', ng-maxlength='80', maxlength='80', name='desc', ng-model='desc')
-                  .control-group(ng-class='{error : !modifyLib.longDesc.$valid}')
-                    .row-fluid
-                      .span6
-                        label.control-label(for='longDesc{{$index}}') {{i18n("description")}}
-                      .span6
-                        label.control-label(for='longDesc{{$index}}') Preview
-                      .controls
-                        span.help-inline You can write this as markdwon format.
-                        .row-fluid
-                          .span6
-                            textarea#longDesc{{$index}}.span12(rows='5', name='longDesc', ng-model='longDesc', ng-maxlength='2000')
-                          .span6(ng-bind-html='longDesc | markdown')
-                    .form-actions
-                      button.btn.btn-primary(ng-disabled='!modifyLib.$valid || saving', ng-click='saving = true;modifyLibs()') {{i18n("modify")}}
-                      button.btn(ng-click='modify=!modify') {{i18n("cancel")}}
+      .span12
+        table.table.table-hover
+          thead
+            tr
+              th {{i18n("name")}}
+              th {{i18n("description")}}
+              th {{i18n("registeredAt")}} / {{i18n("modifiedAt")}}
+          tbody
+            tr(ng-if='filtered.length === 0')
+              td(colspan=3) There is no library.
+            tr(ng-repeat='item in filtered track by $index', ng-controller='PrivateLibraryCtrl', ng-click="$state.go('mine.detail', {key : item.key})")
+              td
+                a(ui-sref='mine.detail({key : item.key})') {{item.label}}
+              td(ng-bind-html='item.desc | escape | break2br') 
+              td {{item.registeredAt | date}} / {{item.modifiedAt | date}}

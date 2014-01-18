@@ -3,6 +3,7 @@
 @gapiIsLoaded = ()-> window.gapiIsLoaded()
 
 angular.module('LibraryBoxApp', ['ngSanitize','cgNotify','ui.bootstrap', 'ui.directives','ui.router', 'markdown'])
+  .constant("apiUrl", "https://gas-library-box.appspot.com/_ah/api")
   .config(["$stateProvider","$urlRouterProvider",'$compileProvider', ($stateProvider,$urlRouterProvider,$compileProvider) ->
     $compileProvider.urlSanitizationWhitelist /^\s*(https?|ftp|mailto|chrome-extension):/
 
@@ -11,16 +12,22 @@ angular.module('LibraryBoxApp', ['ngSanitize','cgNotify','ui.bootstrap', 'ui.dir
     $stateProvider
       .state 'top',
         url: '/'
-        templateUrl: 'views/index.html'
-        controller: 'IndexCtrl'
+        views :
+          container : 
+            templateUrl : 'views/index.html'
+            controller: 'IndexCtrl'
       .state 'mine', 
         url: '/mine'
-        templateUrl: 'views/main.html'
-        controller: 'MainCtrl'
+        views :
+          container : 
+            templateUrl : 'views/main.html'
+            controller: 'MainCtrl'
       .state 'mine.detail',
         url: '/detail/:key'
-        templateUrl: 'views/detail.html'
-        controller: 'DetailCtrl'
+        views :
+          mine : 
+            templateUrl : 'views/detail.html'
+            controller: 'DetailCtrl'
         resolve :
           'library' : ['$stateParams', 'storage',($stateParams, storage)-> storage.getLibrary $stateParams.key]
       .state 'global',

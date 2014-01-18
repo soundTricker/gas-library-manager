@@ -1,33 +1,32 @@
 
-<div class="pull-right"><a href="#/global">Back to list</a>
-  <div ng-init="item = library">
-    <h1 class="page-header">{{item.label}}</h1>
-    <div>
+<div class="pull-right"><a href="#/global">Back to list</a></div>
+<div ng-init="item = library">
+  <h1 class="page-header">{{item.label}}</h1>
+  <div>
+    <div class="pull-right">
       <div class="pull-right">
-        <div class="pull-right">
-          <div class="well well-small">
-            <h5>Author</h5>
-            <div class="media"><a ng-href="{{item.url}}" target="_blank" class="pull-left"><img src="" alt="" ng-src="{{item.authorIconUrl}}" class="media-object"/></a>
-              <div class="media-body">
-                <h6 class="media-heading"><a ng-href="{{item.authorUrl}}" target="_blank">{{item.authorName}}</a></h6>
-              </div>
+        <div class="well well-small">
+          <h5>Author</h5>
+          <div class="media"><a ng-href="{{item.url}}" target="_blank" class="pull-left"><img src="" alt="" ng-src="{{item.authorIconUrl}}" class="media-object"/></a>
+            <div class="media-body">
+              <h6 class="media-heading"><a ng-href="{{item.authorUrl}}" target="_blank">{{item.authorName}}</a></h6>
             </div>
-            <div>{{i18n("registeredAt")}} : {{item.registeredAt | date}}</div>
-            <div>{{i18n("modifiedAt")}} : {{item.modifiedAt | date}}</div>
           </div>
+          <div>{{i18n("registeredAt")}} : {{item.registeredAt | date}}</div>
+          <div>{{i18n("modifiedAt")}} : {{item.modifiedAt | date}}</div>
         </div>
       </div>
-      <h5>{{i18n("description")}}</h5>
-      <div ng-show="item.desc" ng-bind-html="library.desc | escape | break2br"></div>
-      <div ng-hide="item.desc" class="clearfix">(No description)</div>
-      <h5>{{i18n("longDescription")}}</h5>
-      <div ng-if="item.longDesc" ng-bind-html="library.longDesc | markdown"></div>
-      <div ng-if="!item.longDesc" class="clearfix">(No description)</div>
-      <hr/>
-      <div class="btn-group"><a href="{{item.sourceUrl}}" target="_blank" class="btn btn-link"><i class="icon-external-link"></i>{{i18n("viewSource")}}</a>
-        <button ng-if="!isStocked(item.libraryKey)" ng-click="stocked()" class="btn btn-link"></button>
-      </div>
-      <hr/>
     </div>
+    <h5>{{i18n("description")}}</h5>
+    <div ng-show="item.desc" ng-bind-html="library.desc | escape | break2br"></div>
+    <div ng-hide="item.desc" class="clearfix">(No description)</div>
+    <h5>{{i18n("longDescription")}}</h5>
+    <div ng-if="item.longDesc" ng-bind-html="library.longDesc | markdown"></div>
+    <div ng-if="!item.longDesc" class="clearfix">(No description)</div>
+    <hr/>
+    <div class="btn-group"><a href="{{item.sourceUrl}}" target="_blank" class="btn btn-link"><i class="icon-external-link"></i>{{i18n("viewSource")}}</a>
+      <button ng-if="!isStocked(item.libraryKey)" ng-click="stocked()" class="btn btn-link"></button>
+    </div>
+    <hr/>
   </div>
 </div>

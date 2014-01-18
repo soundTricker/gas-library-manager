@@ -11,6 +11,7 @@
   "background": {
     "page": "background.html"
   },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqKzuGazQz3jh+QpuGLN2eA1q2O9HEmeZxy4rPLmznseXatmohq3ED6xE+GdsjLZ1YZ/x0CLdmc98Uoak4ZPZnbkzr5mF2K/o8/kc0MTsrEtwx7nERtP2vLGy4hvb3mAOSn++1iV242Xc1njJ+burMf+JdqL5UOCLFxjoGeIUNbJG6Eki9jT0d7tXxvJFtWFqRwCQuA1CNaTDJYSVbK6P4WvyHWaGERo+kg/tUdkKtFwOwab/dr18eszx9WSgnbSgZYFbNNuQp/ZXiJ7kFCGMezQ4DEJQb3JmyV5sfzjYJbTMKcmIBUZZU9oEVtqf1mBB8BOfaaDDLraksxxpNhmITwIDAQAB",
   "options_page": "options.html",
   "content_scripts": [
     {
@@ -36,7 +37,7 @@
     "font/*",
     "views/*"
   ],
-  "content_security_policy": "script-src 'self' https://apis.google.com https://www.google-analytics.com; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://apis.google.com https://www.google-analytics.com http://localhost:35729; object-src 'self'",
   "permissions": [
     "identity",
     "storage",

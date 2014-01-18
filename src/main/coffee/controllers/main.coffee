@@ -9,7 +9,7 @@ libraryBoxApp.controller 'MainCtrl',
     $scope.currentPage = 1 #current page
     $scope.maxSize = 3 #pagination max size
     $scope.entryLimit = 20 #max rows for data table
-
+    $scope.search = {"$":""}
     libraries = (item for item in $rootScope.libraries when !item.isExternal)
     libraries = libraries.sort (i1,i2)-> i1.label.toLowerCase() > i2.label.toLowerCase()
 

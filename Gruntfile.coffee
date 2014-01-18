@@ -26,11 +26,8 @@ module.exports = (grunt) ->
     yeoman: yeomanConfig
     watch:
       options:
-        livereload : on
+        livereload : 35728
         spawn: false
-      livereload:
-        files: ["<%= yeoman.app%>/{,*/}*"]
-        tasks: []
       jade:
         files: ["<%= yeoman.src %>/jade/{,*/}*.jade"]
         tasks: ["jade:local"]
@@ -46,6 +43,9 @@ module.exports = (grunt) ->
       compass:
         files: ["<%= yeoman.app %>/styles/{,*/}*.{scss,sass}"]
         tasks: ["compass:server"]
+      livereload:
+        files: ["<%= yeoman.app%>/{,*/}*"]
+        tasks: []
 
     connect:
       options:
@@ -100,7 +100,7 @@ module.exports = (grunt) ->
 
     compass:
       options:
-        sassDir: "<%= yeoman.app %>/styles"
+        sassDir: "<%= yeoman.src %>/scss"
         cssDir: "<%= yeoman.app %>/styles"
         generatedImagesDir: ".tmp/images/generated"
         imagesDir: "<%= yeoman.app %>/images"

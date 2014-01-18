@@ -12,6 +12,9 @@
       $scope.currentPage = 1;
       $scope.maxSize = 3;
       $scope.entryLimit = 20;
+      $scope.search = {
+        "$": ""
+      };
       libraries = (function() {
         var _i, _len, _ref, _results;
         _ref = $rootScope.libraries;
