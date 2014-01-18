@@ -1,106 +1,88 @@
-<!doctype html>
-<html ng-app="LibraryBoxApp" ng-csp>
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <!-- build:css({.tmp,app}) css/app.css -->
-      <link href="bower_components/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet">
-      <link href="bower_components/bootstrap/docs/assets/css/bootstrap-responsive.css" res="stylesheet">
-      <link rel="stylesheet" href="bower_components/angular-ui/build/angular-ui.min.css">
-      <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-      <link rel="stylesheet" href="styles/angular-notify.min.css">
-      <link href="styles/main.css" rel="stylesheet">
-      <link href="styles/options.css" rel="stylesheet">
-      <!-- endbuild -->
-
-      <title ng-bind="i18n('appName')"></title>
-    </head>
-    <body ng-controller="optionPageCtrl">
-      <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-          <div class="container-fluid">
-            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="brand" href="#">{{i18n('appName')}}</a>
-            <div class="nav-collapse collapse">
-              <ul class="nav pull-left">
-                <li ng-class="{active : $state.is('top')}" ><a href="#">Home</a></li>
-                <li ng-class="{active : $state.includes('mine')}" ><a href="#/mine">My Libraries</a></li>
-                <li ng-class="{active : $state.includes('global')}" ng-if="gapiLoaded"><a href="#/global">Global Libraries</a></li>
-                <li ng-class="{active : $state.is('register')}" ng-if="loginStatus == 'givenRegister'">Register</li>
-              </ul>
-              <ul class="nav pull-right" ng-switch="loginStatus">
-                <li ng-switch-when="loggedin" class="dropdown">
-                  <a class="dropdown-toggle">{{nickname}} <img ng-src="{{userIconUrl}}"></a>
-                  <ul class="dropdown-menu">
-                    <li><a ui-sref="account">Change Account Information</a></li>
-                  </ul>
-                </li>
-                <li class="active" ng-switch-when="givenRegister">
-                  <a ng-click="showRegister()" class="navbar-link">Sign up</a>
-                </li>
-                <li class="active" ng-switch-when="loadFinished">
-                  <a ng-click="login()" class="navbar-link">Sign in</a>
-                </li>
-                <li class="" ng-switch-default>
-                  <p class="navbar-text"><i class="icon-spinner icon-spin"></i> Now loading...</p>
-                </li>
-              </ul>
-            </div><!--/.nav-collapse -->
+<!DOCTYPE html>
+<html ng-app="LibraryBoxApp" ng-csp="ng-csp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- build:css({.tmp,app}) css/app.css -->
+    <link href="bower_components/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="bower_components/bootstrap/docs/assets/css/bootstrap-responsive.css" res="stylesheet">
+    <link rel="stylesheet" href="bower_components/angular-ui/build/angular-ui.min.css">
+    <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles/angular-notify.min.css">
+    <link href="styles/main.css" rel="stylesheet">
+    <link href="styles/options.scss" rel="stylesheet">
+    <!-- endbuild -->
+    <title ng-bind="i18n('appName')"></title>
+  </head>
+  <body ng-controller="optionPageCtrl">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <button type="button" data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="#" class="brand">{{i18n('appName')}}</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav pull-left">
+              <li ng-class="{active : $state.is('top')}"><a href="#">Home</a></li>
+              <li ng-class="{active : $state.includes('mine')}"><a href="#/mine">My Libraries</a></li>
+              <li ng-class="{active : $state.includes('global')}" ng-if="gapiLoaded"><a href="#/global">Global Libraries</a></li>
+              <li ng-class="{active : $state.is('register')}" ng-if="loginStatus == 'givenRegister'">Register</li>
+            </ul>
+            <ul ng-switch="loginStatus" class="nav pull-right">
+              <li ng-switch-when="loggedin" class="dropdown"><a class="dropdown-toggle">{{nickname}} &nbsp;<img ng-src="{{userIconUrl}}"></a>
+                <ul class="dropdown-menu">
+                  <li><a ui-sref="account">Change Account Information</a></li>
+                </ul>
+              </li>
+              <li ng-switch-when="givenRegister" class="active"><a ng-click="showRegister()" class="navbar-link">Sign up</a></li>
+              <li ng-switch-when="loadFinished" class="active"><a ng-click="login()" class="navbar-link">Sign in</a></li>
+              <li ng-switch-default="ng-switch-default">
+                <p class="navbar-text"><i class="icon-spinner icon-spin"> </i>&nbsp;Now loading...</p>
+              </li>
+            </ul>
           </div>
         </div>
-      </div>      
-      <div notifications="bottom right"></div>
-      <div ng-show="isViewLoading" style="margin-top:50px;"><i class="icon-spinner icon-spin"></i> Now loading...</div>
-
-      <div ng-hide="isViewLoading" class="container-fluid" ui-view="" style="margin-top:50px;">
       </div>
-      <!-- build:js scripts/modules.js -->
-      <script src="bower_components/jquery/jquery.min.js" type="text/javascript"></script>
-      <script src="bower_components/jquery-easing/jquery.easing.min.js"></script>
-      <script src="bower_components/marked/lib/marked.js"></script>
-      <script src="bower_components/angular-unstable/angular.min.js"></script>
-      <script src="bower_components/angular-ui/build/angular-ui.min.js"></script>
-      <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js"></script>
-      <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-      <script src="bower_components//angular-ui-router/release/angular-ui-router.min.js"></script>
-      <script src="scripts/lib/angular-notify.min.js"></script>
-      <!-- endbuild -->
-
-      <!-- build:js({.tmp,app}) scripts/scripts.js -->
-      <script src="scripts/services/markdown.js"></script>
-      <script src="scripts/filters/markdown.js"></script>
-      <!-- app-->
-      <script src="scripts/options.js"></script>
-      <!-- controllers-->
-      <script src="scripts/controllers/optionPage.js"></script>
-      <script src="scripts/controllers/main.js"></script>
-      <script src="scripts/controllers/index.js"></script>
-      <script src="scripts/controllers/register.js"></script>
-      <script src="scripts/controllers/detail.js"></script>
-      <script src="scripts/controllers/publish.js"></script>
-      <script src="scripts/controllers/global.js"></script>
-      <script src="scripts/controllers/loading.js"></script>
-      <script src="scripts/controllers/modifyAccount.js"></script>
-
-      <!-- directives -->
-      <script src="scripts/directives/smoothScroll.js"></script>
-
-      <!-- filteres -->
-      <script src="scripts/filters/br.js"></script>
-      <script src="scripts/filters/startFrom.js"></script>
-
-      <!-- services -->
-      <script src="scripts/services/storage.js"></script>
-      <script src="scripts/services/notify.js"></script>
-
-      <!-- another dependency -->
-      <script src="scripts/lib/gapi-chrome-apps.js"></script>
-      <!-- endbuild -->
-
-      <script src="scripts/analytics.js"></script>
-    </body>
+    </div>
+    <div notifications="bottom right"></div>
+    <div ng-show="isViewLoading" style="margin-top:50px;"><i class="icon-spinner icon-spin"></i>Now loading...</div>
+    <div ng-hide="isViewLoading" ui-view="container" style="margin-top:50px;" class="container-fluid"></div>
+    <!-- build:js scripts/modules.js -->
+    <script src="bower_components/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="bower_components/jquery-easing/jquery.easing.min.js"></script>
+    <script src="bower_components/marked/lib/marked.js"></script>
+    <script src="bower_components/angular-unstable/angular.min.js"></script>
+    <script src="bower_components/angular-ui/build/angular-ui.min.js"></script>
+    <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components//angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="scripts/lib/angular-notify.min.js"></script>
+    <!-- endbuild -->
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/services/markdown.js"></script>
+    <script src="scripts/filters/markdown.js"></script>
+    <!-- app-->
+    <script src="scripts/options.js"></script>
+    <!-- controllers-->
+    <script src="scripts/controllers/optionPage.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/index.js"></script>
+    <script src="scripts/controllers/register.js"></script>
+    <script src="scripts/controllers/detail.js"></script>
+    <script src="scripts/controllers/publish.js"></script>
+    <script src="scripts/controllers/global.js"></script>
+    <script src="scripts/controllers/loading.js"></script>
+    <script src="scripts/controllers/modifyAccount.js"></script>
+    <!-- directives -->
+    <script src="scripts/directives/smoothScroll.js"></script>
+    <!-- filteres -->
+    <script src="scripts/filters/br.js"></script>
+    <script src="scripts/filters/startFrom.js"></script>
+    <!-- services -->
+    <script src="scripts/services/storage.js"></script>
+    <script src="scripts/services/notify.js"></script>
+    <!-- another dependency -->
+    <script src="scripts/lib/gapi-chrome-apps.js"></script>
+    <!-- endbuild -->
+    <script src="scripts/analytics.js"></script>
+    <script src="http://localhost:35729/livereload.js"></script>
+  </body>
 </html>

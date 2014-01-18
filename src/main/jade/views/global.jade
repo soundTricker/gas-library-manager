@@ -1,45 +1,45 @@
 h1.page-header {{i18n("myLibraryList")}}
-  .row-fluid
-      .span3
-        div(ui-scrollfix='90')
-          ul.nav.nav-list.well.well-small(style='width: 268px;')
-            li.nav-header List
-            li
-              form.form-search
-                .input-append
-                  input.search-query(accesskey='f', type='search', ng-model='search.$', placeholder='{{i18n(\'search\')}}')
-                  button.btn(tooltip='Search from global site', ng-click='query()')
-                    i.icon-search
-            li.divider
-            li.muted(ng-if='filtered.length === 0') There is no library.
-            li(ng-repeat='i in filtered track by $index')
-              a(ng-if='$state.is(\'global\')', smooth-scroll='#{{i.libraryKey}}', scroll-easing='easeInOutBack', scroll-duration='slow', scroll-offset='-30') {{i.label}}
-              a(ng-if='$state.is(\'global.detail\')', ng-href='#/global/detail/{{i.libraryKey}}') {{i.label}}
-            li
-              pagination.pagination-small(data-boundary-links='true', data-num-pages='noOfPages', data-current-page='currentPage', max-size='maxSize', data-previous-text='«', data-next-text='»')
-            li(ng-if='next')
-              a(ng-click='showMore()') Show more library
-      .span9.library-list(ng-if='$state.is(\'global.detail\')', ui-view='ui-view')
-      .span9.library-list(ng-if='$state.is(\'global\')')
-        .row-fluid(ng-repeat='item in filtered track by $index', ng-controller='GlobalLibraryCtrl')
-          #{{item.libraryKey}}.span12
-            h2.page-header
-              a(href='#/global/detail/{{item.libraryKey}}') {{item.label}}
-            div(ng-show='!modify')
-              .pull-right
-                div {{i18n("registeredAt")}} : {{item.registeredAt | date}}
-                div {{i18n("modifiedAt")}} : {{item.modifiedAt | date}}
-              div(ng-show='item.desc', ng-bind-html='item.desc | escape | break2br')
-              .clearfix(ng-hide='item.desc')
-                | (No description)
-              hr
-              .btn-group
-                a.btn.btn-link(href='{{item.sourceUrl}}', target='_blank')
-                  i.icon-external-link
-                  | {{i18n("viewSource")}}
-                button.btn.btn-link(ng-if='!item.isMyLibrary && !item.isStocked', popover='If you stocked global library,this library will be shown in Script Editor\'s library assistant.', popover-trigger='mouseenter', popover-placement='bottom', ng-click='stock()')
-                  i.icon-pushpin
-                  | Stock library
-                button.btn.btn-link(ng-if='!item.isMyLibrary && item.isStocked', popover='If you unstocked global library,this library will not be shown in Script Editor\'s library assistant.', popover-trigger='mouseenter', popover-placement='bottom', ng-click='unStock()')
-                  i.icon-pushpin
-                  | UnStock library
+.row-fluid
+  .span3
+    div(ui-scrollfix='90')
+      ul.nav.nav-list.well.well-small(style='width: 268px;')
+        li.nav-header List
+        li
+          form.form-search
+            .input-append
+              input.search-query(accesskey='f', type='search', ng-model='search.$', placeholder="{{i18n('search')}}")
+              button.btn(tooltip='Search from global site', ng-click='query()')
+                i.icon-search
+        li.divider
+        li.muted(ng-if='filtered.length === 0') There is no library.
+        li(ng-repeat='i in filtered track by $index')
+          a(ng-if="$state.is('global')", smooth-scroll="{{'#' + i.libraryKey}}", scroll-easing='easeInOutBack', scroll-duration='slow', scroll-offset='-30') {{i.label}}
+          a(ng-if='$state.is(\'global.detail\')', ng-href='#/global/detail/{{i.libraryKey}}') {{i.label}}
+        li
+          pagination.pagination-small(data-boundary-links='true', data-num-pages='noOfPages', data-current-page='currentPage', max-size='maxSize', data-previous-text='«', data-next-text='»')
+        li(ng-if='next')
+          a(ng-click='showMore()') Show more library
+  .span9.library-list(ng-if="$state.is(\'global.detail\')", ui-view)
+  .span9.library-list(ng-if='$state.is(\'global\')')
+    .row-fluid(ng-repeat='item in filtered track by $index', ng-controller='GlobalLibraryCtrl')
+      .span12(id="{{item.libraryKey}}")
+        h2.page-header
+          a(href='#/global/detail/{{item.libraryKey}}') {{item.label}}
+        div(ng-show='!modify')
+          .pull-right
+            div {{i18n("registeredAt")}} : {{item.registeredAt | date}}
+            div {{i18n("modifiedAt")}} : {{item.modifiedAt | date}}
+          div(ng-show='item.desc', ng-bind-html='item.desc | escape | break2br')
+          .clearfix(ng-hide='item.desc')
+            | (No description)
+          hr
+          .btn-group
+            a.btn.btn-link(href='{{item.sourceUrl}}', target='_blank')
+              i.icon-external-link
+              | {{i18n("viewSource")}}
+            button.btn.btn-link(ng-if='!item.isMyLibrary && !item.isStocked', popover='If you stocked global library,this library will be shown in Script Editor\'s library assistant.', popover-trigger='mouseenter', popover-placement='bottom', ng-click='stock()')
+              i.icon-pushpin
+              | Stock library
+            button.btn.btn-link(ng-if='!item.isMyLibrary && item.isStocked', popover='If you unstocked global library,this library will not be shown in Script Editor\'s library assistant.', popover-trigger='mouseenter', popover-placement='bottom', ng-click='unStock()')
+              i.icon-pushpin
+              | UnStock library

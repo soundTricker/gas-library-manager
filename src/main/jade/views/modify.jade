@@ -1,0 +1,27 @@
+form(name='modifyLib', ng-init='label=item.label; desc=item.desc; longDesc=item.longDesc;')
+    fieldset
+        legend(ng-bind-html='i18n(\'modifyTitle\')')
+        .control-group(ng-class='{error : !modifyLib.label.$valid}')
+          label.control-label(for='label{{$index}}') {{i18n("name")}}
+          .controls
+            input#label{{$index}}.span12(type='text', placeholder='Write library name', ng-maxlength='100', maxlength='100', name='label', ng-model='label', required='required')
+            span.help-inline(ng-show='modifyLib.label.$error.required') {{i18n("errorsRequired")}}
+        .control-group(ng-class='{error : !modifyLib.desc.$valid}')
+          label.control-label(for='desc{{$index}}') {{i18n("description")}}
+          .controls
+            input#desc{{$index}}.span12(type='text', placeholder='Write this library short description, it\'s shown in script editor.', ng-maxlength='80', maxlength='80', name='desc', ng-model='desc')
+        .control-group(ng-class='{error : !modifyLib.longDesc.$valid}')
+          .row-fluid
+            .span6
+              label.control-label(for='longDesc{{$index}}') {{i18n("description")}}
+            .span6
+              label.control-label(for='longDesc{{$index}}') Preview
+            .controls
+              span.help-inline You can write this as markdwon format.
+              .row-fluid
+                .span6
+                  textarea#longDesc{{$index}}.span12(rows='5', name='longDesc', ng-model='longDesc', ng-maxlength='2000')
+                .span6(ng-bind-html='longDesc | markdown')
+          .form-actions
+            button.btn.btn-primary(ng-disabled='!modifyLib.$valid || saving', ng-click='saving = true;modifyLibs()') {{i18n("modify")}}
+            button.btn(ng-click='modify=!modify') {{i18n("cancel")}}

@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   angular.module('LibraryBoxApp').controller('optionPageCtrl', [
-    '$scope', '$state', '$rootScope', '$window', '$q', '$notify', 'storage', (function($scope, $state, $rootScope, $window, $q, $notify, storage) {
+    '$scope', '$state', '$rootScope', '$window', '$q', '$notify', 'storage', 'apiUrl', (function($scope, $state, $rootScope, $window, $q, $notify, storage, apiUrl) {
       $rootScope.$state = $state;
       $rootScope.$on("$stateChangeStart", function() {
         return $rootScope.isViewLoading = true;
@@ -40,7 +40,7 @@
             }
             return d.promise;
           };
-          return $q.all([loadApiDefer("plus", "v1"), loadApiDefer("drive", "v2"), loadApiDefer("libraries", "v1", "https://gas-library-box.appspot.com/_ah/api"), loadApiDefer("members", "v1", "https://gas-library-box.appspot.com/_ah/api")]).then(function() {
+          return $q.all([loadApiDefer("plus", "v1"), loadApiDefer("drive", "v2"), loadApiDefer("libraries", "v1", apiUrl), loadApiDefer("members", "v1", apiUrl)]).then(function() {
             return chrome.identity.getAuthToken({
               interactive: true
             }, function(token) {
@@ -60,6 +60,7 @@
                 $rootScope.loggedin = result.code !== 404;
                 $rootScope.gapiLoaded = true;
                 $rootScope.$emit('gapiLoaded');
+                console.log(result);
                 return $scope.$apply();
               });
             });

@@ -1,32 +1,32 @@
 .pull-right
-    a(href='#/global') Back to list
-    div(ng-init='item = library')
-      h1.page-header {{item.label}}
-      div
-        .pull-right
-          .pull-right
-            .well.well-small
-              h5 Author
-              .media
-                a.pull-left(ng-href='{{item.url}}', target='_blank')
-                  img.media-object(src='', alt='', ng-src='{{item.authorIconUrl}}')
-                .media-body
-                  h6.media-heading
-                    a(ng-href='{{item.authorUrl}}', target='_blank') {{item.authorName}}
-              div {{i18n("registeredAt")}} : {{item.registeredAt | date}}
-              div {{i18n("modifiedAt")}} : {{item.modifiedAt | date}}
-        h5 {{i18n("description")}}
-        div(ng-show='item.desc', ng-bind-html='library.desc | escape | break2br')
-        .clearfix(ng-hide='item.desc')
-          | (No description)
-        h5 {{i18n("longDescription")}}
-        div(ng-if='item.longDesc', ng-bind-html='library.longDesc | markdown')
-        .clearfix(ng-if='!item.longDesc')
-          | (No description)
-        hr
-        .btn-group
-          a.btn.btn-link(href='{{item.sourceUrl}}', target='_blank')
-            i.icon-external-link
-            | {{i18n("viewSource")}}
-          button.btn.btn-link(ng-if='!isStocked(item.libraryKey)', ng-click='stocked()')
-        hr
+  a(href='#/global') Back to list
+div(ng-init='item = library')
+  h1.page-header {{item.label}}
+  div
+    .pull-right
+      .pull-right
+        .well.well-small
+          h5 Author
+          .media
+            a.pull-left(ng-href='{{item.url}}', target='_blank')
+              img.media-object(src='', alt='', ng-src='{{item.authorIconUrl}}')
+            .media-body
+              h6.media-heading
+                a(ng-href='{{item.authorUrl}}', target='_blank') {{item.authorName}}
+          div {{i18n("registeredAt")}} : {{item.registeredAt | date}}
+          div {{i18n("modifiedAt")}} : {{item.modifiedAt | date}}
+    h5 {{i18n("description")}}
+    div(ng-show='item.desc', ng-bind-html='library.desc | escape | break2br')
+    .clearfix(ng-hide='item.desc')
+      | (No description)
+    h5 {{i18n("longDescription")}}
+    div(ng-if='item.longDesc', ng-bind-html='library.longDesc | markdown')
+    .clearfix(ng-if='!item.longDesc')
+      | (No description)
+    hr
+    .btn-group
+      a.btn.btn-link(href='{{item.sourceUrl}}', target='_blank')
+        i.icon-external-link
+        | {{i18n("viewSource")}}
+      button.btn.btn-link(ng-if='!isStocked(item.libraryKey)', ng-click='stocked()')
+    hr
