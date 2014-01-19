@@ -40,29 +40,17 @@
             }
             return d.promise;
           };
-          return $q.all([loadApiDefer("plus", "v1"), loadApiDefer("drive", "v2"), loadApiDefer("libraries", "v1", apiUrl), loadApiDefer("members", "v1", apiUrl)]).then(function() {
+          return $q.all([loadApiDefer("drive", "v2")]).then(function() {
             return chrome.identity.getAuthToken({
               interactive: true
             }, function(token) {
               gapi.auth.setToken({
                 "access_token": token
               });
-              return gapi.client.members.get({
-                userKey: "me"
-              }).execute(function(result) {
-                if (result.code === 404) {
-                  $notify.info("Please Sign Up", "You are not registered to gas-library-box service.<br> If you want to publish your library to gas-library-box , please sign up.");
-                  $scope.loginStatus = "givenRegister";
-                } else {
-                  $rootScope.loginUser = result;
-                  $rootScope.$emit("loggedin", result);
-                }
-                $rootScope.loggedin = result.code !== 404;
-                $rootScope.gapiLoaded = true;
-                $rootScope.$emit('gapiLoaded');
-                console.log(result);
-                return $scope.$apply();
-              });
+              $rootScope.loginStatus = "loaded";
+              $rootScope.gapiLoaded = true;
+              $rootScope.$emit('gapiLoaded');
+              return $scope.$apply();
             });
           });
         });

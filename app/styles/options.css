@@ -1,15 +1,15 @@
-/* line 2, options.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/options\.scss}line{font-family:\000033}}
 .ui-scrollfix {
   position: fixed;
   top: 60px;
 }
 
-/* line 7, options.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/options\.scss}line{font-family:\000038}}
 .library-list {
   padding-right: 5px;
 }
 
-/* line 12, options.scss */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/options\.scss}line{font-family:\0000313}}
 .notify {
   position: fixed;
   right: 0;
@@ -20,4 +20,26 @@
   -moz-transition: top 0.5s ease-out, opacity 0.5s ease-out 5s;
   -o-transition: top 0.5s ease-out, opacity 0.5s ease-out 5s;
   transition: top 0.5s ease-out, opacity 0.5s ease-out 5s;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/options\.scss}line{font-family:\0000321}}
+.gmail-template {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  -webkit-transition: top 0.5s ease-out, opacity 0.5s ease-out;
+  -webkit-transition-delay: 0s, 5s;
+  -moz-transition: top 0.5s ease-out, opacity 0.5s ease-out 5s;
+  -o-transition: top 0.5s ease-out, opacity 0.5s ease-out 5s;
+  transition: top 0.5s ease-out, opacity 0.5s ease-out 5s;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/options\.scss}line{font-family:\0000329}}
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }

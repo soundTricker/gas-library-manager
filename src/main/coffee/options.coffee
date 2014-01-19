@@ -30,67 +30,67 @@ angular.module('LibraryBoxApp', ['ngSanitize','cgNotify','ui.bootstrap', 'ui.dir
             controller: 'DetailCtrl'
         resolve :
           'library' : ['$stateParams', 'storage',($stateParams, storage)-> storage.getLibrary $stateParams.key]
-      .state 'global',
-        url: '/global?q&next'
-        templateUrl: 'views/global.html'
-        controller: 'GlobalCtrl'
-        resolve : 
-          'result' : ['$stateParams','$rootScope','$q', ($stateParams, $rootScope, $q)->
-            d = $q.defer()
+      # .state 'global',
+      #   url: '/global?q&next'
+      #   templateUrl: 'views/global.html'
+      #   controller: 'GlobalCtrl'
+      #   resolve : 
+      #     'result' : ['$stateParams','$rootScope','$q', ($stateParams, $rootScope, $q)->
+      #       d = $q.defer()
 
-            search = ()->
-              param =
-                query : $stateParams.q,
-              $stateParams.next || param.nextToken = $stateParams.next
-              gapi.client.libraries.search(param).execute (result)->
-                d.resolve result
-                $rootScope.$apply()
-              d.promise
+      #       search = ()->
+      #         param =
+      #           query : $stateParams.q,
+      #         $stateParams.next || param.nextToken = $stateParams.next
+      #         gapi.client.libraries.search(param).execute (result)->
+      #           d.resolve result
+      #           $rootScope.$apply()
+      #         d.promise
 
-            list = ()->
-              param = {}
-              $stateParams.next || param.cursor = $stateParams.next
-              gapi.client.libraries.list(param).execute (result)-> 
-                d.resolve result
-                $rootScope.$apply()
-              d.promise
+      #       list = ()->
+      #         param = {}
+      #         $stateParams.next || param.cursor = $stateParams.next
+      #         gapi.client.libraries.list(param).execute (result)-> 
+      #           d.resolve result
+      #           $rootScope.$apply()
+      #         d.promise
 
-            if $rootScope.gapiLoaded
-              return search() if $stateParams.q
-              return list()
+      #       if $rootScope.gapiLoaded
+      #         return search() if $stateParams.q
+      #         return list()
 
-            $rootScope.$on "gapiLoaded", ()->
-              return search() if $stateParams.q
-              return list()
-            d.promise
-          ]
-      .state 'global.detail',
-        url: '/detail/:key'
-        templateUrl: 'views/globalDetail.html'
-        controller: 'DetailCtrl'
-        resolve:
-          'library' : ['$stateParams', '$rootScope', '$q',($stateParams,$rootScope, $q)->
-            d = $q.defer()
-            get = do(key=$stateParams.key)->
-              return ()->
-                gapi.client.libraries.get(libraryKey : key).execute (result)->
-                  d.resolve result
-                  $rootScope.$apply()
-                d.promise
-            return get() if $rootScope.gapiLoaded
+      #       $rootScope.$on "gapiLoaded", ()->
+      #         return search() if $stateParams.q
+      #         return list()
+      #       d.promise
+      #     ]
+      # .state 'global.detail',
+      #   url: '/detail/:key'
+      #   templateUrl: 'views/globalDetail.html'
+      #   controller: 'DetailCtrl'
+      #   resolve:
+      #     'library' : ['$stateParams', '$rootScope', '$q',($stateParams,$rootScope, $q)->
+      #       d = $q.defer()
+      #       get = do(key=$stateParams.key)->
+      #         return ()->
+      #           gapi.client.libraries.get(libraryKey : key).execute (result)->
+      #             d.resolve result
+      #             $rootScope.$apply()
+      #           d.promise
+      #       return get() if $rootScope.gapiLoaded
               
-            $rootScope.$on "gapiLoaded", ()->
-              get()
-            d.promise
-          ]
-      .state 'account',
-        url: '/account',
-        templateUrl: 'views/modifyAccount.html'
-        controller: 'ModifyAccountCtrl'
-      .state 'register',
-        url: '/register',
-        templateUrl: 'views/register.html'
-        controller: 'RegisterCtrl'
+      #       $rootScope.$on "gapiLoaded", ()->
+      #         get()
+      #       d.promise
+      #     ]
+      # .state 'account',
+      #   url: '/account',
+      #   templateUrl: 'views/modifyAccount.html'
+      #   controller: 'ModifyAccountCtrl'
+      # .state 'register',
+      #   url: '/register',
+      #   templateUrl: 'views/register.html'
+      #   controller: 'RegisterCtrl'
   ])
   .run ["$rootScope",'storage', ($rootScope, storage)->
     $rootScope.i18n = (key, args...)->

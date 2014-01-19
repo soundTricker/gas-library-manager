@@ -23,17 +23,9 @@
             <ul class="nav pull-left">
               <li ng-class="{active : $state.is('top')}"><a href="#">Home</a></li>
               <li ng-class="{active : $state.includes('mine')}"><a href="#/mine">My Libraries</a></li>
-              <li ng-class="{active : $state.includes('global')}" ng-if="gapiLoaded"><a href="#/global">Global Libraries</a></li>
-              <li ng-class="{active : $state.is('register')}" ng-if="loginStatus == 'givenRegister'">Register</li>
             </ul>
             <ul ng-switch="loginStatus" class="nav pull-right">
-              <li ng-switch-when="loggedin" class="dropdown"><a class="dropdown-toggle">{{nickname}} &nbsp;<img ng-src="{{userIconUrl}}"></a>
-                <ul class="dropdown-menu">
-                  <li><a ui-sref="account">Change Account Information</a></li>
-                </ul>
-              </li>
-              <li ng-switch-when="givenRegister" class="active"><a ng-click="showRegister()" class="navbar-link">Sign up</a></li>
-              <li ng-switch-when="loadFinished" class="active"><a ng-click="login()" class="navbar-link">Sign in</a></li>
+              <li ng-switch-when="loaded"> </li>
               <li ng-switch-default="ng-switch-default">
                 <p class="navbar-text"><i class="icon-spinner icon-spin"> </i>&nbsp;Now loading...</p>
               </li>
