@@ -9,7 +9,11 @@ libraryBoxApp.controller 'MainCtrl',
     $scope.currentPage = 1 #current page
     $scope.maxSize = 3 #pagination max size
     $scope.entryLimit = 20 #max rows for data table
-    $scope.search = {"$":""}
+    $scope.search = "$" : ""
+    $scope.exportMode = off
+
+    $scope.setExportMode = ()->
+      $scope.exportMode = !$scope.exportMode
     libraries = (item for item in $rootScope.libraries when !item.isExternal)
     libraries = libraries.sort (i1,i2)-> i1.label.toLowerCase() > i2.label.toLowerCase()
 
@@ -99,7 +103,7 @@ Content-Transfer-Encoding: base64
 
   ]
 
-libraryBoxApp.controller 'PrivateLibraryCtrl',["$scope", "$window", 'storage', '$notify' , ($scope,$window, storage, $notify)->
+libraryBoxApp.controller 'PrivateLibraryCtrl',["$scope", "$window", 'storage', '$notify' ,'$state', ($scope,$window, storage, $notify, $state)->
 
   $scope.modify = false
   $scope.delete = false
@@ -110,6 +114,7 @@ libraryBoxApp.controller 'PrivateLibraryCtrl',["$scope", "$window", 'storage', '
         $notify.info "Deleted", "#{$scope.item.label} is deleted."
         $scope.$parent.$emit "deleted" , $scope.item.key
         $scope.delete = false
+        $state.go "mine"
     else
       $scope.delete = false
 

@@ -29,11 +29,21 @@ div.dependency-dialog input.gwt-TextBox.textbox {
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/main\.scss}line{font-family:\0000317}}
-div.properties-box {
+div.properties-box .wrapper {
   -webkit-animation: showProperteisBox 0.001s 1;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/main\.scss}line{font-family:\0000321}}
 .ui-autocomplete {
   z-index: 9999 !important;
+  max-height: 200px;
+  overflow-y: auto;
+  /* prevent horizontal scrollbar */
+  overflow-x: hidden;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/main\.scss}line{font-family:\0000329}}
+.ui-menu-item a p {
+  padding: 2px 2px;
+  margin: 2px 0px;
 }

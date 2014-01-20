@@ -1,7 +1,11 @@
 (function() {
   'use strict';
   angular.module('LibraryBoxApp').controller('DetailCtrl', [
-    '$scope', '$rootScope', 'library', function($scope, $rootScope, library, $filter) {
+    '$scope', '$rootScope', 'library', '$state', '$notify', function($scope, $rootScope, library, $state, $notify) {
+      if (!library) {
+        $notify.warn("Library is not found", "Library " + $state.params.key + " is not found.");
+        return $state.go("mine");
+      }
       $scope.library = library;
       return $scope.item = library;
     }

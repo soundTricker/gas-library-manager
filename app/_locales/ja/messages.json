@@ -64,6 +64,12 @@
   },
   "deletePublished" : {
     "message" : "公開されたLibraryを削除"
+  },
+  "explainManageLibraries" : {
+    "message" : "自身のGASライブラリを管理します。"
+  },
+  "explainManual" : {
+    "message" : "ヘルプを見たい場合はこちら(外部サイトに遷移します)"
   }
 
 
