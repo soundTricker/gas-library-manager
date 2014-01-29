@@ -72,6 +72,12 @@
   },
   "deletePublished" : {
     "message" : "Delete Published library"
+  },
+  "explainManageLibraries" : {
+    "message" : "Manage your Google Apps Script library. You can modify, delete, show your libraries."
+  },
+  "explainManual" : {
+    "message" : "Please see a manual(Show external sites)"
   }
 
 

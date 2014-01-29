@@ -1,38 +1,34 @@
+
 <div class="row-fluid">
   <div class="span12">
-    <div ng-hide="loaded">
-      <i class="icon-spinner icon-spin"></i> Now loading your account infomation...
-    </div>
-    <form name="modifyForm" class="form-horizontal" ng-show="loaded">
-      <legend id="">Modify your account</legend>
-      <div class="control-group" ng-class="{error : !modifyForm.name.$valid}">
+    <div ng-hide="loaded"><i class="icon-spinner icon-spin"></i>Now loading your account infomation...</div>
+    <form name="modifyForm" ng-show="loaded" class="form-horizontal">
+      <legend>Modify your account</legend>
+      <div ng-class="{error : !modifyForm.name.$valid}" class="control-group">
         <label for="name" class="control-label">Nickname</label>
         <div class="controls">
-          <input id="name" type="text" name="name" ng-model="nickname" placeholder="Set your account name" required max-length="50" ng-trim="true">
-          <span class="help-inline" ng-show="modifyForm.name.$error.required">{{i18n("errorsRequired")}}</span>
+          <input id="name" type="text" name="name" ng-model="nickname" placeholder="Set your account name" required="required" max-length="50" ng-trim="true"/><span ng-show="modifyForm.name.$error.required" class="help-inline">{{i18n("errorsRequired")}}</span>
         </div>
       </div>
       <div class="control-group">
         <label for="useIcon" class="control-label">Profile Icon</label>
         <div class="controls">
           <div class="media">
-            <div class="pull-left">
-              <img class="media-object" ng-show="useIcon == 'use'" ng-src="{{userIconUrl}}" ng-show="modifyForm">
-            </div>
+            <div class="pull-left"><img ng-show="modifyForm" ng-src="{{userIconUrl}}" class="media-object"/></div>
             <div class="media-body">
-              <label for="useIcon" class="radio inline" ng-init="useIcon = 'use'">
-                <input type="radio" id="useIcon" ng-model="useIcon" name="useIcon" value="use" checked>Use Google+ Icon</input>
+              <label for="useIcon" ng-init="useIcon = 'use'" class="radio inline">
+                <input id="useIcon" type="radio" ng-model="useIcon" name="useIcon" value="use" checked="checked"/>Use Google+ Icon
               </label>
               <label for="notUsing" class="radio inline">
-                <input type="radio" id="notUsing" ng-model="useIcon" ng-value="" name="useIcon" value="not">Not set it.</input>
+                <input id="notUsing" type="radio" ng-model="useIcon" ng-value="" name="useIcon" value="not"/>Not set it.
               </label>
             </div>
           </div>
         </div>
       </div>
       <div class="form-actions">
-        <button class="btn btn-primary" ng-disabled="!modifyForm.$valid || processing" ng-click="processing = true;modify()">Modify Account</button>
-        <button class="btn" type="cancel">Cancel</button>
+        <button ng-disabled="!modifyForm.$valid || processing" ng-click="processing = true;modify()" class="btn btn-primary">Modify Account</button>
+        <button type="cancel" class="btn">Cancel</button>
       </div>
     </form>
   </div>

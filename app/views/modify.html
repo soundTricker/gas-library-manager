@@ -1,41 +1,40 @@
+
 <form name="modifyLib" ng-init="label=item.label; desc=item.desc; longDesc=item.longDesc;">
   <fieldset>
     <legend ng-bind-html="i18n('modifyTitle')"></legend>
-    <div class="control-group" ng-class="{error : !modifyLib.label.$valid}">
-        <label class="control-label" for="label{{$index}}">{{i18n("name")}}</label>
-        <div class="controls">
-          <input type="text" placeholder="Write library name" ng-maxlength="100" maxlength="100" id="label{{$index}}" class="span12" name="label" ng-model="label" required>
-          <span class="help-inline" ng-show="modifyLib.label.$error.required">{{i18n("errorsRequired")}}</span>
-        </div>
+    <div ng-class="{error : !modifyLib.label.$valid}" class="control-group">
+      <label for="label{{$index}}" class="control-label">{{i18n("name")}}</label>
+      <div class="controls">
+        <input id="label"/><span ng-show="modifyLib.label.$error.required" class="help-inline">{{i18n("errorsRequired")}}</span>
+      </div>
     </div>
-    <div class="control-group" ng-class="{error : !modifyLib.desc.$valid}">
-        <label class="control-label" for="desc{{$index}}">{{i18n("description")}}</label>
-        <div class="controls">
-          <input type="text" class="span12"  placeholder="Write this library short description, it's shown in script editor." ng-maxlength="80" maxlength="80" id="desc{{$index}}" name="desc" ng-model="desc">
-        </div>
+    <div ng-class="{error : !modifyLib.desc.$valid}" class="control-group">
+      <label for="desc{{$index}}" class="control-label">{{i18n("description")}}</label>
+      <div class="controls">
+        <input id="desc"/>
+      </div>
     </div>
-    <div class="control-group" ng-class="{error : !modifyLib.longDesc.$valid}">
-        <div class="row-fluid">
-          <div class="span6">
-            <label class="control-label" for="longDesc{{$index}}">{{i18n("description")}}</label>
-          </div>
-          <div class="span6">
-            <label class="control-label" for="longDesc{{$index}}">Preview</label>
-          </div>
-        <div class="controls">
-          <span class="help-inline">You can write this as markdwon format.</span>
+    <div ng-class="{error : !modifyLib.longDesc.$valid}" class="control-group">
+      <div class="row-fluid">
+        <div class="span6">
+          <label for="longDesc{{$index}}" class="control-label">{{i18n("description")}}</label>
+        </div>
+        <div class="span6">
+          <label for="longDesc{{$index}}" class="control-label">Preview</label>
+        </div>
+        <div class="controls"><span class="help-inline">You can write this as markdwon format.</span>
           <div class="row-fluid">
             <div class="span6">
-              <textarea class="span12" rows="5" id="longDesc{{$index}}" name="longDesc" ng-model="longDesc" ng-maxlength="2000"></textarea>
+              <textarea id="longDesc">{{$index}}.span12(rows='5', name='longDesc', ng-model='longDesc', ng-maxlength='2000')</textarea>
             </div>
-            <div class="span6" ng-bind-html="longDesc | markdown"></div>
+            <div ng-bind-html="longDesc | markdown" class="span6"></div>
           </div>
-
         </div>
-    </div>
-    <div class="form-actions">
-      <button class="btn btn-primary" ng-disabled="!modifyLib.$valid || saving" ng-click="saving = true;modifyLibs()">{{i18n("modify")}}</button>
-      <button class="btn" ng-click="modify=!modify">{{i18n("cancel")}}</button>
+      </div>
+      <div class="form-actions">
+        <button ng-disabled="!modifyLib.$valid || saving" ng-click="saving = true;modifyLibs()" class="btn btn-primary">{{i18n("modify")}}</button>
+        <button ng-click="modify=!modify" class="btn">{{i18n("cancel")}}</button>
+      </div>
     </div>
   </fieldset>
 </form>

@@ -26,11 +26,12 @@ module.exports = (grunt) ->
     yeoman: yeomanConfig
     watch:
       options:
-        livereload : on
+        livereload : 35728
         spawn: false
-      livereload:
-        files: ["<%= yeoman.app%>/{,*/}*"]
-        tasks: []
+      jade:
+        files: ["<%= yeoman.src %>/jade/{,*/}*.jade"]
+        tasks: ["jade:local"]
+
       coffee:
         files: ["<%= yeoman.src %>/coffee/{,*/}*.coffee"]
         tasks: ["coffee:dist"]
@@ -40,8 +41,11 @@ module.exports = (grunt) ->
         tasks: ["coffee:test"]
 
       compass:
-        files: ["<%= yeoman.app %>/styles/{,*/}*.{scss,sass}"]
+        files: ["<%= yeoman.src %>/sass/{,*/}*.{scss,sass}"]
         tasks: ["compass:server"]
+      livereload:
+        files: ["<%= yeoman.app%>/{,*/}*"]
+        tasks: []
 
     connect:
       options:
@@ -51,6 +55,8 @@ module.exports = (grunt) ->
         hostname: "localhost"
       keepalive:
         options:
+          keepalive:on
+          livereload:on
           middleware: (connect)->
             [mountFolder(connect, "app")]
 
@@ -94,7 +100,7 @@ module.exports = (grunt) ->
 
     compass:
       options:
-        sassDir: "<%= yeoman.app %>/styles"
+        sassDir: "<%= yeoman.src %>/sass"
         cssDir: "<%= yeoman.app %>/styles"
         generatedImagesDir: ".tmp/images/generated"
         imagesDir: "<%= yeoman.app %>/images"
@@ -109,6 +115,29 @@ module.exports = (grunt) ->
       server:
         options:
           debugInfo: true
+    jade:
+      local:
+          options:
+            pretty: on
+            data :
+              livereload:on
+          files: [
+            expand: true
+            cwd: "<%= yeoman.src %>/jade"
+            src: "{,*/}*.jade"
+            dest: "<%= yeoman.app %>/"
+            ext: ".html"
+          ]
+      dist:
+          options:
+            pretty: on
+          files: [
+            expand: true
+            cwd: "<%= yeoman.src %>/jade"
+            src: "{,*/}*.jade"
+            dest: "<%= yeoman.app %>/"
+            ext: ".html"
+          ]
 
     
     # not used since Uglify task does concat,
@@ -127,7 +156,7 @@ module.exports = (grunt) ->
       options:
         dest: "<%= yeoman.dist %>"
 
-      html: ["<%= yeoman.app %>/popup.html", "<%= yeoman.app %>/options.html", "<%= yeoman.app %>/background.html"]
+      html: ["<%= yeoman.app %>/popup.html", "<%= yeoman.app %>/options.html"]
 
     usemin:
       options:
@@ -200,18 +229,22 @@ module.exports = (grunt) ->
           cwd: ".tmp/images"
           dest: "<%= yeoman.dist %>/images"
           src: ["generated/*"]
+        ,
+          expand: true
+          cwd: "<%= yeoman.app %>"
+          dest: "<%= yeoman.dist %>"
+          src: ["scripts/background.js","scripts/analytics.js"]
         ]
 
     concurrent:
       server: ["coffee:dist", "compass:server"]
       test: ["coffee", "compass"]
-      dist: ["coffee", "compass:dist", "imagemin", "svgmin", "htmlmin"]
+      dist: ["coffee","jade:dist", "compass:dist", "imagemin", "svgmin", "htmlmin"]
 
     chromeManifest:
       dist:
         options:
-          buildnumber: true
-          background: "scripts/background.js"
+          buildnumber: off
 
         src: "<%= yeoman.app %>"
         dest: "<%= yeoman.dist %>"

@@ -1,0 +1,45 @@
+h1.page-header {{i18n("myLibraryList")}}
+.row-fluid
+  .span3(ng-if='$state.is(\'mine.detail\')')
+    div(ui-scrollfix='110')
+      ul.nav.nav-list.well.well-small(style='width: 268px;')
+        li.nav-header List
+        li
+          input.search-query(accesskey='f', type='search', ng-model='search.$', placeholder='{{i18n(\'search\')}}')
+        li.divider
+        li.muted(ng-if='filtered.length === 0') There is no library.
+        li(ng-repeat='i in filtered track by $index', ng-class="{active : $state.params.key == i.key}")
+          a(ng-href='#/mine/detail/{{i.key}}') {{i.label}}
+        pagination.pagination-small(data-boundary-links='true', data-num-pages='noOfPages', data-current-page='currentPage', max-size='maxSize', data-previous-text='«', data-next-text='»')
+  .span9.library-list(ng-if='$state.is(\'mine.detail\')', ui-view="mine")
+  .span12.library-list(ng-if='$state.is(\'mine\')')
+    .well.well-small
+      .pull-left Search: 
+             input.search-query(type='search', ng-model='search.$', placeholder='{{i18n(\'search\')}}')
+      .pull-right(ng-if='gapiLoaded')
+        .btn-group.pull-right
+          button.btn.btn-link(tabindex="-1", ng-disabled='uploading', ng-click='uploadLibraries()') Export
+          button.btn.btn-link(tabindex="-1", ng-click='isCollapsed = !isCollapsed') Import
+        .clearfix
+        div(collapse='isCollapsed')
+          form.form-inline(name='importForm')
+            input.input-xlarge(tabindex="-1", type='text', name='fileId', placeholder='input library file key of Google Drive', ng-model='fileId', required='required')
+            button.btn(tabindex="-1", ng-click='import(fileId)') Import
+      .clearfix
+
+    .row-fluid
+      .span12
+        table.table.table-hover
+          thead
+            tr
+              th {{i18n("name")}}
+              th {{i18n("description")}}
+              th {{i18n("registeredAt")}} / {{i18n("modifiedAt")}}
+          tbody
+            tr(ng-if='filtered.length === 0')
+              td(colspan=3) There is no library.
+            tr(ng-repeat='item in filtered track by $index', ng-controller='PrivateLibraryCtrl', ng-click="$state.go('mine.detail', {key : item.key})")
+              td
+                a(ui-sref='mine.detail({key : item.key})') {{item.label}}
+              td(ng-bind-html='item.desc | escape | break2br') 
+              td {{item.registeredAt | date}} / {{item.modifiedAt | date}}

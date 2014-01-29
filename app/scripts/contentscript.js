@@ -1,9 +1,9 @@
 (function() {
   (function($, global) {
     "use strict";
-    var $saveButton, $saveMessageBox, escapeHTML;
+    var $saveButton, $saveMessageBox, escapeHTML, generateLinks;
     $saveMessageBox = $('<div>');
-    $saveButton = $("<button type=\"button\" class=\"gwt-Button\">" + (chrome.i18n.getMessage('saveButton')) + "</button>").click(function() {
+    $saveButton = $("<button type=\"button\" class=\"saveButton gwt-Button\">" + (chrome.i18n.getMessage('saveButton')) + "</button>").click(function() {
       var item, propertyRows;
       $saveMessageBox.empty();
       propertyRows = $('.properties-box').find("input.info-row");
@@ -35,18 +35,39 @@
       });
     });
     document.addEventListener("webkitAnimationStart", (function(event) {
-      console.log(event.animationName);
       return (global[event.animationName] || function() {
         return this;
       }).apply(this, event);
     }), true);
     global.showProperteisBox = function(event) {
+      if ($(".saveButton").length > 0) {
+        return;
+      }
       return $('.properties-box').closest('.dialogMiddle').find('.buttons').append($saveButton.clone(true)).append($saveMessageBox);
+    };
+    generateLinks = function(item) {
+      return $("<div>").append($("<h3>").text(item.label)).append($("<p>", {
+        "text": item.desc
+      })).append($("<a>", {
+        "href": item.sourceUrl,
+        "text": "View source",
+        "target": "_blank"
+      }).button()).append($("<a>", {
+        "on": {
+          "click": function() {
+            return chrome.runtime.sendMessage({
+              action: "showMyLibraryPage",
+              key: item.value
+            });
+          }
+        },
+        "href": "javascript:",
+        "text": "View detail"
+      }).button());
     };
     global.showDependencyDialog = function(event) {
       return chrome.storage.local.get("libraries", function(res) {
-        var $info, $text, item, key, libraries, source;
-        console.log(res);
+        var $info, $text, autocomp, item, key, libraries, source;
         libraries = (res != null ? res.libraries : void 0) || {};
         source = (function() {
           var _results;
@@ -64,7 +85,7 @@
           }
           return _results;
         })();
-        $info = $("<div>").appendTo($('div.dependency-dialog .find'));
+        $info = $("<div>").appendTo($('div.dependency-dialog').closest(".maestro-dialog"));
         $text = $('div.dependency-dialog input.gwt-TextBox.textbox').autocomplete({
           minLength: 2,
           source: function(request, response) {
@@ -76,16 +97,17 @@
           },
           focus: function(event, ui) {
             $text.val(ui.item.value);
-            $info.html("<a href=\"" + ui.item.sourceUrl + "\">" + (escapeHTML(ui.item.label)) + "</a>");
+            $info.empty().append(generateLinks(ui.item));
             return false;
           },
           select: function(event, ui) {
             $text.val(ui.item.value);
-            $info.html("<a href=\"" + ui.item.sourceUrl + "\">" + (escapeHTML(ui.item.label)) + "</a>");
-            return false;
+            $info.empty().append(generateLinks(ui.item));
+            return true;
           }
         });
-        return $text.data("ui-autocomplete")._renderItem = function(ul, item) {
+        autocomp = $text.data("ui-autocomplete");
+        autocomp._renderItem = function(ul, item) {
           var $a, $li, desc, label, matcher;
           $li = $("<li>");
           matcher = new RegExp("(" + ($.ui.autocomplete.escapeRegex(this.term)) + ")", "ig");
@@ -100,6 +122,16 @@
             $a.append("<p><small> " + desc + "</small></p>");
           }
           return $li.append($a).appendTo(ul);
+        };
+        return autocomp._renderMenu = function(ul, items) {
+          var that;
+          that = this;
+          $("<li>").append($("<b>", {
+            text: "Choose library by Keyboard's Up or Down"
+          })).appendTo(ul);
+          return $.each(items, function(index, item) {
+            return that._renderItemData(ul, item);
+          });
         };
       });
     };

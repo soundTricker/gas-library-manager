@@ -1,6 +1,6 @@
 {
   "name": "__MSG_appName__",
-  "version": "0.0.7",
+  "version": "0.1.1",
   "manifest_version": 2,
   "description": "__MSG_appDescription__",
   "icons": {
@@ -9,7 +9,10 @@
   },
   "default_locale": "en",
   "background": {
-    "page": "background.html"
+    "scripts": [
+      "scripts/background.js",
+      "scripts/analytics.js"
+    ]
   },
   "options_page": "options.html",
   "content_scripts": [
@@ -25,18 +28,27 @@
       "js": [
         "bower_components/jquery/jquery.min.js",
         "bower_components/jquery-ui/ui/jquery-ui.js",
-        "scripts/contentscript.js"
+        "scripts/contentscript.js",
+        "scripts/analytics.js"
       ],
       "run_at": "document_end",
       "all_frames": false
     }
   ],
+  "page_action": {
+    "default_icon": {
+      "19": "images/icon-19.png",
+      "38": "images/icon-38.png"
+    },
+    "default_title": "__MSG_appName__",
+    "default_popup": "popup.html"
+  },
   "web_accessible_resources": [
     "bower_components/jquery-ui/themes/base/images/*",
     "font/*",
     "views/*"
   ],
-  "content_security_policy": "script-src 'self' https://apis.google.com https://www.google-analytics.com; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://apis.google.com https://www.google-analytics.com http://localhost:35729; object-src 'self'",
   "permissions": [
     "identity",
     "storage",

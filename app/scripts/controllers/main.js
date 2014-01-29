@@ -12,6 +12,13 @@
       $scope.currentPage = 1;
       $scope.maxSize = 3;
       $scope.entryLimit = 20;
+      $scope.search = {
+        "$": ""
+      };
+      $scope.exportMode = false;
+      $scope.setExportMode = function() {
+        return $scope.exportMode = !$scope.exportMode;
+      };
       libraries = (function() {
         var _i, _len, _ref, _results;
         _ref = $rootScope.libraries;
@@ -128,7 +135,7 @@
   ]);
 
   libraryBoxApp.controller('PrivateLibraryCtrl', [
-    "$scope", "$window", 'storage', '$notify', function($scope, $window, storage, $notify) {
+    "$scope", "$window", 'storage', '$notify', '$state', function($scope, $window, storage, $notify, $state) {
       $scope.modify = false;
       $scope["delete"] = false;
       $scope.saving = false;
@@ -137,7 +144,8 @@
           return storage.removeLibrary($scope.item.key).then(function() {
             $notify.info("Deleted", "" + $scope.item.label + " is deleted.");
             $scope.$parent.$emit("deleted", $scope.item.key);
-            return $scope["delete"] = false;
+            $scope["delete"] = false;
+            return $state.go("mine");
           });
         } else {
           return $scope["delete"] = false;

@@ -6,22 +6,34 @@
     return window.gapiIsLoaded();
   };
 
-  angular.module('LibraryBoxApp', ['ngSanitize', 'cgNotify', 'ui.bootstrap', 'ui.directives', 'ui.router', 'markdown']).config([
+  angular.module('LibraryBoxApp', ['ngSanitize', 'cgNotify', 'ui.bootstrap', 'ui.directives', 'ui.router', 'markdown']).constant("apiUrl", "https://gas-library-box.appspot.com/_ah/api").config([
     "$stateProvider", "$urlRouterProvider", '$compileProvider', function($stateProvider, $urlRouterProvider, $compileProvider) {
       $compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
       $urlRouterProvider.otherwise('/');
       return $stateProvider.state('top', {
         url: '/',
-        templateUrl: 'views/index.html',
-        controller: 'IndexCtrl'
+        views: {
+          container: {
+            templateUrl: 'views/index.html',
+            controller: 'IndexCtrl'
+          }
+        }
       }).state('mine', {
         url: '/mine',
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+        views: {
+          container: {
+            templateUrl: 'views/main.html',
+            controller: 'MainCtrl'
+          }
+        }
       }).state('mine.detail', {
         url: '/detail/:key',
-        templateUrl: 'views/detail.html',
-        controller: 'DetailCtrl',
+        views: {
+          mine: {
+            templateUrl: 'views/detail.html',
+            controller: 'DetailCtrl'
+          }
+        },
         resolve: {
           'library': [
             '$stateParams', 'storage', function($stateParams, storage) {
@@ -29,91 +41,6 @@
             }
           ]
         }
-      }).state('global', {
-        url: '/global?q&next',
-        templateUrl: 'views/global.html',
-        controller: 'GlobalCtrl',
-        resolve: {
-          'result': [
-            '$stateParams', '$rootScope', '$q', function($stateParams, $rootScope, $q) {
-              var d, list, search;
-              d = $q.defer();
-              search = function() {
-                var param;
-                param = {
-                  query: $stateParams.q
-                };
-                $stateParams.next || (param.nextToken = $stateParams.next);
-                gapi.client.libraries.search(param).execute(function(result) {
-                  d.resolve(result);
-                  return $rootScope.$apply();
-                });
-                return d.promise;
-              };
-              list = function() {
-                var param;
-                param = {};
-                $stateParams.next || (param.cursor = $stateParams.next);
-                gapi.client.libraries.list(param).execute(function(result) {
-                  d.resolve(result);
-                  return $rootScope.$apply();
-                });
-                return d.promise;
-              };
-              if ($rootScope.gapiLoaded) {
-                if ($stateParams.q) {
-                  return search();
-                }
-                return list();
-              }
-              $rootScope.$on("gapiLoaded", function() {
-                if ($stateParams.q) {
-                  return search();
-                }
-                return list();
-              });
-              return d.promise;
-            }
-          ]
-        }
-      }).state('global.detail', {
-        url: '/detail/:key',
-        templateUrl: 'views/globalDetail.html',
-        controller: 'DetailCtrl',
-        resolve: {
-          'library': [
-            '$stateParams', '$rootScope', '$q', function($stateParams, $rootScope, $q) {
-              var d, get;
-              d = $q.defer();
-              get = (function(key) {
-                return function() {
-                  gapi.client.libraries.get({
-                    libraryKey: key
-                  }).execute(function(result) {
-                    d.resolve(result);
-                    return $rootScope.$apply();
-                  });
-                  return d.promise;
-                };
-              })($stateParams.key);
-              if ($rootScope.gapiLoaded) {
-                return get();
-              }
-              $rootScope.$on("gapiLoaded", function() {
-                return get();
-              });
-              return d.promise;
-            }
-          ]
-        }
-      }).state('account', {
-        url: '/account',
-        templateUrl: 'views/modifyAccount.html',
-        controller: 'ModifyAccountCtrl'
-      }).state('register', {
-        url: '/register',
-        templateUrl: 'views/register.html',
-        controller: 'RegisterCtrl'
       });
     }
   ]).run([

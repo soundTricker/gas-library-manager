@@ -1,18 +1,5 @@
 
-<div class="alert {{type}} alert-block gmail-template">
-  <style>
-    .gmail-template {
-      position:fixed;
-      right:0;
-      bottom:0;
-      z-index: 9999;
-      -webkit-transition: top 0.5s ease-out,opacity 0.5s ease-out 5s; /* 4 sec delay for longer message visibility */
-      -moz-transition: top 0.5s ease-out,opacity 0.5s ease-out 5s;
-      -o-transition: top 0.5s ease-out,opacity 0.5s ease-out 5s;
-      transition: top 0.5s ease-out,opacity 0.5s ease-out 5s;
-    }
-
-  </style>
-  <h4>{{title}}</h4>
-  <span ng-bind-html="message"></span>
+<div class="clearfix"></div>
+<div class="alert {{type}} alert-block notify">
+  <h4>{{title}}</h4><span ng-bind-html="message"></span>
 </div>

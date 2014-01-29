@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   angular.module('LibraryBoxApp').controller('optionPageCtrl', [
-    '$scope', '$state', '$rootScope', '$window', '$q', '$notify', 'storage', (function($scope, $state, $rootScope, $window, $q, $notify, storage) {
+    '$scope', '$state', '$rootScope', '$window', '$q', '$notify', 'storage', 'apiUrl', (function($scope, $state, $rootScope, $window, $q, $notify, storage, apiUrl) {
       $rootScope.$state = $state;
       $rootScope.$on("$stateChangeStart", function() {
         return $rootScope.isViewLoading = true;
@@ -40,28 +40,17 @@
             }
             return d.promise;
           };
-          return $q.all([loadApiDefer("plus", "v1"), loadApiDefer("drive", "v2"), loadApiDefer("libraries", "v1", "https://gas-library-box.appspot.com/_ah/api"), loadApiDefer("members", "v1", "https://gas-library-box.appspot.com/_ah/api")]).then(function() {
+          return $q.all([loadApiDefer("drive", "v2")]).then(function() {
             return chrome.identity.getAuthToken({
               interactive: true
             }, function(token) {
               gapi.auth.setToken({
                 "access_token": token
               });
-              return gapi.client.members.get({
-                userKey: "me"
-              }).execute(function(result) {
-                if (result.code === 404) {
-                  $notify.info("Please Sign Up", "You are not registered to gas-library-box service.<br> If you want to publish your library to gas-library-box , please sign up.");
-                  $scope.loginStatus = "givenRegister";
-                } else {
-                  $rootScope.loginUser = result;
-                  $rootScope.$emit("loggedin", result);
-                }
-                $rootScope.loggedin = result.code !== 404;
-                $rootScope.gapiLoaded = true;
-                $rootScope.$emit('gapiLoaded');
-                return $scope.$apply();
-              });
+              $rootScope.loginStatus = "loaded";
+              $rootScope.gapiLoaded = true;
+              $rootScope.$emit('gapiLoaded');
+              return $scope.$apply();
             });
           });
         });

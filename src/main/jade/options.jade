@@ -1,0 +1,97 @@
+!!! 5
+html(ng-app='LibraryBoxApp', ng-csp='ng-csp')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    // build:css({.tmp,app}) css/app.css 
+    link(href='bower_components/bootstrap/docs/assets/css/bootstrap.css', rel='stylesheet')
+    link(href='bower_components/bootstrap/docs/assets/css/bootstrap-responsive.css', res='stylesheet')
+    link(rel='stylesheet', href='bower_components/angular-ui/build/angular-ui.min.css')
+    link(href='bower_components/font-awesome/css/font-awesome.min.css', rel='stylesheet')
+    link(rel='stylesheet', href='styles/angular-notify.min.css')
+    link(href='styles/main.css', rel='stylesheet')
+    link(href='styles/options.css', rel='stylesheet')
+    // endbuild 
+    title(ng-bind="i18n('appName')")
+  body(ng-controller='optionPageCtrl')
+    .navbar.navbar-inverse.navbar-fixed-top
+      .navbar-inner
+        .container-fluid
+          button.btn.btn-navbar(type='button', data-toggle='collapse', data-target='.nav-collapse')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.brand(href='#') {{i18n('appName')}}
+          .nav-collapse.collapse
+            ul.nav.pull-left
+              li(ng-class="{active : $state.is('top')}")
+                a(href='#') Home
+              li(ng-class='{active : $state.includes(\'mine\')}')
+                a(href='#/mine') My Libraries
+              //- li(ng-class='{active : $state.includes(\'global\')}', ng-if='gapiLoaded')
+              //-   a(href='#/global') Global Libraries
+              //- li(ng-class='{active : $state.is(\'register\')}', ng-if='loginStatus == \'givenRegister\'') Register
+            ul.nav.pull-right(ng-switch='loginStatus')
+              li(ng-switch-when="loaded") 
+
+              //- li.dropdown(ng-switch-when='loggedin')
+              //-   a.dropdown-toggle
+              //-     | {{nickname}} &nbsp;
+              //-     img(ng-src='{{userIconUrl}}')
+              //-   ul.dropdown-menu
+              //-     li
+              //-       a(ui-sref='account') Change Account Information
+              //- li.active(ng-switch-when='givenRegister')
+              //-   a.navbar-link(ng-click='showRegister()') Sign up
+              //- li.active(ng-switch-when='loadFinished')
+              //-   a.navbar-link(ng-click='login()') Sign in
+              li(ng-switch-default='ng-switch-default')
+                p.navbar-text
+                  i.icon-spinner.icon-spin 
+                  | &nbsp;Now loading...
+    div(notifications='bottom right')
+    div(ng-show='isViewLoading', style='margin-top:50px;')
+      i.icon-spinner.icon-spin
+      | Now loading...
+    .container-fluid(ng-hide='isViewLoading', ui-view="container", style='margin-top:50px;')
+    // build:js scripts/modules.js 
+    script(src='bower_components/jquery/jquery.min.js', type='text/javascript')
+    script(src='bower_components/jquery-easing/jquery.easing.min.js')
+    script(src='bower_components/marked/lib/marked.js')
+    script(src='bower_components/angular-unstable/angular.min.js')
+    script(src='bower_components/angular-ui/build/angular-ui.min.js')
+    script(src='bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js')
+    script(src='bower_components/angular-sanitize/angular-sanitize.js')
+    script(src='bower_components//angular-ui-router/release/angular-ui-router.min.js')
+    script(src='scripts/lib/angular-notify.min.js')
+    // endbuild 
+    // build:js({.tmp,app}) scripts/scripts.js 
+    script(src='scripts/services/markdown.js')
+    script(src='scripts/filters/markdown.js')
+    // app
+    script(src='scripts/options.js')
+    // controllers
+    script(src='scripts/controllers/optionPage.js')
+    script(src='scripts/controllers/main.js')
+    script(src='scripts/controllers/index.js')
+    script(src='scripts/controllers/register.js')
+    script(src='scripts/controllers/detail.js')
+    script(src='scripts/controllers/publish.js')
+    script(src='scripts/controllers/global.js')
+    script(src='scripts/controllers/loading.js')
+    script(src='scripts/controllers/modifyAccount.js')
+    // directives 
+    script(src='scripts/directives/smoothScroll.js')
+    // filteres 
+    script(src='scripts/filters/br.js')
+    script(src='scripts/filters/startFrom.js')
+    // services 
+    script(src='scripts/services/storage.js')
+    script(src='scripts/services/notify.js')
+    // another dependency 
+    script(src='scripts/lib/gapi-chrome-apps.js')
+    // endbuild 
+    script(src='scripts/analytics.js')
+    if livereload
+      script(src="http://localhost:35729/livereload.js")
+

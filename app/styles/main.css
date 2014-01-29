@@ -1,39 +1,49 @@
 /* Will be compiled down to a single stylesheet with your sass files */
 @-webkit-keyframes showDependencyDialog {
-  /* line 4, main.scss */
+  /* line 4, ../../src/main/sass/main.scss */
   0% {
     opacity: 0;
   }
 
-  /* line 5, main.scss */
+  /* line 5, ../../src/main/sass/main.scss */
   100% {
     opacity: 1;
   }
 }
 
 @-webkit-keyframes showProperteisBox {
-  /* line 9, main.scss */
+  /* line 9, ../../src/main/sass/main.scss */
   0% {
     opacity: 0;
   }
 
-  /* line 10, main.scss */
+  /* line 10, ../../src/main/sass/main.scss */
   100% {
     opacity: 1;
   }
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/app\/styles\/main\.scss}line{font-family:\0000313}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/main\.scss}line{font-family:\0000313}}
 div.dependency-dialog input.gwt-TextBox.textbox {
   -webkit-animation: showDependencyDialog 0.001s 1;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/app\/styles\/main\.scss}line{font-family:\0000317}}
-div.properties-box {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/main\.scss}line{font-family:\0000317}}
+div.properties-box .wrapper {
   -webkit-animation: showProperteisBox 0.001s 1;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/app\/styles\/main\.scss}line{font-family:\0000321}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/main\.scss}line{font-family:\0000321}}
 .ui-autocomplete {
   z-index: 9999 !important;
+  max-height: 200px;
+  overflow-y: auto;
+  /* prevent horizontal scrollbar */
+  overflow-x: hidden;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/main\.scss}line{font-family:\0000329}}
+.ui-menu-item a p {
+  padding: 2px 2px;
+  margin: 2px 0px;
 }
