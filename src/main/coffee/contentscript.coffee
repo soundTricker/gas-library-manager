@@ -3,7 +3,7 @@ do($=jQuery, global=@) ->
 
   $saveMessageBox = $ '<div>'
 
-  $saveButton = $("<button type=\"button\" class=\"gwt-Button\">#{chrome.i18n.getMessage('saveButton')}</button>").click ()->
+  $saveButton = $("<button type=\"button\" class=\"saveButton gwt-Button\">#{chrome.i18n.getMessage('saveButton')}</button>").click ()->
     $saveMessageBox.empty()
     propertyRows = $('.properties-box').find "input.info-row"
     item = 
@@ -30,24 +30,43 @@ do($=jQuery, global=@) ->
         $saveMessageBox.text chrome.i18n.getMessage("saved", item.label)
 
   document.addEventListener "webkitAnimationStart", ((event) ->
-    console.log event.animationName
     (global[event.animationName] || ()->@).apply(this,event)
 
   ), true
 
   global.showProperteisBox = (event)-> 
+    return if $(".saveButton").length > 0
     $('.properties-box').closest('.dialogMiddle').find('.buttons').append($saveButton.clone(true)).append($saveMessageBox)
+
+  generateLinks = (item)->
+    return $("<div>")
+      .append($("<h3>").text(item.label))
+      .append($("<p>" ,
+        "text" : item.desc
+      ))
+      .append($("<a>" ,
+        "href" : item.sourceUrl
+        "text" : "View source"
+        "target" : "_blank"
+      ).button())
+      .append($("<a>", 
+        "on" :
+          "click" : ()-> chrome.runtime.sendMessage {action : "showMyLibraryPage", key : item.value}
+        "href" : "javascript:" 
+        "text" : "View detail"
+      ).button())
 
   global.showDependencyDialog = (event)->
     chrome.storage.local.get "libraries",(res)->
-      console.log res
       libraries = res?.libraries || {}
 
       source = ({value:item.key, label:item.label ,desc : item.desc, sourceUrl : item.sourceUrl} for key, item of libraries when item.key)
 
-      $info = $("<div>").appendTo $('div.dependency-dialog .find')
+      $info = $("<div>").appendTo $('div.dependency-dialog').closest(".maestro-dialog")
 
-      $text = $('div.dependency-dialog input.gwt-TextBox.textbox').autocomplete
+
+
+      $text = $('div.dependency-dialog input.gwt-TextBox.textbox').autocomplete(
         minLength : 2
         source : (request, response)->
           matcher = new RegExp $.ui.autocomplete.escapeRegex(request.term) , "i"
@@ -58,14 +77,16 @@ do($=jQuery, global=@) ->
           )
         focus : (event, ui)->
           $text.val ui.item.value
-          $info.html "<a href=\"#{ui.item.sourceUrl}\">#{escapeHTML(ui.item.label)}</a>"
+          $info.empty().append(generateLinks(ui.item)) # "<a href=\"#{ui.item.sourceUrl}\">#{escapeHTML(ui.item.label)}</a>"
           return false
         select : (event, ui)->
           $text.val ui.item.value
-          $info.html "<a href=\"#{ui.item.sourceUrl}\">#{escapeHTML(ui.item.label)}</a>"
-          return false
+          $info.empty().append(generateLinks(ui.item)) # "<a href=\"#{ui.item.sourceUrl}\">#{escapeHTML(ui.item.label)}</a>"
+          return true
+      )
 
-      $text.data("ui-autocomplete")._renderItem = (ul, item)->
+      autocomp = $text.data("ui-autocomplete")
+      autocomp._renderItem = (ul, item)->
         $li = $("<li>")
         matcher = new RegExp "(#{$.ui.autocomplete.escapeRegex(@term)})" , "ig"
         label = item.label.replace(matcher,($1, match) ->
@@ -78,6 +99,10 @@ do($=jQuery, global=@) ->
           )
           $a.append("<p><small> #{desc}</small></p>")
         $li.append($a).appendTo(ul)
+      autocomp._renderMenu = (ul, items)->
+        that = @
+        $("<li>").append($("<b>", text : "Choose library by Keyboard's Up or Down")).appendTo ul
+        $.each items , (index, item)-> that._renderItemData ul, item
 
   escapeHTML = (str)->
     str.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;")

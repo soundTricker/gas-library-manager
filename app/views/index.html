@@ -3,3 +3,26 @@
   <h1>{{i18n("appName")}}</h1>
   <p>{{i18n("appDescription")}}</p>
 </div>
+<div class="row-fluid">
+  <div class="span8">
+    <div class="row-fluid">
+      <div class="span6">
+        <h3 class="page-header">Manage libraries</h3>
+        <p>{{i18n("explainManageLibraries")}}</p>
+        <button ng-click="$state.go('mine')" class="btn btn-primary pull-right">Let's start »</button>
+      </div>
+      <div class="span6">
+        <h3 class="page-header">Need Help?</h3>
+        <p>{{i18n("explainManual")}} </p><a href="https://sites.google.com/site/gashackja/gas-library-box" target="_blank" class="btn btn-primary pull-right">See manual »</a>
+      </div>
+    </div>
+  </div>
+  <div class="span4 well">
+    <h3>What's New?</h3>
+    <div class="row-fluid">
+      <div class="span12">
+        <p>2014/01/20 Beta version release</p>
+      </div>
+    </div>
+  </div>
+</div>

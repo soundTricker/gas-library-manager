@@ -23,17 +23,15 @@
       </div>
       <div ng-if="gapiLoaded" class="pull-right">
         <div class="btn-group pull-right">
-          <button tabindex="-1" ng-disabled="uploading" ng-click="uploadLibraries()" class="btn btn-link">Export My Libraries</button>
-          <button tabindex="-1" ng-click="isCollapsed = !isCollapsed" class="btn btn-link">Import My Libraries</button>
+          <button tabindex="-1" ng-disabled="uploading" ng-click="uploadLibraries()" class="btn btn-link">Export</button>
+          <button tabindex="-1" ng-click="isCollapsed = !isCollapsed" class="btn btn-link">Import</button>
         </div>
         <div class="clearfix"></div>
         <div collapse="isCollapsed">
-          <div class="well well-large">
-            <form name="importForm" class="form-inline">
-              <input tabindex="-1" type="text" name="fileId" placeholder="input library file key of Google Drive" ng-model="fileId" required="required" class="input-xlarge"/>
-              <button tabindex="-1" ng-click="import(fileId)" class="btn">Import</button>
-            </form>
-          </div>
+          <form name="importForm" class="form-inline">
+            <input tabindex="-1" type="text" name="fileId" placeholder="input library file key of Google Drive" ng-model="fileId" required="required" class="input-xlarge"/>
+            <button tabindex="-1" ng-click="import(fileId)" class="btn">Import</button>
+          </form>
         </div>
       </div>
       <div class="clearfix"></div>

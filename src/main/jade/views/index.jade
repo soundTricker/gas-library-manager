@@ -1,3 +1,22 @@
 .hero-unit
   h1 {{i18n("appName")}}
   p {{i18n("appDescription")}}
+.row-fluid
+  .span8
+    .row-fluid
+      .span6
+        h3.page-header Manage libraries
+        p {{i18n("explainManageLibraries")}}
+        button.btn.btn-primary.pull-right(ng-click="$state.go('mine')") Let's start »
+      .span6
+        h3.page-header Need Help?
+        p {{i18n("explainManual")}} 
+        a.btn.btn-primary.pull-right(href="https://sites.google.com/site/gashackja/gas-library-box", target="_blank") See manual »
+
+  .span4.well
+    h3 What's New?
+    .row-fluid
+      .span12
+        p 2014/01/20 Beta version release
+
+

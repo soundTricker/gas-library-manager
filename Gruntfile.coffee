@@ -41,7 +41,7 @@ module.exports = (grunt) ->
         tasks: ["coffee:test"]
 
       compass:
-        files: ["<%= yeoman.app %>/styles/{,*/}*.{scss,sass}"]
+        files: ["<%= yeoman.src %>/sass/{,*/}*.{scss,sass}"]
         tasks: ["compass:server"]
       livereload:
         files: ["<%= yeoman.app%>/{,*/}*"]
@@ -100,7 +100,7 @@ module.exports = (grunt) ->
 
     compass:
       options:
-        sassDir: "<%= yeoman.src %>/scss"
+        sassDir: "<%= yeoman.src %>/sass"
         cssDir: "<%= yeoman.app %>/styles"
         generatedImagesDir: ".tmp/images/generated"
         imagesDir: "<%= yeoman.app %>/images"
@@ -156,7 +156,7 @@ module.exports = (grunt) ->
       options:
         dest: "<%= yeoman.dist %>"
 
-      html: ["<%= yeoman.app %>/popup.html", "<%= yeoman.app %>/options.html", "<%= yeoman.app %>/background.html"]
+      html: ["<%= yeoman.app %>/popup.html", "<%= yeoman.app %>/options.html"]
 
     usemin:
       options:
@@ -229,6 +229,11 @@ module.exports = (grunt) ->
           cwd: ".tmp/images"
           dest: "<%= yeoman.dist %>/images"
           src: ["generated/*"]
+        ,
+          expand: true
+          cwd: "<%= yeoman.app %>"
+          dest: "<%= yeoman.dist %>"
+          src: ["scripts/background.js","scripts/analytics.js"]
         ]
 
     concurrent:
@@ -239,8 +244,7 @@ module.exports = (grunt) ->
     chromeManifest:
       dist:
         options:
-          buildnumber: true
-          background: "scripts/background.js"
+          buildnumber: off
 
         src: "<%= yeoman.app %>"
         dest: "<%= yeoman.dist %>"

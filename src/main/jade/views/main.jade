@@ -18,14 +18,13 @@ h1.page-header {{i18n("myLibraryList")}}
              input.search-query(type='search', ng-model='search.$', placeholder='{{i18n(\'search\')}}')
       .pull-right(ng-if='gapiLoaded')
         .btn-group.pull-right
-          button.btn.btn-link(tabindex="-1", ng-disabled='uploading', ng-click='uploadLibraries()') Export My Libraries
-          button.btn.btn-link(tabindex="-1", ng-click='isCollapsed = !isCollapsed') Import My Libraries
+          button.btn.btn-link(tabindex="-1", ng-disabled='uploading', ng-click='uploadLibraries()') Export
+          button.btn.btn-link(tabindex="-1", ng-click='isCollapsed = !isCollapsed') Import
         .clearfix
         div(collapse='isCollapsed')
-          .well.well-large
-            form.form-inline(name='importForm')
-              input.input-xlarge(tabindex="-1", type='text', name='fileId', placeholder='input library file key of Google Drive', ng-model='fileId', required='required')
-              button.btn(tabindex="-1", ng-click='import(fileId)') Import
+          form.form-inline(name='importForm')
+            input.input-xlarge(tabindex="-1", type='text', name='fileId', placeholder='input library file key of Google Drive', ng-model='fileId', required='required')
+            button.btn(tabindex="-1", ng-click='import(fileId)') Import
       .clearfix
 
     .row-fluid

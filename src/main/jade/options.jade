@@ -10,7 +10,7 @@ html(ng-app='LibraryBoxApp', ng-csp='ng-csp')
     link(href='bower_components/font-awesome/css/font-awesome.min.css', rel='stylesheet')
     link(rel='stylesheet', href='styles/angular-notify.min.css')
     link(href='styles/main.css', rel='stylesheet')
-    link(href='styles/options.scss', rel='stylesheet')
+    link(href='styles/options.css', rel='stylesheet')
     // endbuild 
     title(ng-bind="i18n('appName')")
   body(ng-controller='optionPageCtrl')
@@ -28,21 +28,23 @@ html(ng-app='LibraryBoxApp', ng-csp='ng-csp')
                 a(href='#') Home
               li(ng-class='{active : $state.includes(\'mine\')}')
                 a(href='#/mine') My Libraries
-              li(ng-class='{active : $state.includes(\'global\')}', ng-if='gapiLoaded')
-                a(href='#/global') Global Libraries
-              li(ng-class='{active : $state.is(\'register\')}', ng-if='loginStatus == \'givenRegister\'') Register
+              //- li(ng-class='{active : $state.includes(\'global\')}', ng-if='gapiLoaded')
+              //-   a(href='#/global') Global Libraries
+              //- li(ng-class='{active : $state.is(\'register\')}', ng-if='loginStatus == \'givenRegister\'') Register
             ul.nav.pull-right(ng-switch='loginStatus')
-              li.dropdown(ng-switch-when='loggedin')
-                a.dropdown-toggle
-                  | {{nickname}} &nbsp;
-                  img(ng-src='{{userIconUrl}}')
-                ul.dropdown-menu
-                  li
-                    a(ui-sref='account') Change Account Information
-              li.active(ng-switch-when='givenRegister')
-                a.navbar-link(ng-click='showRegister()') Sign up
-              li.active(ng-switch-when='loadFinished')
-                a.navbar-link(ng-click='login()') Sign in
+              li(ng-switch-when="loaded") 
+
+              //- li.dropdown(ng-switch-when='loggedin')
+              //-   a.dropdown-toggle
+              //-     | {{nickname}} &nbsp;
+              //-     img(ng-src='{{userIconUrl}}')
+              //-   ul.dropdown-menu
+              //-     li
+              //-       a(ui-sref='account') Change Account Information
+              //- li.active(ng-switch-when='givenRegister')
+              //-   a.navbar-link(ng-click='showRegister()') Sign up
+              //- li.active(ng-switch-when='loadFinished')
+              //-   a.navbar-link(ng-click='login()') Sign in
               li(ng-switch-default='ng-switch-default')
                 p.navbar-text
                   i.icon-spinner.icon-spin 

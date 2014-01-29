@@ -32,6 +32,12 @@ angular.module('LibraryBoxApp')
         @$rootScope.$apply ()=> d.resolve angular.copy @libraryMap
       d.promise
 
+    getLibrariesSync:()->
+      ret = []
+      @getLibraries().then (res)=>
+        ret.push i for i in @libraries
+      return ret
+
     addLibrary:(library)=>
       d = @$q.defer()
       @getLibraries().then (libraries)=>
