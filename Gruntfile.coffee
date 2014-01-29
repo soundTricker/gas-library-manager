@@ -156,7 +156,7 @@ module.exports = (grunt) ->
       options:
         dest: "<%= yeoman.dist %>"
 
-      html: ["<%= yeoman.app %>/popup.html", "<%= yeoman.app %>/options.html", "<%= yeoman.app %>/background.html"]
+      html: ["<%= yeoman.app %>/popup.html", "<%= yeoman.app %>/options.html"]
 
     usemin:
       options:
@@ -229,6 +229,11 @@ module.exports = (grunt) ->
           cwd: ".tmp/images"
           dest: "<%= yeoman.dist %>/images"
           src: ["generated/*"]
+        ,
+          expand: true
+          cwd: "<%= yeoman.app %>"
+          dest: "<%= yeoman.dist %>"
+          src: ["scripts/background.js","scripts/analytics.js"]
         ]
 
     concurrent:
@@ -239,8 +244,7 @@ module.exports = (grunt) ->
     chromeManifest:
       dist:
         options:
-          buildnumber: true
-          background: "scripts/background.js"
+          buildnumber: off
 
         src: "<%= yeoman.app %>"
         dest: "<%= yeoman.dist %>"

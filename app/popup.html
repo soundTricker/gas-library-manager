@@ -29,15 +29,15 @@
               </li>
             </ul>
             <ul ng-if="ctrl.search.$ != ''" class="nav nav-list nav-pills nav-stacked">
+              <li>
+                <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="ctrl.currentPage" max-size="maxSize" data-previous-text="«" data-next-text="»" class="pagination-small"></pagination>
+              </li>
               <li ng-repeat="library in ctrl.filtered track by $index">
                 <h5>{{library.label}}</h5>
                 <div id="{{library.key}}" class="well well-small">
                   <p>{{library.desc}}</p>
                   <div class="btn-group"><a href="{{library.sourceUrl}}" target="_blank" class="btn btn-mini btn-info">View source</a><a href="#" ng-click="ctrl.showMyLibrariesPage(library.key)" class="btn btn-mini btn-info">View detail</a></div>
                 </div>
-              </li>
-              <li>
-                <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="ctrl.currentPage" max-size="maxSize" data-previous-text="«" data-next-text="»" class="pagination-small"></pagination>
               </li>
             </ul>
           </div>

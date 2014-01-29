@@ -27,6 +27,8 @@ html(ng-app="LibraryBoxApp",ng-csp, ng-controller="popup as ctrl")
                 li
                   input(type="search",ng-model="ctrl.search.$", placeholder="Search library")
               ul.nav.nav-list.nav-pills.nav-stacked(ng-if="ctrl.search.$ != ''")
+                li
+                  pagination.pagination-small(data-boundary-links='true', data-num-pages='noOfPages', data-current-page='ctrl.currentPage', max-size='maxSize', data-previous-text='«', data-next-text='»')
                 li(ng-repeat="library in ctrl.filtered track by $index")
                   h5 {{library.label}}
                   .well.well-small(id="{{library.key}}")
@@ -34,8 +36,6 @@ html(ng-app="LibraryBoxApp",ng-csp, ng-controller="popup as ctrl")
                     .btn-group
                       a.btn.btn-mini.btn-info(href="{{library.sourceUrl}}", target="_blank") View source
                       a.btn.btn-mini.btn-info(href="#", ng-click="ctrl.showMyLibrariesPage(library.key)") View detail
-                li
-                  pagination.pagination-small(data-boundary-links='true', data-num-pages='noOfPages', data-current-page='ctrl.currentPage', max-size='maxSize', data-previous-text='«', data-next-text='»')
 
 
 
