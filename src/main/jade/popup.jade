@@ -1,0 +1,51 @@
+!!! 5
+html(ng-app="LibraryBoxApp",ng-csp, ng-controller="popup as ctrl")
+  head
+    title {{i18n('appName')}}
+    meta(name="viewport",content="width=device-width, initial-scale=1.0")
+    // build:css({.tmp,app}) styles/popup.css
+    link(href='bower_components/bootstrap/docs/assets/css/bootstrap.css', rel='stylesheet')
+    link(href='bower_components/bootstrap/docs/assets/css/bootstrap-responsive.css', rel='stylesheet')
+    link(href='bower_components/font-awesome/css/font-awesome.min.css', rel='stylesheet')
+    link(rel='stylesheet', href='bower_components/angular-ui/build/angular-ui.min.css')
+    // endbuild 
+  body(styles="margin:5px;")
+    // CHROME EXTENSION POPUP 
+    h3.page-header {{i18n('appName')}}
+    #container(style="width:400px")
+      .container-fluid
+        .row-fluid
+          #msgBox.span12(style="display:none;")
+            .alert
+        .row-fluid
+          .span12
+              ul.nav.nav-list.nav-pills.nav-stacked
+                li
+                  a#showOptionPage(href="#", tabindex="-1", ng-click="ctrl.showOptionPage()")
+                    i.icon-save &nbsp;
+                    | Show Option Page
+                li
+                  input(type="search",ng-model="ctrl.search.$", placeholder="Search library")
+              ul.nav.nav-list.nav-pills.nav-stacked(ng-if="ctrl.search.$ != ''")
+                li(ng-repeat="library in ctrl.filtered track by $index")
+                  h5 {{library.label}}
+                  .well.well-small(id="{{library.key}}")
+                    p {{library.desc}}
+                    .btn-group
+                      a.btn.btn-mini.btn-info(href="{{library.sourceUrl}}", target="_blank") View source
+                      a.btn.btn-mini.btn-info(href="#", ng-click="ctrl.showMyLibrariesPage(library.key)") View detail
+                li
+                  pagination.pagination-small(data-boundary-links='true', data-num-pages='noOfPages', data-current-page='ctrl.currentPage', max-size='maxSize', data-previous-text='«', data-next-text='»')
+
+
+
+    // build:js scripts/popup.js 
+    script(src='bower_components/jquery/jquery.min.js')
+    script(type="text/javascript", src="bower_components/angular-unstable/angular.min.js")
+    script(src='bower_components/angular-ui/build/angular-ui.min.js')
+    script(src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js")
+    script(src="bower_components/angular-sanitize/angular-sanitize.js")
+    script(src='scripts/popup.js')
+    script(src='scripts/services/storage.js')
+    script(src='scripts/filters/startFrom.js')
+    // endbuild 

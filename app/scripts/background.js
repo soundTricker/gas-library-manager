@@ -1,7 +1,9 @@
 (function() {
   (function(global) {
-    chrome.runtime.onInstalled.addListener(function(prev) {
-      return global.showOptionPage();
+    chrome.runtime.onInstalled.addListener(function(details) {
+      if ((details != null ? details.reason : void 0) === "install") {
+        return global.showOptionPage();
+      }
     });
     chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
       var result;
@@ -13,15 +15,22 @@
         values: result
       });
     });
+    chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+      if (!tab.url) {
+        return;
+      }
+      if (tab.url.indexOf("script.google.com") > -1) {
+        return chrome.pageAction.show(tabId);
+      }
+    });
     global.showOptionPage = function() {
       return chrome.tabs.create({
         url: chrome.extension.getURL("options.html")
       });
     };
     return global.showMyLibraryPage = function(message) {
-      console.log(arguments);
       return chrome.tabs.create({
-        url: "${chrome.extension.getURL('options.html')}#/mine/detail/" + message.key
+        url: "" + (chrome.extension.getURL('options.html')) + "#/mine/detail/" + message.key
       });
     };
   })(this);

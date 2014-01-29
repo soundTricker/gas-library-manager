@@ -1,12 +1,58 @@
-<!doctype html>
-<html>
-    <head>
-        <link href="styles/main.css" rel="stylesheet">
-        <!-- build:js scripts/popup.js -->
-        <script src="scripts/popup.js"></script>
-        <!-- endbuild -->
-    </head>
-    <body>
-        <!-- CHROME EXTENSION POPUP -->
-    </body>
+<!DOCTYPE html>
+<html ng-app="LibraryBoxApp" ng-csp ng-controller="popup as ctrl">
+  <head>
+    <title>{{i18n('appName')}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- build:css({.tmp,app}) styles/popup.css-->
+    <link href="bower_components/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="bower_components/bootstrap/docs/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="bower_components/angular-ui/build/angular-ui.min.css">
+    <!-- endbuild -->
+  </head>
+  <body styles="margin:5px;">
+    <!-- CHROME EXTENSION POPUP -->
+    <h3 class="page-header">{{i18n('appName')}}</h3>
+    <div id="container" style="width:400px">
+      <div class="container-fluid">
+        <div class="row-fluid">
+          <div id="msgBox" style="display:none;" class="span12">
+            <div class="alert"></div>
+          </div>
+        </div>
+        <div class="row-fluid">
+          <div class="span12">
+            <ul class="nav nav-list nav-pills nav-stacked">
+              <li><a id="showOptionPage" href="#" tabindex="-1" ng-click="ctrl.showOptionPage()"><i class="icon-save">&nbsp;</i>Show Option Page</a></li>
+              <li>
+                <input type="search" ng-model="ctrl.search.$" placeholder="Search library">
+              </li>
+            </ul>
+            <ul ng-if="ctrl.search.$ != ''" class="nav nav-list nav-pills nav-stacked">
+              <li ng-repeat="library in ctrl.filtered track by $index">
+                <h5>{{library.label}}</h5>
+                <div id="{{library.key}}" class="well well-small">
+                  <p>{{library.desc}}</p>
+                  <div class="btn-group"><a href="{{library.sourceUrl}}" target="_blank" class="btn btn-mini btn-info">View source</a><a href="#" ng-click="ctrl.showMyLibrariesPage(library.key)" class="btn btn-mini btn-info">View detail</a></div>
+                </div>
+              </li>
+              <li>
+                <pagination data-boundary-links="true" data-num-pages="noOfPages" data-current-page="ctrl.currentPage" max-size="maxSize" data-previous-text="«" data-next-text="»" class="pagination-small"></pagination>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- build:js scripts/popup.js -->
+    <script src="bower_components/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-unstable/angular.min.js"></script>
+    <script src="bower_components/angular-ui/build/angular-ui.min.js"></script>
+    <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="scripts/popup.js"></script>
+    <script src="scripts/services/storage.js"></script>
+    <script src="scripts/filters/startFrom.js"></script>
+    <!-- endbuild -->
+  </body>
 </html>

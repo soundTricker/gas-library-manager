@@ -80,6 +80,23 @@
         return d.promise;
       };
 
+      Storage.prototype.getLibrariesSync = function() {
+        var ret,
+          _this = this;
+        ret = [];
+        this.getLibraries().then(function(res) {
+          var i, _i, _len, _ref, _results;
+          _ref = _this.libraries;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            i = _ref[_i];
+            _results.push(ret.push(i));
+          }
+          return _results;
+        });
+        return ret;
+      };
+
       Storage.prototype.addLibrary = function(library) {
         var d,
           _this = this;

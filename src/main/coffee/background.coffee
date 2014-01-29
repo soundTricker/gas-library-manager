@@ -1,16 +1,21 @@
 do(global=@)->
-  chrome.runtime.onInstalled.addListener (prev)-> global.showOptionPage()
+  chrome.runtime.onInstalled.addListener (details)-> 
+    global.showOptionPage() if details?.reason is "install"
 
   chrome.extension.onMessage.addListener (message, sender, sendResponse)->
     console.log message, sender, sendResponse
     result = (global[message.action] || ()-> "no command").apply global, [message]
     sendResponse && sendResponse values : result
 
+  chrome.tabs.onUpdated.addListener (tabId, changeInfo, tab)->
+    return if !tab.url
+    chrome.pageAction.show tabId if tab.url.indexOf("script.google.com") > -1
+
   global.showOptionPage = ()-> 
     chrome.tabs.create url : chrome.extension.getURL("options.html")
+
   global.showMyLibraryPage = (message)-> 
-    console.log arguments
-    chrome.tabs.create url : "${chrome.extension.getURL('options.html')}#/mine/detail/#{message.key}"
+    chrome.tabs.create url : "#{chrome.extension.getURL('options.html')}#/mine/detail/#{message.key}"
 
 # do(global=@)->
 #   chrome.extension.onRequest.addListener (message, sender, sendResponse)->
