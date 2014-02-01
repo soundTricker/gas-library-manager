@@ -36,7 +36,7 @@
                 <h5>{{library.label}}</h5>
                 <div id="{{library.key}}" class="well well-small">
                   <p>{{library.desc}}</p>
-                  <div class="btn-group"><a href="{{library.sourceUrl}}" target="_blank" class="btn btn-mini btn-info">View source</a><a href="#" ng-click="ctrl.showMyLibrariesPage(library.key)" class="btn btn-mini btn-info">View detail</a></div>
+                  <div class="btn-group"><a href="{{library.sourceUrl}}" target="_blank" ng-click="ctrl.showSourcePage()" class="btn btn-mini btn-info">View source</a><a href="#" ng-click="ctrl.showMyLibrariesPage(library.key)" class="btn btn-mini btn-info">View detail</a></div>
                 </div>
               </li>
             </ul>
@@ -54,5 +54,6 @@
     <script src="scripts/services/storage.js"></script>
     <script src="scripts/filters/startFrom.js"></script>
     <!-- endbuild -->
+    <script type="text/javascript" src="scripts/analytics.js"></script>
   </body>
 </html>

@@ -27,10 +27,16 @@
           item.modifiedAt = item.registeredAt;
           libraries[item.key] = item;
         }
-        return chrome.storage.local.set({
+        chrome.storage.local.set({
           "libraries": libraries
         }, function() {
           return $saveMessageBox.text(chrome.i18n.getMessage("saved", item.label));
+        });
+        return chrome.runtime.sendMessage({
+          action: "logEvent",
+          "event": "saveLibrary",
+          "source": "saveButton",
+          "from": "content_script"
         });
       });
     });
@@ -50,11 +56,27 @@
         "text": item.desc
       })).append($("<a>", {
         "href": item.sourceUrl,
+        "on": {
+          "click": function() {
+            return chrome.runtime.sendMessage({
+              action: "logEvent",
+              "event": "viewSource",
+              "source": "viewSourceLink",
+              "from": "content_script"
+            });
+          }
+        },
         "text": "View source",
         "target": "_blank"
       }).button()).append($("<a>", {
         "on": {
           "click": function() {
+            chrome.runtime.sendMessage({
+              action: "logEvent",
+              "event": "viewMyLibraryPage",
+              "source": "viewDetailLink",
+              "from": "content_script"
+            });
             return chrome.runtime.sendMessage({
               action: "showMyLibraryPage",
               key: item.value

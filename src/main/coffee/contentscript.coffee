@@ -29,6 +29,8 @@ do($=jQuery, global=@) ->
       chrome.storage.local.set {"libraries" : libraries} , ()->
         $saveMessageBox.text chrome.i18n.getMessage("saved", item.label)
 
+      chrome.runtime.sendMessage {action : "logEvent" , "event" : "saveLibrary" , "source" : "saveButton", "from" : "content_script"}
+
   document.addEventListener "webkitAnimationStart", ((event) ->
     (global[event.animationName] || ()->@).apply(this,event)
 
@@ -46,12 +48,16 @@ do($=jQuery, global=@) ->
       ))
       .append($("<a>" ,
         "href" : item.sourceUrl
+        "on" : 
+          "click" : ()-> chrome.runtime.sendMessage {action : "logEvent" , "event" : "viewSource" , "source" : "viewSourceLink", "from" : "content_script"}
         "text" : "View source"
         "target" : "_blank"
       ).button())
       .append($("<a>", 
         "on" :
-          "click" : ()-> chrome.runtime.sendMessage {action : "showMyLibraryPage", key : item.value}
+          "click" : ()-> 
+            chrome.runtime.sendMessage {action : "logEvent" , "event" : "viewMyLibraryPage" , "source" : "viewDetailLink", "from" : "content_script"}
+            chrome.runtime.sendMessage {action : "showMyLibraryPage", key : item.value}
         "href" : "javascript:" 
         "text" : "View detail"
       ).button())

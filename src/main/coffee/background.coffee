@@ -17,6 +17,9 @@ do(global=@)->
   global.showMyLibraryPage = (message)-> 
     chrome.tabs.create url : "#{chrome.extension.getURL('options.html')}#/mine/detail/#{message.key}"
 
+  global.logEvent = (message)->
+    _gaq.push(['_trackEvent',message.source,message.event, message.from])
+
 # do(global=@)->
 #   chrome.extension.onRequest.addListener (message, sender, sendResponse)->
 #     result = (global[message.action] || ()-> "no command").apply global, message.args

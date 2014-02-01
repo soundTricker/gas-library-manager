@@ -2,7 +2,8 @@
 
 @gapiIsLoaded = ()-> window.gapiIsLoaded()
 
-angular.module('LibraryBoxApp', ['ngSanitize','cgNotify','ui.bootstrap', 'ui.directives','ui.router', 'markdown'])
+angular
+  .module('LibraryBoxApp', ['ngSanitize','cgNotify','ui.bootstrap', 'ui.directives','ui.router', 'markdown'])
   .constant("apiUrl", "https://gas-library-box.appspot.com/_ah/api")
   .config(["$stateProvider","$urlRouterProvider",'$compileProvider', ($stateProvider,$urlRouterProvider,$compileProvider) ->
     $compileProvider.urlSanitizationWhitelist /^\s*(https?|ftp|mailto|chrome-extension):/

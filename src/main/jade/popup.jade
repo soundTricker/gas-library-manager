@@ -34,7 +34,7 @@ html(ng-app="LibraryBoxApp",ng-csp, ng-controller="popup as ctrl")
                   .well.well-small(id="{{library.key}}")
                     p {{library.desc}}
                     .btn-group
-                      a.btn.btn-mini.btn-info(href="{{library.sourceUrl}}", target="_blank") View source
+                      a.btn.btn-mini.btn-info(href="{{library.sourceUrl}}", target="_blank", ng-click="ctrl.showSourcePage()") View source
                       a.btn.btn-mini.btn-info(href="#", ng-click="ctrl.showMyLibrariesPage(library.key)") View detail
 
 
@@ -49,3 +49,4 @@ html(ng-app="LibraryBoxApp",ng-csp, ng-controller="popup as ctrl")
     script(src='scripts/services/storage.js')
     script(src='scripts/filters/startFrom.js')
     // endbuild 
+    script(type="text/javascript", src="scripts/analytics.js")

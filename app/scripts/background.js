@@ -28,10 +28,13 @@
         url: chrome.extension.getURL("options.html")
       });
     };
-    return global.showMyLibraryPage = function(message) {
+    global.showMyLibraryPage = function(message) {
       return chrome.tabs.create({
         url: "" + (chrome.extension.getURL('options.html')) + "#/mine/detail/" + message.key
       });
+    };
+    return global.logEvent = function(message) {
+      return _gaq.push(['_trackEvent', message.source, message.event, message.from]);
     };
   })(this);
 
