@@ -14,7 +14,8 @@
     "marked": "~0.2.9",
     "angular-ui-router": "~0.2.0",
     "jQuery": "~2.0.3",
-    "angular-intro.js": "*"
+    "angular-intro.js": "*",
+    "angulartics": "~0.8.7"
   },
   "devDependencies": {}
 }

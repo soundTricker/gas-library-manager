@@ -2,11 +2,19 @@
 
 angular.module('LibraryBoxApp')
   .controller 'optionPageCtrl',
-    ['$scope','$state','$rootScope','$window','$q','$notify','storage', 'apiUrl', 
-    (($scope , $state , $rootScope , $window , $q , $notify , storage, apiUrl) ->
+    ['$scope','$state','$rootScope','$window','$q','$notify','storage', 'apiUrl', '$analytics', '$location',
+    (($scope , $state , $rootScope , $window , $q , $notify , storage, apiUrl, $analytics, $location) ->
       $rootScope.$state = $state
       $rootScope.$on "$stateChangeStart", ()-> $rootScope.isViewLoading = on
-      $rootScope.$on "$stateChangeSuccess", ()-> $rootScope.isViewLoading = off
+      $rootScope.$on "$stateChangeSuccess", ()-> 
+        if $state.is 'mine.detail'
+          url = $analytics.settings.pageTracking.basePath + "/mine/" + $state.current.url
+          $analytics.pageTrack(url)
+        else
+          url = $analytics.settings.pageTracking.basePath + $location.url()
+          $analytics.pageTrack(url)
+        $rootScope.isViewLoading = off
+
       $rootScope.$on "$stateChangeError", ()-> $rootScope.isViewLoading = off
 
       $rootScope.$on "loggedin" , (e,info)->

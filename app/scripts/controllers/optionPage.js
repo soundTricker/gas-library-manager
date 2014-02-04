@@ -1,12 +1,20 @@
 (function() {
   'use strict';
   angular.module('LibraryBoxApp').controller('optionPageCtrl', [
-    '$scope', '$state', '$rootScope', '$window', '$q', '$notify', 'storage', 'apiUrl', (function($scope, $state, $rootScope, $window, $q, $notify, storage, apiUrl) {
+    '$scope', '$state', '$rootScope', '$window', '$q', '$notify', 'storage', 'apiUrl', '$analytics', '$location', (function($scope, $state, $rootScope, $window, $q, $notify, storage, apiUrl, $analytics, $location) {
       $rootScope.$state = $state;
       $rootScope.$on("$stateChangeStart", function() {
         return $rootScope.isViewLoading = true;
       });
       $rootScope.$on("$stateChangeSuccess", function() {
+        var url;
+        if ($state.is('mine.detail')) {
+          url = $analytics.settings.pageTracking.basePath + "/mine/" + $state.current.url;
+          $analytics.pageTrack(url);
+        } else {
+          url = $analytics.settings.pageTracking.basePath + $location.url();
+          $analytics.pageTrack(url);
+        }
         return $rootScope.isViewLoading = false;
       });
       $rootScope.$on("$stateChangeError", function() {
