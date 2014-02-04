@@ -6,7 +6,7 @@
       <ul style="width: 268px;" class="nav nav-list well well-small">
         <li class="nav-header">List</li>
         <li>
-          <input accesskey="f" type="search" ng-model="search.$" placeholder="{{i18n('search')}}" class="search-query"/>
+          <input accesskey="f" type="search" ng-model="search.$" placeholder="{{i18n('search')}}" analytics-on="focus" analytics-category="search" analytics-event="focusSearchBox" analytics-label="{{$state.current.name}}" class="search-query"/>
         </li>
         <li class="divider"></li>
         <li ng-if="filtered.length === 0" class="muted">There is no library.</li>
@@ -19,19 +19,19 @@
   <div ng-if="$state.is('mine')" class="span12 library-list">
     <div ng-intro-method="help" ng-intro-options="options" class="well well-small">
       <div data-intro="Search your libraries. Please input any charactor" data-step="1" class="pull-left">Search: 
-        <input type="search" ng-model="search.$" placeholder="{{i18n('search')}}" class="search-query"/>
+        <input type="search" ng-model="search.$" placeholder="{{i18n('search')}}" analytics-on="focus" analytics-category="search" analytics-event="focusSearchBox" analytics-label="{{$state.current.name}}" class="search-query"/>
       </div>
       <div ng-if="gapiLoaded" class="pull-right">
         <div class="btn-group pull-right">
-          <button data-intro="Backup library-list metadata to Google Drive. You can export libraries added to library box as json." data-step="2" tabindex="-1" ng-disabled="uploading" ng-click="uploadLibraries()" class="btn btn-link"> <i class="icon-cloud-upload"></i>Backup</button>
-          <button data-intro="Restore library-list metadata from Google Drive. You can import libraries from json." data-step="3" data-position="left" tabindex="-1" ng-click="isCollapsed = !isCollapsed" class="btn btn-link"> <i class="icon-cloud-download"></i>Restore</button>
-          <button ng-click="help()" class="btn btn-link"><i class="icon-question-sign"></i></button>
+          <button data-intro="Backup library-list metadata to Google Drive. You can export libraries added to library box as json." data-step="2" tabindex="-1" ng-disabled="uploading" ng-click="uploadLibraries()" analytics-on="click" analytics-category="backup" analytics-event="clickBackup" analytics-label="{{$state.current.name}}" class="btn btn-link"> <i class="icon-cloud-upload"></i>Backup</button>
+          <button data-intro="Restore library-list metadata from Google Drive. You can import libraries from json." data-step="3" data-position="left" tabindex="-1" ng-click="isCollapsed = !isCollapsed" analytics-on="click" analytics-category="restore" analytics-event="clickRestore" analytics-label="{{$state.current.name}}" class="btn btn-link"> <i class="icon-cloud-download"></i>Restore</button>
+          <button ng-click="help()" analytics-on="click" analytics-category="help" analytics-event="showHelp" analytics-label="{{$state.current.name}}" class="btn btn-link"><i class="icon-question-sign"></i></button>
         </div>
         <div class="clearfix"></div>
         <div collapse="isCollapsed">
           <form name="importForm" class="form-inline">
             <input tabindex="-1" type="text" name="fileId" placeholder="input library file key of Google Drive" ng-model="fileId" required="required" class="input-xlarge"/>
-            <button tabindex="-1" ng-click="import(fileId)" class="btn">Import</button>
+            <button tabindex="-1" ng-click="import(fileId)" class="btn">Restore</button>
           </form>
         </div>
       </div>
@@ -52,7 +52,7 @@
               <td colspan="3">There is no library.</td>
             </tr>
             <tr ng-repeat="item in filtered track by $index" ng-controller="PrivateLibraryCtrl" ng-click="$state.go('mine.detail', {key : item.key})">
-              <td><a ui-sref="mine.detail({key : item.key})">{{item.label}}</a></td>
+              <td><a ui-sref="mine.detail({key : item.key})" analytics-on="click" analytics-category="viewDetailLink" analytics-event="viewDetailLink" analytics-label="{{$state.current.name}}">{{item.label}}</a></td>
               <td ng-bind-html="item.desc | escape | break2br"> </td>
               <td>{{item.registeredAt | date}} / {{item.modifiedAt | date}}</td>
             </tr>
