@@ -64,7 +64,7 @@ Content-Type: application/json
 Content-Type: application/json
 Content-Transfer-Encoding: base64
 
-#{btoa(json)}
+#{Base64.encode(json)}
 #{close_delim}
 """
 

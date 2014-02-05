@@ -67,7 +67,7 @@
             'title': "gas-library-box-libraries.json",
             'mimeType': "application/json"
           };
-          multipartRequestBody = "" + delimiter + "\nContent-Type: application/json\n\n" + (JSON.stringify(metadata)) + "\n" + delimiter + "\nContent-Type: application/json\nContent-Transfer-Encoding: base64\n\n" + (btoa(json)) + "\n" + close_delim;
+          multipartRequestBody = "" + delimiter + "\nContent-Type: application/json\n\n" + (JSON.stringify(metadata)) + "\n" + delimiter + "\nContent-Type: application/json\nContent-Transfer-Encoding: base64\n\n" + (Base64.encode(json)) + "\n" + close_delim;
           return gapi.client.request({
             'path': '/upload/drive/v2/files',
             'method': 'POST',
