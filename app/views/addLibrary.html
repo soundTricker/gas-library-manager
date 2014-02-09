@@ -1,0 +1,61 @@
+
+<div class="pull-right"><a ui-sref="mine()">Back to list</a></div>
+<form name="addLibraryForm" class="form-horizontal">
+  <fieldset> 
+    <legend>Add New Library {{addLibraryForm | json}} {{addLibraryForm.libraryKey.$invalid}}</legend>
+    <div ng-class="{error : addLibraryForm.libraryKey.$invalid &amp;&amp; addLibraryForm.libraryKey.$dirty}" class="control-group"> 
+      <label for="libraryKey" class="control-label">Key</label>
+      <div class="controls">
+        <div class="input-append">
+          <input id="libraryKey" type="text" placeholder="Input Google Apps Script Project Key or Google Drive's File ID" ng-maxlength="200" maxlength="200" ng-model="libraryKey" name="libraryKey" required="required" ui-validate="{exist : 'isNotLibraryExist($value)' }" class="input-xxlarge"/>
+          <button class="btn"><i class="icon-search"> </i></button>
+        </div>
+        <p class="help-block">Input Google Apps Script Project Key or Google Drive's File ID</p>
+        <p ng-show="addLibraryForm.libraryKey.$error.required &amp;&amp; addLibraryForm.libraryKey.$dirty" class="help-block">{{i18n("errorsRequired")}}</p>
+        <p ng-show="addLibraryForm.libraryKey.$error.exist &amp;&amp; addLibraryForm.libraryKey.$dirty" class="help-block">This library is already exist.</p>
+      </div>
+    </div>
+    <div ng-class="{error : addLibraryForm.label.$invalid &amp;&amp; addLibraryForm.label.$dirty}" class="control-group">
+      <label for="label" class="control-label">{{i18n("name")}}</label>
+      <div class="controls">
+        <input id="label" type="text" placeholder="Write library name" ng-maxlength="100" maxlength="100" name="label" ng-model="label" required="required" class="span12"/>
+        <p ng-show="addLibraryForm.label.$error.required &amp;&amp; addLibraryForm.label.$dirty" class="help-block">{{i18n("errorsRequired")}}</p>
+      </div>
+    </div>
+    <div ng-class="{error : addLibraryForm.sourceUrl.$invalid &amp;&amp; addLibraryForm.sourceUrl.$dirty}" class="control-group">
+      <label for="sourceUrl" class="control-label">Source URL</label>
+      <div class="controls">
+        <input id="label" type="text" placeholder="Write library source URL" ng-maxlength="300" maxlength="300" name="sourceUrl" ng-model="sourceUrl" required="required" class="span12"/>
+        <p ng-show="addLibraryForm.sourceUrl.$error.required &amp;&amp; addLibraryForm.sourceUrl.$dirty" class="help-block">{{i18n("errorsRequired")}}</p>
+      </div>
+    </div>
+    <div ng-class="{error : addLibraryForm.desc.$invalid &amp;&amp; addLibraryForm.desc.$dirty}" class="control-group">
+      <label for="desc" class="control-label">{{i18n("description")}}</label>
+      <div class="controls">
+        <input id="desc" type="text" ng-maxlength="80" maxlength="80" name="desc" ng-model="desc" placeholder="Write this library short description, it's shown in script editor." class="span12"/>
+      </div>
+    </div>
+    <div ng-class="{error : addLibraryForm.longDesc.$invalid &amp;&amp; addLibraryForm.longDesc.$dirty}" class="control-group">
+      <div class="row-fluid">
+        <div class="span6">
+          <label for="longDesc" class="control-label">{{i18n("longDescription")}}</label>
+        </div>
+        <div class="span6">
+          <label for="longDesc" class="control-label">Preview</label>
+        </div>
+        <div class="controls"><span class="help-inline">You can write this as markdwon format.</span>
+          <div class="row-fluid">
+            <div class="span6">
+              <textarea id="longDesc" rows="5" name="longDesc" ng-model="longDesc" ng-maxlength="2000" class="span12"></textarea>
+            </div>
+            <div ng-bind-html="longDesc | markdown" class="span6"></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button ng-disabled="addLibraryForm.$invalid || saving" ng-click="addLibrary()" class="btn btn-primary">{{i18n("saveButton")}}</button>
+        <button class="btn">{{i18n("cancel")}}</button>
+      </div>
+    </div>
+  </fieldset>
+</form>
