@@ -15,6 +15,7 @@ angular
       'angulartics'
       'angulartics.google.analytics'
       'ui.utils'
+      'infinite-scroll'
     ]
   .constant("apiUrl", "https://gas-library-box.appspot.com/_ah/api")
   .config([

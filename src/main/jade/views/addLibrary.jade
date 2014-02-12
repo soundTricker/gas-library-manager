@@ -1,48 +1,87 @@
 .pull-right
     a(ui-sref='mine()') Back to list
-form.form-horizontal(name="addLibraryForm")
+form.form-horizontal(name="addLibraryForm", novalidate)
   fieldset 
-    legend Add New Library {{addLibraryForm | json}} {{addLibraryForm.libraryKey.$invalid}}
+    legend Add New Library
     .control-group(ng-class='{error : addLibraryForm.libraryKey.$invalid && addLibraryForm.libraryKey.$dirty}') 
       label.control-label(for="libraryKey") Key
       .controls
         .input-append
-          input.input-xxlarge#libraryKey(type="text", placeholder="Input Google Apps Script Project Key or Google Drive's File ID", ng-maxlength='200', maxlength='200',ng-model="libraryKey",name="libraryKey",required='required', ui-validate="{exist : 'isNotLibraryExist($value)' }")
-          button.btn
-            i.icon-search 
+          input.input-xxlarge#libraryKey(type="text", placeholder="Google Apps Script Project Key or Google Drive's File ID", ng-maxlength='200', maxlength='200',ng-model="libraryKey",name="libraryKey",required='required', ui-validate="{exist : 'isNotLibraryExist($value)' }")
+          button.btn(ng-if="gapiLoaded",tooltip="Get library information from Google Drive",tooltip-append-to-body="true",ng-click="!loadFiles && showPicker()", ng-mouseenter="over=true",ng-mouseleave="over=false", ng-class="{disabled : loadFiles}", tabindex="-1")
+            i(ng-class="{'icon-folder-close': !loadFiles && !over,'icon-folder-open': !loadFiles && over, 'icon-spinner': loadFiles, 'icon-spin' : loadFiles}")
         p.help-block Input Google Apps Script Project Key or Google Drive's File ID
-        p.help-block(ng-show='addLibraryForm.libraryKey.$error.required && addLibraryForm.libraryKey.$dirty') {{i18n("errorsRequired")}}
-        p.help-block(ng-show='addLibraryForm.libraryKey.$error.exist && addLibraryForm.libraryKey.$dirty') This library is already exist.
+        div(ng-show="addLibraryForm.libraryKey.$dirty && addLibraryForm.libraryKey.$invalid")
+          p.help-block(ng-show='addLibraryForm.libraryKey.$error.required') {{i18n("errorsRequired")}}
+          p.help-block(ng-show='addLibraryForm.libraryKey.$error.exist') This library is already exist in this app.
+        div(modal='searchDialog', close='searchDialog=false', options='opts', width="100")
+          .modal-header
+            h3 Your Google Apps Script Files
+            div
+              | Search :
+              input.search-query(type="search", ng-model="searchQuery.$")
+          .modal-body(infinite-scroll='nextPage()',infinite-scroll-disabled='loadFiles',infinite-scroll-distance='1',infinite-scroll-immediate-check="false", ng-init="current={}")
+            div
+              table.table.table-striped.table-bordered.table-condensed
+                thead
+                  tr
+                    th
+                    th Name
+                    th Owner
+                    th Created / Mofified
+                    th Actions
+                tbody
+                  tr(ng-repeat="item in items | filter:searchQuery")
+                    td
+                      input(type="radio", name="choice", ng-click="$parent.current = item")
+                    td
+                      a(ng-href="https://script.google.com/d/{{item.id}}/edit", target="_blank")
+                        img(ng-src="{{item.iconLink}}", alt="") 
+                        | &nbsp;{{item.title}}
+                    td 
+                      img(ng-show="{{item.owners[0].picture.url != null}}", ng-src="{{item.owners[0].picture.url}}", width="20", height="20") 
+                      | &nbsp;{{item.owners[0].displayName}}
+                    td {{item.createdDate | date:shortDate}}/ {{item.modifiedDate | date:shortDate}}
+                    th
+              div(ng-if="loadFiles")
+                i.icon-spinner.icon-spin 
+                | Now Loading
+          .modal-footer
+            button.btn.btn-info(ng-click='setForm(current)')
+              i.icon-download 
+              | Import
+            button.btn.cancel(ng-click='searchDialog=false')
+              | {{i18n("cancel")}}
 
 
     .control-group(ng-class='{error : addLibraryForm.label.$invalid && addLibraryForm.label.$dirty}')
       label.control-label(for='label') {{i18n("name")}}
       .controls
-        input.span12#label(type='text', placeholder='Write library name', ng-maxlength='100', maxlength='100', name='label', ng-model='label', required='required')
+        input.span12#label(type='text', placeholder='Library name', ng-maxlength='100', maxlength='100', name='label', ng-model='label', required='required')
         p.help-block(ng-show='addLibraryForm.label.$error.required && addLibraryForm.label.$dirty') {{i18n("errorsRequired")}}
 
     .control-group(ng-class='{error : addLibraryForm.sourceUrl.$invalid && addLibraryForm.sourceUrl.$dirty}')
       label.control-label(for='sourceUrl') Source URL
       .controls
-        input.span12#label(type='text', placeholder='Write library source URL', ng-maxlength='300', maxlength='300', name='sourceUrl', ng-model='sourceUrl', required='required')
+        input.span12#label(type='text', placeholder='Library source URL', ng-maxlength='300', maxlength='300', name='sourceUrl', ng-model='sourceUrl', required='required')
         p.help-block(ng-show='addLibraryForm.sourceUrl.$error.required && addLibraryForm.sourceUrl.$dirty') {{i18n("errorsRequired")}}
 
     .control-group(ng-class='{error : addLibraryForm.desc.$invalid && addLibraryForm.desc.$dirty}')
       label.control-label(for='desc') {{i18n("description")}}
       .controls
-        input.span12#desc(type='text', ng-maxlength='80', maxlength='80', name='desc', ng-model='desc', placeholder="Write this library short description, it\'s shown in script editor.")
+        input.span12#desc(type='text', ng-maxlength='80', maxlength='80', name='desc', ng-model='desc', placeholder="This library's short description, it\'s shown in autocomplete list.")
     .control-group(ng-class='{error : addLibraryForm.longDesc.$invalid && addLibraryForm.longDesc.$dirty}')
       .row-fluid
         .span6
           label.control-label(for='longDesc') {{i18n("longDescription")}}
+          .controls
+            span.help-inline You can write this as markdwon format.
+            .row-fluid
+              .span12
+                textarea.span12#longDesc(rows='5', name='longDesc', ng-model='longDesc', ng-maxlength='2000')
         .span6
           label.control-label(for='longDesc') Preview
-        .controls
-          span.help-inline You can write this as markdwon format.
-          .row-fluid
-            .span6
-              textarea.span12#longDesc(rows='5', name='longDesc', ng-model='longDesc', ng-maxlength='2000')
-            .span6(ng-bind-html='longDesc | markdown')
+          .span6(ng-bind-html='longDesc | markdown')
       .form-actions
         button.btn.btn-primary(ng-disabled='addLibraryForm.$invalid || saving', ng-click='addLibrary()') {{i18n("saveButton")}}
-        button.btn {{i18n("cancel")}}
+        button.btn(type="reset") Reset
