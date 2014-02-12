@@ -35,6 +35,7 @@ html(ng-app='LibraryBoxApp', ng-csp='ng-csp')
             ul.nav.pull-right(ng-switch='loginStatus')
               li(ng-switch-when="loaded") 
 
+
               //- li.dropdown(ng-switch-when='loggedin')
               //-   a.dropdown-toggle
               //-     | {{nickname}} &nbsp;
@@ -46,6 +47,10 @@ html(ng-app='LibraryBoxApp', ng-csp='ng-csp')
               //-   a.navbar-link(ng-click='showRegister()') Sign up
               //- li.active(ng-switch-when='loadFinished')
               //-   a.navbar-link(ng-click='login()') Sign in
+              li.active(ng-switch-when="notAuthorized")
+                button.btn.btn-link.navbar-link(ng-click="authorize(true)")
+                  i.icon-google-plus 
+                  | &nbsp;Authorize
               li(ng-switch-default='ng-switch-default')
                 p.navbar-text
                   i.icon-spinner.icon-spin 

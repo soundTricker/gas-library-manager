@@ -42,15 +42,39 @@ angular.module('LibraryBoxApp')
 
             $q.all([
               # loadApiDefer "plus", "v1"
-              loadApiDefer "drive", "v2",
+              loadApiDefer "drive", "v2"
+              loadApiDefer "oauth2", "v1"
               # loadApiDefer "libraries", "v1", apiUrl
               # loadApiDefer "members", "v1", apiUrl
             ]).then ()-> 
                 $scope.authorize off
 
       $scope.authorize = (interactive)->
+
         chrome.identity.getAuthToken interactive : interactive, (token)->
-          gapi.auth.setToken "access_token" : token
+
+          if chrome.runtime.lastError
+            console.log chrome.runtime.lastError
+            $rootScope.loginStatus = "notAuthorized"
+            $notify.info "Please authorize App", "You have not authorized this app, In this state, GLB is limited."
+            return $scope.$apply()
+
+          if !token?
+            $rootScope.loginStatus = "notAuthorized"
+            $notify.info "Please authorize App", "You have not authorized this app, In this state, GLB is limited."
+            return $scope.$apply()
+
+          gapi.client.oauth2.tokeninfo(access_token : token).execute (result)->
+            if result.error
+              gapi.auth.setToken access_token : ""
+              chrome.identity.removeCachedAuthToken token : token, ()-> 
+                $rootScope.loginStatus = "notAuthorized"
+                $notify.info "Please authorize App", "You have not authorized this app, In this state, GLB is limited."
+                return $scope.$apply()
+
+          gapi.auth.setToken access_token : token
+
+
           $rootScope.loginStatus = "loaded"
           # gapi.client.members.get
           #   userKey : "me"

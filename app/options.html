@@ -27,6 +27,9 @@
             </ul>
             <ul ng-switch="loginStatus" class="nav pull-right">
               <li ng-switch-when="loaded"> </li>
+              <li ng-switch-when="notAuthorized" class="active">
+                <button ng-click="authorize(true)" class="btn btn-link navbar-link"><i class="icon-google-plus"> </i>&nbsp;Authorize</button>
+              </li>
               <li ng-switch-default="ng-switch-default">
                 <p class="navbar-text"><i class="icon-spinner icon-spin"> </i>&nbsp;Now loading...</p>
               </li>

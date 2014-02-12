@@ -49,7 +49,7 @@
               }
               return d.promise;
             };
-            return $q.all([loadApiDefer("drive", "v2")]).then(function() {
+            return $q.all([loadApiDefer("drive", "v2"), loadApiDefer("oauth2", "v1")]).then(function() {
               return $scope.authorize(false);
             });
           });
@@ -59,8 +59,35 @@
         return chrome.identity.getAuthToken({
           interactive: interactive
         }, function(token) {
+          if (chrome.runtime.lastError) {
+            console.log(chrome.runtime.lastError);
+            $rootScope.loginStatus = "notAuthorized";
+            $notify.info("Please authorize App", "You have not authorized this app, In this state, GLB is limited.");
+            return $scope.$apply();
+          }
+          if (token == null) {
+            $rootScope.loginStatus = "notAuthorized";
+            $notify.info("Please authorize App", "You have not authorized this app, In this state, GLB is limited.");
+            return $scope.$apply();
+          }
+          gapi.client.oauth2.tokeninfo({
+            access_token: token
+          }).execute(function(result) {
+            if (result.error) {
+              gapi.auth.setToken({
+                access_token: ""
+              });
+              return chrome.identity.removeCachedAuthToken({
+                token: token
+              }, function() {
+                $rootScope.loginStatus = "notAuthorized";
+                $notify.info("Please authorize App", "You have not authorized this app, In this state, GLB is limited.");
+                return $scope.$apply();
+              });
+            }
+          });
           gapi.auth.setToken({
-            "access_token": token
+            access_token: token
           });
           $rootScope.loginStatus = "loaded";
           $rootScope.gapiLoaded = true;
