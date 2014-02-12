@@ -7,8 +7,8 @@ DEFAULT_API_PARAMETER =
 
 angular.module('LibraryBoxApp')
   .controller 'AddLibraryCtrl', [
-    '$scope','storage','$notify','$state','$window'
-    ($scope , storage , $notify , $state , $window) ->
+    '$scope','storage','$notify','$state','$window','$analytics','$timeout'
+    ($scope , storage , $notify , $state , $window , $analytics , $timeout) ->
       $scope.loadFiles = off
       $scope.opts = 
         backdropFade : yes
@@ -32,14 +32,19 @@ angular.module('LibraryBoxApp')
           modifiedAt : new Date().getTime()
 
         if !$scope.isNotLibraryExist(item.key)
+          $scope.saving = off
           return
 
         storage.addLibrary(item).then ()->
           $notify.info "Add Library" , "#{$scope.label} have been added"
           $scope.saving = off
-          $state.go 'mine'
+          $timeout ()->
+            $state.go 'mine'
+        $analytics.eventTrack 'saveLibrary',
+          "category":"saveButton"
+          "label" : $state.current.name
 
-      $scope.showPicker = ()->
+      $scope.showPicker = ()->        
         $scope.loadFiles = on
         gapi.client.drive.files
         .list(DEFAULT_API_PARAMETER)
@@ -55,6 +60,9 @@ angular.module('LibraryBoxApp')
             $scope.items = result.items
             $scope.loadFiles = off
             $scope.searchDialog = on
+        $analytics.eventTrack 'usePicker',
+          "category":"picker"
+          "label" : $state.current.name
 
       $scope.nextPage = ()->
         return if !$scope.nextPageToken || $scope.loadFiles
@@ -71,9 +79,22 @@ angular.module('LibraryBoxApp')
             $scope.items.push item for item in result.items
             $scope.loadFiles = off
       $scope.setForm = (item)->
+
+        $timeout ()->
+          $scope.addLibraryForm.libraryKey.$setViewValue item.id
+          $scope.addLibraryForm.label.$setViewValue item.title 
+          $scope.addLibraryForm.desc.$setViewValue item.description
+          $scope.addLibraryForm.sourceUrl.$setViewValue  "https://script.google.com/d/#{item.id}/edit"
         $scope.libraryKey = item.id
-        $scope.label = item.title
+        $scope.label = item.title 
         $scope.desc = item.description
-        $scope.sourceUrl = "https://script.google.com/d/#{item.id}/edit"
+        $scope.sourceUrl =  "https://script.google.com/d/#{item.id}/edit"
+
+
+        
         $scope.searchDialog = off
+        $analytics.eventTrack 'setForm',
+          "category":"picker"
+          "label" : $state.current.name
+
   ]

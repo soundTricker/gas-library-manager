@@ -8,7 +8,7 @@
   };
 
   angular.module('LibraryBoxApp').controller('AddLibraryCtrl', [
-    '$scope', 'storage', '$notify', '$state', '$window', function($scope, storage, $notify, $state, $window) {
+    '$scope', 'storage', '$notify', '$state', '$window', '$analytics', '$timeout', function($scope, storage, $notify, $state, $window, $analytics, $timeout) {
       var libraries;
       $scope.loadFiles = false;
       $scope.opts = {
@@ -36,17 +36,24 @@
           modifiedAt: new Date().getTime()
         };
         if (!$scope.isNotLibraryExist(item.key)) {
+          $scope.saving = false;
           return;
         }
-        return storage.addLibrary(item).then(function() {
+        storage.addLibrary(item).then(function() {
           $notify.info("Add Library", "" + $scope.label + " have been added");
           $scope.saving = false;
-          return $state.go('mine');
+          return $timeout(function() {
+            return $state.go('mine');
+          });
+        });
+        return $analytics.eventTrack('saveLibrary', {
+          "category": "saveButton",
+          "label": $state.current.name
         });
       };
       $scope.showPicker = function() {
         $scope.loadFiles = true;
-        return gapi.client.drive.files.list(DEFAULT_API_PARAMETER).execute(function(result) {
+        gapi.client.drive.files.list(DEFAULT_API_PARAMETER).execute(function(result) {
           if (result.error) {
             $notify.error("Get an Error, Please retry it.", result.error.message);
             $scope.loadFiles = false;
@@ -58,6 +65,10 @@
             $scope.loadFiles = false;
             return $scope.searchDialog = true;
           });
+        });
+        return $analytics.eventTrack('usePicker', {
+          "category": "picker",
+          "label": $state.current.name
         });
       };
       $scope.nextPage = function() {
@@ -86,11 +97,21 @@
         });
       };
       return $scope.setForm = function(item) {
+        $timeout(function() {
+          $scope.addLibraryForm.libraryKey.$setViewValue(item.id);
+          $scope.addLibraryForm.label.$setViewValue(item.title);
+          $scope.addLibraryForm.desc.$setViewValue(item.description);
+          return $scope.addLibraryForm.sourceUrl.$setViewValue("https://script.google.com/d/" + item.id + "/edit");
+        });
         $scope.libraryKey = item.id;
         $scope.label = item.title;
         $scope.desc = item.description;
         $scope.sourceUrl = "https://script.google.com/d/" + item.id + "/edit";
-        return $scope.searchDialog = false;
+        $scope.searchDialog = false;
+        return $analytics.eventTrack('setForm', {
+          "category": "picker",
+          "label": $state.current.name
+        });
       };
     }
   ]);

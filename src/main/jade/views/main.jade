@@ -19,13 +19,13 @@ h1.page-header {{i18n("myLibraryList")}}
         input.search-query(type='search', ng-model='search.$', placeholder='{{i18n(\'search\')}}', analytics-on="focus",analytics-category="search", analytics-event="focusSearchBox", analytics-label="{{$state.current.name}}")
       .pull-right
         .btn-group.pull-right
-          a.btn.btn-link(ui-sref='mine.add()')
+          a.btn.btn-link(ui-sref='mine.add()', data-intro="Add new library to GLB manualy.",data-step="2", tabindex="-1")
             i.icon-plus-sign-alt 
             | Add Library
-          button.btn.btn-link(ng-if='gapiLoaded', data-intro="Backup library-list metadata to Google Drive. You can export libraries added to library box as json.",data-step="2", tabindex="-1", ng-disabled='uploading', ng-click='uploadLibraries()', analytics-on="click", analytics-category="backup", analytics-event="clickBackup", analytics-label="{{$state.current.name}}") 
+          button.btn.btn-link(ng-if='gapiLoaded', data-intro="Backup library-list metadata to Google Drive. You can export libraries added to library box as json.",data-step="3", tabindex="-1", ng-disabled='uploading', ng-click='uploadLibraries()', analytics-on="click", analytics-category="backup", analytics-event="clickBackup", analytics-label="{{$state.current.name}}") 
             i.icon-cloud-upload 
             | Backup
-          button.btn.btn-link(ng-if='gapiLoaded', data-intro="Restore library-list metadata from Google Drive. You can import libraries from json.",data-step="3",data-position="left",tabindex="-1", analytics-on="click", analytics-category="restore", analytics-event="clickRestore", analytics-label="{{$state.current.name}}", ng-click='$parent.isCollapsed = !$parent.isCollapsed') 
+          button.btn.btn-link(ng-if='gapiLoaded', data-intro="Restore library-list metadata from Google Drive. You can import libraries from json.",data-step="4",data-position="left",tabindex="-1", analytics-on="click", analytics-category="restore", analytics-event="clickRestore", analytics-label="{{$state.current.name}}", ng-click='$parent.isCollapsed = !$parent.isCollapsed') 
             i.icon-cloud-download 
             | Restore
           button.btn.btn-link(ng-click="help()", analytics-on="click", analytics-category="help", analytics-event="showHelp", analytics-label="{{$state.current.name}}")
@@ -38,7 +38,7 @@ h1.page-header {{i18n("myLibraryList")}}
       .clearfix
 
     .row-fluid
-      .span12(data-intro="The Library List, You can see detail if clicking.", data-step="4",data-position="top")
+      .span12(data-intro="The Library List, You can see detail if clicking.", data-step="5",data-position="top")
         table.table.table-hover
           thead
             tr
