@@ -14,6 +14,8 @@ angular
       "angular-intro"
       'angulartics'
       'angulartics.google.analytics'
+      'ui.utils'
+      'infinite-scroll'
     ]
   .constant("apiUrl", "https://gas-library-box.appspot.com/_ah/api")
   .config([
@@ -44,6 +46,12 @@ angular
               controller: 'DetailCtrl'
           resolve :
             'library' : ['$stateParams', 'storage',($stateParams, storage)-> storage.getLibrary $stateParams.key]
+        .state 'mine.add',
+          url : '/add'
+          views :
+            mine :
+              templateUrl : 'views/addLibrary.html'
+              controller : 'AddLibraryCtrl'
         # .state 'global',
         #   url: '/global?q&next'
         #   templateUrl: 'views/global.html'

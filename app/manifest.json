@@ -49,7 +49,7 @@
     "font/*",
     "views/*"
   ],
-  "content_security_policy": "script-src 'self' https://apis.google.com https://www.google-analytics.com http://localhost:35729 https://ssl.google-analytics.com; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://apis.google.com https://www.google-analytics.com http://localhost:35729 https://ssl.google-analytics.com https://docs.google.com https://www-onepick-opensocial.googleusercontent.com/; object-src 'self'",
   "permissions": [
     "identity",
     "storage",

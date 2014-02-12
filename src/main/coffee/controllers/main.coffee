@@ -17,6 +17,11 @@ libraryBoxApp.controller 'MainCtrl',
     libraries = (item for item in $rootScope.libraries when !item.isExternal)
     libraries = libraries.sort (i1,i2)-> i1.label.toLowerCase() > i2.label.toLowerCase()
 
+    $rootScope.$watch 'libraries', ()->
+      libraries = (item for item in $rootScope.libraries when !item.isExternal)
+      libraries = libraries.sort (i1,i2)-> i1.label.toLowerCase() > i2.label.toLowerCase()
+      $scope.filtered = filter()
+
     filter = ()->
       $filter('limitTo')(
         $filter('startFrom')(

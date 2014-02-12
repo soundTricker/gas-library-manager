@@ -29,38 +29,43 @@
       });
       $window.gapiIsLoaded = function() {
         return gapi.auth.init(function() {
-          var loadApiDefer;
-          loadApiDefer = function(api, version, base) {
-            var d;
-            d = $q.defer();
-            if (base) {
-              gapi.client.load(api, version, (function(e) {
-                return $scope.$apply(function() {
-                  return d.resolve(api);
+          return $scope.$apply(function() {
+            var loadApiDefer;
+            loadApiDefer = function(api, version, base) {
+              var d;
+              d = $q.defer();
+              if (base) {
+                gapi.client.load(api, version, (function(e) {
+                  return $scope.$apply(function() {
+                    return d.resolve(api);
+                  });
+                }), base);
+              } else {
+                gapi.client.load(api, version, function(e) {
+                  return $scope.$apply(function() {
+                    return d.resolve(api);
+                  });
                 });
-              }), base);
-            } else {
-              gapi.client.load(api, version, function(e) {
-                return $scope.$apply(function() {
-                  return d.resolve(api);
-                });
-              });
-            }
-            return d.promise;
-          };
-          return $q.all([loadApiDefer("drive", "v2")]).then(function() {
-            return chrome.identity.getAuthToken({
-              interactive: true
-            }, function(token) {
-              gapi.auth.setToken({
-                "access_token": token
-              });
-              $rootScope.loginStatus = "loaded";
-              $rootScope.gapiLoaded = true;
-              $rootScope.$emit('gapiLoaded');
-              return $scope.$apply();
+              }
+              return d.promise;
+            };
+            return $q.all([loadApiDefer("drive", "v2")]).then(function() {
+              return $scope.authorize(false);
             });
           });
+        });
+      };
+      $scope.authorize = function(interactive) {
+        return chrome.identity.getAuthToken({
+          interactive: interactive
+        }, function(token) {
+          gapi.auth.setToken({
+            "access_token": token
+          });
+          $rootScope.loginStatus = "loaded";
+          $rootScope.gapiLoaded = true;
+          $rootScope.$emit('gapiLoaded');
+          return $scope.$apply();
         });
       };
       return $scope.showRegister = function() {

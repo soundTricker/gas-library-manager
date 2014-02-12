@@ -97,6 +97,26 @@
         return ret;
       };
 
+      Storage.prototype.getLibrariesMapSync = function() {
+        var d, ret,
+          _this = this;
+        d = this.$q.defer();
+        ret = {};
+        chrome.storage.local.get("libraries", function(res) {
+          var item, key, _ref;
+          _this.libraryMap = (res != null ? res.libraries : void 0) || {};
+          _ref = _this.libraryMap;
+          for (key in _ref) {
+            item = _ref[key];
+            if (item.key) {
+              ret[key] = item;
+            }
+          }
+          return _this.$rootScope.$apply();
+        });
+        return ret;
+      };
+
       Storage.prototype.addLibrary = function(library) {
         var d,
           _this = this;

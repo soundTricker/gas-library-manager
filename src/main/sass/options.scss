@@ -32,3 +32,10 @@
     visibility: hidden;
   }
 }
+
+.modal {
+  &.file-choose-modal {
+    width : 800px;
+    margin-left: -400px;
+  }
+}

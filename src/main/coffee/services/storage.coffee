@@ -37,6 +37,14 @@ angular.module('LibraryBoxApp')
       @getLibraries().then (res)=>
         ret.push i for i in @libraries
       return ret
+    getLibrariesMapSync:()->
+      d = @$q.defer()
+      ret = {}
+      chrome.storage.local.get "libraries", (res)=>
+        @libraryMap = res?.libraries || {}
+        (ret[key] = item for key, item of @libraryMap when item.key)
+        @$rootScope.$apply()
+      return ret
 
     addLibrary:(library)=>
       d = @$q.defer()

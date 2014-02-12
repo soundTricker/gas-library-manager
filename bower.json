@@ -16,7 +16,9 @@
     "jquery": "~2.0.3",
     "angular-intro.js": "*",
     "angulartics": "~0.8.7",
-    "js-base64": "~2.1.2"
+    "js-base64": "~2.1.2",
+    "angular-ui-utils": "~0.1.1",
+    "ngInfiniteScroll": "~1.0.0"
   },
   "devDependencies": {}
 }
