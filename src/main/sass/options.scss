@@ -22,6 +22,8 @@
   @include ellipsis()
 }
 
+
+
 .export-mode {
   &.on {
     display : table-cell;
@@ -37,5 +39,17 @@
   &.file-choose-modal {
     width : 800px;
     margin-left: -400px;
+
+    table {
+      td.title {
+        max-width: 250px;
+        width : 250px;
+        a {
+          display : block;
+          max-width: 250px;
+          @include ellipsis()
+        }
+      }
+    }
   }
 }

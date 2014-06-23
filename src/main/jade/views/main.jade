@@ -22,6 +22,10 @@ h1.page-header {{i18n("myLibraryList")}}
           a.btn.btn-link(ui-sref='mine.add()', data-intro="Add new library to GLB manualy.",data-step="2", tabindex="-1")
             i.icon-plus-sign-alt 
             | Add Library
+          button.btn.btn-link(ng-click="openGlmImport=true",ng-if='gapiLoaded') 
+            i.icon-download-alt 
+            | Import
+            div(modal="openGlmImport", close='openGlmImport=false', options='glmImportOption')
           button.btn.btn-link(ng-if='gapiLoaded', data-intro="Backup library-list metadata to Google Drive. You can export libraries added to library box as json.",data-step="3", tabindex="-1", ng-disabled='uploading', ng-click='uploadLibraries()', analytics-on="click", analytics-category="backup", analytics-event="clickBackup", analytics-label="{{$state.current.name}}") 
             i.icon-cloud-upload 
             | Backup
@@ -35,6 +39,7 @@ h1.page-header {{i18n("myLibraryList")}}
           form.form-inline(name='importForm')
             input.input-xlarge(tabindex="-1", type='text', name='fileId', placeholder='input library file key of Google Drive', ng-model='fileId', required='required')
             button.btn(tabindex="-1", ng-click='import(fileId)', ng-disabled="importing") Restore
+
       .clearfix
 
     .row-fluid

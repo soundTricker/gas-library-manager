@@ -1,0 +1,101 @@
+.modal-header
+  h3 Import from GAS Library Management App
+  div(ng-if="state == 'chooseSpreadsheet' || state == 'chooseLibraries'")
+    | Search :
+    input.search-query(type="search", ng-model="searchQuery.$")
+div(ng-switch="state") 
+  div(ng-switch-when="chooseSpreadsheet") 
+    .modal-body(infinite-scroll='nextPage()',infinite-scroll-disabled='loadFiles',infinite-scroll-distance='1',infinite-scroll-immediate-check="false", ng-init="current")
+      h3 Choose GAS Library Management App's Spreadsheet
+      table.table.table-striped.table-bordered.table-condensed.table-hover
+        thead
+          tr
+            th
+            th Name
+            th Owner
+            th Created / Mofified
+        tbody
+          tr(ng-repeat="item in items | filter:searchQuery")
+            td
+              input(type="radio", name="choice", ng-click="$parent.current = item")
+            td.title
+              a(ng-href="https://docs.google.com/spreadsheet/ccc?key={{item.id}}", target="_blank", title="{{item.title}}", tooltip="{{item.title}}")
+                img(ng-src="{{item.iconLink}}", alt="") 
+                | &nbsp;{{item.title}}
+            td 
+              img(ng-show="{{item.owners[0].picture.url != null}}", ng-src="{{item.owners[0].picture.url}}", width="20", height="20") 
+              | &nbsp;{{item.owners[0].displayName}}
+            td {{item.createdDate | date:shortDate}}/ {{item.modifiedDate | date:shortDate}}
+        div(ng-if="loadFiles")
+          i.icon-spinner.icon-spin 
+          | Now Loading
+    .modal-footer
+      button.btn.btn-info(ng-click='loadSheet(current)',ng-disabled="!current")
+        i.icon-table 
+        | Load Sheets
+      button.btn.cancel(ng-click='$parent.openGlmImport=false')
+        | {{i18n("cancel")}}
+
+  div(ng-switch-when="chooseSheet")
+    .modal-body(ng-init="sheet")
+      h3 Choose Library List Sheet in {{ssName}}
+      table.table.table-striped.table-bordered.table-condensed.table-hover
+        thead
+          tr
+            th
+            th Name
+            th Mofified
+        tbody
+          tr(ng-repeat="item in items | filter:searchQuery")
+            td
+              input(type="radio", name="choice", ng-click="$parent.sheet = item")
+            td.title
+              span
+                {{item.title.$t}}
+            td {{item.updated.$t | date:shortDate}}
+        div(ng-if="loadFiles")
+          i.icon-spinner.icon-spin 
+          | Now Loading
+    .modal-footer
+      button.btn.btn-info(ng-click='loadLibrary(sheet)', ng-disabled="!sheet")
+        i.icon-book 
+        | Load Libraries
+      button.btn.cancel(ng-click='$parent.openGlmImport=false')
+        | {{i18n("cancel")}}
+  div(ng-switch-when="chooseLibraries")
+    .modal-body(ng-init="sheet")
+      h3 Choose Libraies
+      .btn-toolbar
+        button.btn.btn-link(ng-click="checkAll($event)") Check All
+        button.btn.btn-link(ng-click="reverseAll($event)") Reverse All
+        button.btn.btn-link(ng-click="uncheckAll($event)") Uncheck All
+      table.table.table-striped.table-bordered.table-condensed.table-hover
+        thead
+          tr
+            th
+              input(type="checkbox", ng-model="all", ng-click="checkAll($event)")
+            th Name
+            th Key
+        tbody
+          tr(ng-repeat="item in loadedLibraries | filter:searchQuery", ng-click="item.selected = !item.selected")
+            td
+              input(type="checkbox", name="choice", ng-model="item.selected", ng-click="$event.stopPropagation()")
+            td.title
+              span
+                {{item.title}}
+            td {{item.key}}
+        div(ng-if="loadFiles")
+          i.icon-spinner.icon-spin 
+          | Now Loading
+    .modal-footer
+      button.btn.btn-info(ng-click='loadLibrary(sheet)', ng-disabled="!sheet")
+        i.icon-table 
+        | Load Libraries
+      button.btn.cancel(ng-click='$parent.openGlmImport=false')
+        | {{i18n("cancel")}}
+
+  div(ng-switch-default)
+    .modal-body
+      i.icon-spinner.icon-spin 
+      | &nbsp;Now loading...
+

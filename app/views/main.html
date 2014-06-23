@@ -24,6 +24,9 @@
       </div>
       <div class="pull-right">
         <div class="btn-group pull-right"><a ui-sref="mine.add()" data-intro="Add new library to GLB manualy." data-step="2" tabindex="-1" class="btn btn-link"><i class="icon-plus-sign-alt"> </i>Add Library</a>
+          <button ng-click="openGlmImport=true" ng-if="gapiLoaded" class="btn btn-link"> <i class="icon-download-alt"> </i>Import
+            <div modal="openGlmImport" close="openGlmImport=false" options="glmImportOption"></div>
+          </button>
           <button ng-if="gapiLoaded" data-intro="Backup library-list metadata to Google Drive. You can export libraries added to library box as json." data-step="3" tabindex="-1" ng-disabled="uploading" ng-click="uploadLibraries()" analytics-on="click" analytics-category="backup" analytics-event="clickBackup" analytics-label="{{$state.current.name}}" class="btn btn-link"> <i class="icon-cloud-upload"> </i>Backup</button>
           <button ng-if="gapiLoaded" data-intro="Restore library-list metadata from Google Drive. You can import libraries from json." data-step="4" data-position="left" tabindex="-1" analytics-on="click" analytics-category="restore" analytics-event="clickRestore" analytics-label="{{$state.current.name}}" ng-click="$parent.isCollapsed = !$parent.isCollapsed" class="btn btn-link"> <i class="icon-cloud-download"> </i>Restore</button>
           <button ng-click="help()" analytics-on="click" analytics-category="help" analytics-event="showHelp" analytics-label="{{$state.current.name}}" class="btn btn-link"><i class="icon-question-sign"></i></button>

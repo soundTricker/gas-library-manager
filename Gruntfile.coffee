@@ -12,25 +12,24 @@ mountFolder = (connect, dir) ->
 # use this if you want to recursively match all subfolders:
 # 'test/spec/**/*.js'
 module.exports = (grunt) ->
-  
+
   # load all grunt tasks
   require("matchdep").filterDev("grunt-*").forEach grunt.loadNpmTasks
-  
+
   # configurable paths
   yeomanConfig =
     src: "src/main"
     app: "app"
     dist: "dist"
-
   grunt.initConfig
     yeoman: yeomanConfig
     watch:
-      options:
-        livereload : 35728
-        spawn: false
       jade:
         files: ["<%= yeoman.src %>/jade/{,*/}*.jade"]
         tasks: ["jade:local"]
+
+      gruntfile:
+        files: ["Gruntfile.coffee"]
 
       coffee:
         files: ["<%= yeoman.src %>/coffee/{,*/}*.coffee"]
@@ -43,16 +42,27 @@ module.exports = (grunt) ->
       compass:
         files: ["<%= yeoman.src %>/sass/{,*/}*.{scss,sass}"]
         tasks: ["compass:server"]
+
       livereload:
+        options:
+          livereload: "<%= connect.options.livereload %>"
         files: ["<%= yeoman.app%>/{,*/}*"]
         tasks: []
 
     connect:
       options:
         port: 9000
-        
+        livereload: 35730
+
         # change this to '0.0.0.0' to access the server from outside
         hostname: "localhost"
+      livereload:
+        options:
+          open: true
+          base: [
+            ".tmp"
+            "<%= yeoman.app %>"
+          ]
       keepalive:
         options:
           keepalive:on
@@ -121,6 +131,7 @@ module.exports = (grunt) ->
             pretty: on
             data :
               livereload:on
+              port : "<%= connect.options.livereload% >"
           files: [
             expand: true
             cwd: "<%= yeoman.src %>/jade"
@@ -139,13 +150,13 @@ module.exports = (grunt) ->
             ext: ".html"
           ]
 
-    
+
     # not used since Uglify task does concat,
     # but still available if needed
     #concat: {
     #            dist: {}
     #        },
-    
+
     # not enabled since usemin task does concat and uglify
     # check index.html to edit your build targets
     # enable this task if you prefer defining your build targets here
@@ -191,7 +202,7 @@ module.exports = (grunt) ->
     htmlmin:
       dist:
         options: {}
-        
+
         #removeCommentsFromCDATA: true,
         #                    // https://github.com/yeoman/grunt-usemin/issues/44
         #                    //collapseWhitespace: true,
@@ -208,7 +219,7 @@ module.exports = (grunt) ->
           dest: "<%= yeoman.dist %>"
         ]
 
-    
+
     # Put files not handled in other tasks here
     copy:
       dist:
@@ -260,6 +271,21 @@ module.exports = (grunt) ->
           src: ["**"]
           dest: ""
         ]
+
+  grunt.registerTask "serve" , (target)=>
+    if target is "dist"
+      return grunt.task.run [
+        "build"
+        "connect:dist:keepalive"
+      ]
+    grunt.task.run [
+      "clean:server"
+      "concurrent:server"
+
+      "connect:livereload"
+      "watch"
+    ]
+
 
   grunt.registerTask "test", ["clean:server", "concurrent:test", "connect:test", "jasmine"]
   grunt.registerTask "build", ["clean:dist", "chromeManifest:dist", "useminPrepare", "concurrent:dist", "cssmin", "concat", "uglify", "copy", "usemin", "compress"]

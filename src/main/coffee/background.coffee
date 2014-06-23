@@ -1,5 +1,5 @@
 do(global=@)->
-  chrome.runtime.onInstalled.addListener (details)-> 
+  chrome.runtime.onInstalled.addListener (details)->
     global.showOptionPage() if details?.reason is "install"
 
   chrome.extension.onMessage.addListener (message, sender, sendResponse)->
@@ -11,10 +11,10 @@ do(global=@)->
     return if !tab.url
     chrome.pageAction.show tabId if tab.url.indexOf("script.google.com") > -1
 
-  global.showOptionPage = ()-> 
+  global.showOptionPage = ()->
     chrome.tabs.create url : chrome.extension.getURL("options.html")
 
-  global.showMyLibraryPage = (message)-> 
+  global.showMyLibraryPage = (message)->
     chrome.tabs.create url : "#{chrome.extension.getURL('options.html')}#/mine/detail/#{message.key}"
 
   global.logEvent = (message)->
@@ -34,12 +34,9 @@ do(global=@)->
 #   global.getLibraries = ()->
 #     return JSON.parse getValue("libraries" , "[]")
 
-#   global.getValue = (name, def)-> 
+#   global.getValue = (name, def)->
 #     if !localStorage[name] then localStorage[name] = def
 #     return localStorage[name]
 
-#   global.setValue = (name, value)-> 
+#   global.setValue = (name, value)->
 #     localStorage[name] value
-
-
-

@@ -16,9 +16,6 @@
         "$": ""
       };
       $scope.exportMode = false;
-      $scope.setExportMode = function() {
-        return $scope.exportMode = !$scope.exportMode;
-      };
       libraries = (function() {
         var _i, _len, _ref, _results;
         _ref = $rootScope.libraries;
@@ -34,6 +31,13 @@
       libraries = libraries.sort(function(i1, i2) {
         return i1.label.toLowerCase() > i2.label.toLowerCase();
       });
+      $scope.glmImportOption = {
+        backdropFade: true,
+        dialogFade: true,
+        dialogClass: "modal file-choose-modal",
+        templateUrl: "views/glmImport.html",
+        controller: "GlmImportCtrl"
+      };
       $rootScope.$watch('libraries', function() {
         libraries = (function() {
           var _i, _len, _ref, _results;
@@ -56,6 +60,9 @@
         return $filter('limitTo')($filter('startFrom')($filter('filter')(libraries, $scope.search), ($scope.currentPage - 1) * $scope.entryLimit), $scope.entryLimit);
       };
       $scope.filtered = filter();
+      $scope.setExportMode = function() {
+        return $scope.exportMode = !$scope.exportMode;
+      };
       $scope.$watch("search.$", function() {
         return $scope.filtered = filter();
       });

@@ -1,0 +1,105 @@
+
+<div class="modal-header">
+  <h3>Import from GAS Library Management App</h3>
+  <div ng-if="state == 'chooseSpreadsheet' || state == 'chooseLibraries'">Search :
+    <input type="search" ng-model="searchQuery.$" class="search-query"/>
+  </div>
+</div>
+<div ng-switch="state"> 
+  <div ng-switch-when="chooseSpreadsheet"> 
+    <div infinite-scroll="nextPage()" infinite-scroll-disabled="loadFiles" infinite-scroll-distance="1" infinite-scroll-immediate-check="false" ng-init="current" class="modal-body">
+      <h3>Choose GAS Library Management App's Spreadsheet</h3>
+      <table class="table table-striped table-bordered table-condensed table-hover">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Owner</th>
+            <th>Created / Mofified</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in items | filter:searchQuery">
+            <td>
+              <input type="radio" name="choice" ng-click="$parent.current = item"/>
+            </td>
+            <td class="title"><a ng-href="https://docs.google.com/spreadsheet/ccc?key={{item.id}}" target="_blank" title="{{item.title}}" tooltip="{{item.title}}"><img ng-src="{{item.iconLink}}" alt=""/>&nbsp;{{item.title}}</a></td>
+            <td> <img ng-show="{{item.owners[0].picture.url != null}}" ng-src="{{item.owners[0].picture.url}}" width="20" height="20"/>&nbsp;{{item.owners[0].displayName}}</td>
+            <td>{{item.createdDate | date:shortDate}}/ {{item.modifiedDate | date:shortDate}}</td>
+          </tr>
+        </tbody>
+        <div ng-if="loadFiles"><i class="icon-spinner icon-spin"> </i>Now Loading</div>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button ng-click="loadSheet(current)" ng-disabled="!current" class="btn btn-info"><i class="icon-table"> </i>Load Sheets</button>
+      <button ng-click="$parent.openGlmImport=false" class="btn cancel">{{i18n("cancel")}}</button>
+    </div>
+  </div>
+  <div ng-switch-when="chooseSheet">
+    <div ng-init="sheet" class="modal-body">
+      <h3>Choose Library List Sheet in {{ssName}}</h3>
+      <table class="table table-striped table-bordered table-condensed table-hover">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Mofified</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in items | filter:searchQuery">
+            <td>
+              <input type="radio" name="choice" ng-click="$parent.sheet = item"/>
+            </td>
+            <td class="title"><span>{{item.title.$t}}</span></td>
+            <td>{{item.updated.$t | date:shortDate}}</td>
+          </tr>
+        </tbody>
+        <div ng-if="loadFiles"><i class="icon-spinner icon-spin"> </i>Now Loading</div>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button ng-click="loadLibrary(sheet)" ng-disabled="!sheet" class="btn btn-info"><i class="icon-book"> </i>Load Libraries</button>
+      <button ng-click="$parent.openGlmImport=false" class="btn cancel">{{i18n("cancel")}}</button>
+    </div>
+  </div>
+  <div ng-switch-when="chooseLibraries">
+    <div ng-init="sheet" class="modal-body">
+      <h3>Choose Libraies</h3>
+      <div class="btn-toolbar">
+        <button ng-click="checkAll($event)" class="btn btn-link">Check All</button>
+        <button ng-click="reverseAll($event)" class="btn btn-link">Reverse All</button>
+        <button ng-click="uncheckAll($event)" class="btn btn-link">Uncheck All</button>
+      </div>
+      <table class="table table-striped table-bordered table-condensed table-hover">
+        <thead>
+          <tr>
+            <th>
+              <input type="checkbox" ng-model="all" ng-click="checkAll($event)"/>
+            </th>
+            <th>Name</th>
+            <th>Key</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in loadedLibraries | filter:searchQuery" ng-click="item.selected = !item.selected">
+            <td>
+              <input type="checkbox" name="choice" ng-model="item.selected" ng-click="$event.stopPropagation()"/>
+            </td>
+            <td class="title"><span>{{item.title}}</span></td>
+            <td>{{item.key}}</td>
+          </tr>
+        </tbody>
+        <div ng-if="loadFiles"><i class="icon-spinner icon-spin"> </i>Now Loading</div>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button ng-click="loadLibrary(sheet)" ng-disabled="!sheet" class="btn btn-info"><i class="icon-table"> </i>Load Libraries</button>
+      <button ng-click="$parent.openGlmImport=false" class="btn cancel">{{i18n("cancel")}}</button>
+    </div>
+  </div>
+  <div ng-switch-default="ng-switch-default">
+    <div class="modal-body"><i class="icon-spinner icon-spin"> </i>&nbsp;Now loading...</div>
+  </div>
+</div>

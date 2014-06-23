@@ -11,11 +11,15 @@ libraryBoxApp.controller 'MainCtrl',
     $scope.entryLimit = 20 #max rows for data table
     $scope.search = "$" : ""
     $scope.exportMode = off
-
-    $scope.setExportMode = ()->
-      $scope.exportMode = !$scope.exportMode
     libraries = (item for item in $rootScope.libraries when !item.isExternal)
     libraries = libraries.sort (i1,i2)-> i1.label.toLowerCase() > i2.label.toLowerCase()
+
+    $scope.glmImportOption = 
+      backdropFade : yes
+      dialogFade : yes
+      dialogClass : "modal file-choose-modal"
+      templateUrl : "views/glmImport.html"
+      controller : "GlmImportCtrl"
 
     $rootScope.$watch 'libraries', ()->
       libraries = (item for item in $rootScope.libraries when !item.isExternal)
@@ -33,6 +37,10 @@ libraryBoxApp.controller 'MainCtrl',
       )
 
     $scope.filtered = filter()
+
+    $scope.setExportMode = ()->
+      $scope.exportMode = !$scope.exportMode
+
 
     $scope.$watch "search.$" , ()-> 
       $scope.filtered = filter()
@@ -105,6 +113,7 @@ Content-Transfer-Encoding: base64
               $scope.filtered = filter()
 
               $notify.info "Import your libraries", "Success importing your libraries"
+
 
   ]
 

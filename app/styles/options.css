@@ -31,18 +31,33 @@
   text-overflow: ellipsis;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/options\.scss}line{font-family:\0000326}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/options\.scss}line{font-family:\0000328}}
 .export-mode.on {
   display: table-cell;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/options\.scss}line{font-family:\0000330}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/options\.scss}line{font-family:\0000332}}
 .export-mode.off {
   display: none;
   visibility: hidden;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/options\.scss}line{font-family:\0000337}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/options\.scss}line{font-family:\0000339}}
 .modal.file-choose-modal {
   width: 800px;
   margin-left: -400px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/options\.scss}line{font-family:\0000344}}
+.modal.file-choose-modal table td.title {
+  max-width: 250px;
+  width: 250px;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/options\.scss}line{font-family:\0000347}}
+.modal.file-choose-modal table td.title a {
+  display: block;
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }
