@@ -7,13 +7,12 @@ do($=jQuery, global=@) ->
     $table = $($('.modal-dialog.properties-data-dialog .properties-data-dialog-table').get(0))
     propertyRows = $table.find "input.editable-row-input"
     projectKey = $table.find ".properties-data-dialog-table-row:nth-child(5)>td:nth-child(2)>div"
-    console.log projectKey
     item =
       "label" : $(propertyRows.get(0)).val()
       "desc" : $(propertyRows.get(1)).val()
       "key"  : projectKey.text()
       "sourceUrl"  : location.href
-    console.log item
+
     chrome.storage.local.get "libraries" , (res)->
       libraries = res?.libraries || {}
 
