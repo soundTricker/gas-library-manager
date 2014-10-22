@@ -4,16 +4,20 @@
     var $saveButton, $saveMessageBox, escapeHTML, generateLinks;
     $saveMessageBox = $('<div>');
     $saveButton = $("<button type=\"button\" class=\"saveButton gwt-Button\">" + (chrome.i18n.getMessage('saveButton')) + "</button>").click(function() {
-      var item, propertyRows;
+      var $table, item, projectKey, propertyRows;
       $saveMessageBox.empty();
-      propertyRows = $('.properties-box').find("input.info-row");
+      $table = $($('.modal-dialog.properties-data-dialog .properties-data-dialog-table').get(0));
+      propertyRows = $table.find("input.editable-row-input");
+      projectKey = $table.find(".properties-data-dialog-table-row:nth-child(5)>td:nth-child(2)>div");
+      console.log(projectKey);
       item = {
         "label": $(propertyRows.get(0)).val(),
         "desc": $(propertyRows.get(1)).val(),
-        "key": $(propertyRows.get(2)).val(),
+        "key": projectKey.text(),
         "sourceUrl": location.href
       };
-      return chrome.storage.local.get("libraries", function(res) {
+      console.log(item);
+      chrome.storage.local.get("libraries", function(res) {
         var libraries, origin;
         libraries = (res != null ? res.libraries : void 0) || {};
         if (libraries[item.key]) {
@@ -39,6 +43,7 @@
           "from": "content_script"
         });
       });
+      return false;
     });
     document.addEventListener("webkitAnimationStart", (function(event) {
       return (global[event.animationName] || function() {
@@ -46,10 +51,11 @@
       }).apply(this, event);
     }), true);
     global.showProperteisBox = function(event) {
+      $saveMessageBox.empty();
       if ($(".saveButton").length > 0) {
         return;
       }
-      return $('.properties-box').closest('.dialogMiddle').find('.buttons').append($saveButton.clone(true)).append($saveMessageBox);
+      return $('.modal-dialog.properties-data-dialog').find('.modal-dialog-buttons').append($saveButton.clone(true)).append($saveMessageBox);
     };
     generateLinks = function(item) {
       return $("<div>").append($("<h3>").text(item.label)).append($("<p>", {

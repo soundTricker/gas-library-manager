@@ -12,10 +12,10 @@ mountFolder = (connect, dir) ->
 # use this if you want to recursively match all subfolders:
 # 'test/spec/**/*.js'
 module.exports = (grunt) ->
-  
+
   # load all grunt tasks
   require("matchdep").filterDev("grunt-*").forEach grunt.loadNpmTasks
-  
+
   # configurable paths
   yeomanConfig =
     src: "src/main"
@@ -25,9 +25,6 @@ module.exports = (grunt) ->
   grunt.initConfig
     yeoman: yeomanConfig
     watch:
-      options:
-        livereload : 35728
-        spawn: false
       jade:
         files: ["<%= yeoman.src %>/jade/{,*/}*.jade"]
         tasks: ["jade:local"]
@@ -43,14 +40,10 @@ module.exports = (grunt) ->
       compass:
         files: ["<%= yeoman.src %>/sass/{,*/}*.{scss,sass}"]
         tasks: ["compass:server"]
-      livereload:
-        files: ["<%= yeoman.app%>/{,*/}*"]
-        tasks: []
-
     connect:
       options:
         port: 9000
-        
+
         # change this to '0.0.0.0' to access the server from outside
         hostname: "localhost"
       keepalive:
@@ -139,13 +132,13 @@ module.exports = (grunt) ->
             ext: ".html"
           ]
 
-    
+
     # not used since Uglify task does concat,
     # but still available if needed
     #concat: {
     #            dist: {}
     #        },
-    
+
     # not enabled since usemin task does concat and uglify
     # check index.html to edit your build targets
     # enable this task if you prefer defining your build targets here
@@ -191,7 +184,7 @@ module.exports = (grunt) ->
     htmlmin:
       dist:
         options: {}
-        
+
         #removeCommentsFromCDATA: true,
         #                    // https://github.com/yeoman/grunt-usemin/issues/44
         #                    //collapseWhitespace: true,
@@ -208,7 +201,7 @@ module.exports = (grunt) ->
           dest: "<%= yeoman.dist %>"
         ]
 
-    
+
     # Put files not handled in other tasks here
     copy:
       dist:
