@@ -29,14 +29,14 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1"
      inkscape:cx="274.98847"
-     inkscape:cy="216.42054"
+     inkscape:cy="274.02344"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
      showgrid="true"
      inkscape:window-width="1436"
      inkscape:window-height="856"
-     inkscape:window-x="30"
-     inkscape:window-y="4"
+     inkscape:window-x="0"
+     inkscape:window-y="22"
      inkscape:window-maximized="0"
      showguides="false"
      inkscape:snap-global="true"
@@ -60,7 +60,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -82,7 +82,7 @@
        sodipodi:cy="466.6778"
        sodipodi:rx="382.26587"
        sodipodi:ry="372.73898"
-       d="m 896.7171,466.6778 a 382.26587,372.73898 0 1 1 -764.53174,0 382.26587,372.73898 0 1 1 764.53174,0 z"
+       d="m 896.7171,466.6778 c 0,205.85805 -171.14626,372.73898 -382.26587,372.73898 -211.11961,0 -382.26587,-166.88093 -382.26587,-372.73898 0,-205.85806 171.14626,-372.738988 382.26587,-372.738988 211.11961,0 382.26587,166.880928 382.26587,372.738988 z"
        transform="matrix(0.18817843,0,0,0.18817843,371.90682,433.40006)" />
     <path
        style="fill:#ffffff;fill-opacity:1;stroke:none"
@@ -124,7 +124,7 @@
      inkscape:label="Text">
     <text
        xml:space="preserve"
-       style="font-size:65.59397887999999455px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#008cbd;fill-opacity:1;stroke:#666666;stroke-width:1.15886008999999990;font-family:Ricty;-inkscape-font-specification:Ricty Bold;stroke-opacity:1"
+       style="font-size:65.59397888px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#008cbd;fill-opacity:1;stroke:#666666;stroke-width:1.15886009;stroke-opacity:1;font-family:Ricty;-inkscape-font-specification:Ricty Bold"
        x="225.45937"
        y="82.802696"
        id="text2992"
@@ -134,16 +134,27 @@
          id="tspan2994"
          x="225.45937"
          y="82.802696"
-         style="stroke-width:1.15886008999999990;fill:#008cbd;fill-opacity:1;stroke:#666666;stroke-opacity:1">GAS</tspan><tspan
+         style="fill:#008cbd;fill-opacity:1;stroke:#666666;stroke-width:1.15886009;stroke-opacity:1">GAS</tspan><tspan
          sodipodi:role="line"
          x="225.45937"
          y="148.39667"
          id="tspan2996"
-         style="stroke-width:1.15886008999999990;fill:#008cbd;fill-opacity:1;stroke:#666666;stroke-opacity:1">Library</tspan><tspan
+         style="fill:#008cbd;fill-opacity:1;stroke:#666666;stroke-width:1.15886009;stroke-opacity:1">Library</tspan><tspan
          sodipodi:role="line"
          x="225.45937"
          y="213.99066"
          id="tspan2998"
-         style="stroke-width:1.15886008999999990;fill:#008cbd;fill-opacity:1;stroke:#666666;stroke-opacity:1">Box</tspan></text>
+         style="fill:#008cbd;fill-opacity:1;stroke:#666666;stroke-width:1.15886009;stroke-opacity:1">Manager</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:400px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Meiryo;-inkscape-font-specification:Meiryo"
+       x="714"
+       y="91"
+       id="text2996"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2999"
+         x="714"
+         y="91" /></text>
   </g>
 </svg>
