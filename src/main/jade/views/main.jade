@@ -15,18 +15,18 @@ h1.page-header {{i18n("myLibraryList")}}
   .span12.library-list(ng-if='$state.is(\'mine.add\')', ui-view="mine")
   .span12.library-list(ng-if='$state.is("mine")')
     .well.well-small(ng-intro-method="help", ng-intro-options="options")
-      .pull-left(data-intro="Search your libraries. Please input any charactor",data-step="1") Search: 
+      .pull-left(data-intro="Search your libraries. Please input any charactor",data-step="1") Search:
         input.search-query(type='search', ng-model='search.$', placeholder='{{i18n(\'search\')}}', analytics-on="focus",analytics-category="search", analytics-event="focusSearchBox", analytics-label="{{$state.current.name}}")
       .pull-right
         .btn-group.pull-right
-          a.btn.btn-link(ui-sref='mine.add()', data-intro="Add new library to GLB manualy.",data-step="2", tabindex="-1")
-            i.icon-plus-sign-alt 
+          a.btn.btn-link(ui-sref='mine.add()', data-intro="Add new library to GLM manualy.",data-step="2", tabindex="-1")
+            i.icon-plus-sign-alt
             | Add Library
-          button.btn.btn-link(ng-if='gapiLoaded', data-intro="Backup library-list metadata to Google Drive. You can export libraries added to library box as json.",data-step="3", tabindex="-1", ng-disabled='uploading', ng-click='uploadLibraries()', analytics-on="click", analytics-category="backup", analytics-event="clickBackup", analytics-label="{{$state.current.name}}") 
-            i.icon-cloud-upload 
+          button.btn.btn-link(ng-if='gapiLoaded', data-intro="Backup library-list metadata to Google Drive. You can export libraries added to Library Manager as json.",data-step="3", tabindex="-1", ng-disabled='uploading', ng-click='uploadLibraries()', analytics-on="click", analytics-category="backup", analytics-event="clickBackup", analytics-label="{{$state.current.name}}")
+            i.icon-cloud-upload
             | Backup
-          button.btn.btn-link(ng-if='gapiLoaded', data-intro="Restore library-list metadata from Google Drive. You can import libraries from json.",data-step="4",data-position="left",tabindex="-1", analytics-on="click", analytics-category="restore", analytics-event="clickRestore", analytics-label="{{$state.current.name}}", ng-click='$parent.isCollapsed = !$parent.isCollapsed') 
-            i.icon-cloud-download 
+          button.btn.btn-link(ng-if='gapiLoaded', data-intro="Restore library-list metadata from Google Drive. You can import libraries from json.",data-step="4",data-position="left",tabindex="-1", analytics-on="click", analytics-category="restore", analytics-event="clickRestore", analytics-label="{{$state.current.name}}", ng-click='$parent.isCollapsed = !$parent.isCollapsed')
+            i.icon-cloud-download
             | Restore
           button.btn.btn-link(ng-click="help()", analytics-on="click", analytics-category="help", analytics-event="showHelp", analytics-label="{{$state.current.name}}")
             i.icon-question-sign
@@ -51,5 +51,5 @@ h1.page-header {{i18n("myLibraryList")}}
             tr(ng-repeat='item in filtered track by $index', ng-controller='PrivateLibraryCtrl', ng-click="$state.go('mine.detail', {key : item.key})")
               td
                 a(ui-sref='mine.detail({key : item.key})', analytics-on="click", analytics-category="viewDetailLink", analytics-event="viewDetailLink", analytics-label="{{$state.current.name}}") {{item.label}}
-              td(ng-bind-html='item.desc | escape | break2br') 
+              td(ng-bind-html='item.desc | escape | break2br')
               td {{item.registeredAt | date}} / {{item.modifiedAt | date}}

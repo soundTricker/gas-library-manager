@@ -19,12 +19,12 @@
   <div ng-if="$state.is('mine.add')" ui-view="mine" class="span12 library-list"></div>
   <div ng-if="$state.is(&quot;mine&quot;)" class="span12 library-list">
     <div ng-intro-method="help" ng-intro-options="options" class="well well-small">
-      <div data-intro="Search your libraries. Please input any charactor" data-step="1" class="pull-left">Search: 
+      <div data-intro="Search your libraries. Please input any charactor" data-step="1" class="pull-left">Search:
         <input type="search" ng-model="search.$" placeholder="{{i18n('search')}}" analytics-on="focus" analytics-category="search" analytics-event="focusSearchBox" analytics-label="{{$state.current.name}}" class="search-query"/>
       </div>
       <div class="pull-right">
-        <div class="btn-group pull-right"><a ui-sref="mine.add()" data-intro="Add new library to GLB manualy." data-step="2" tabindex="-1" class="btn btn-link"><i class="icon-plus-sign-alt"> </i>Add Library</a>
-          <button ng-if="gapiLoaded" data-intro="Backup library-list metadata to Google Drive. You can export libraries added to library box as json." data-step="3" tabindex="-1" ng-disabled="uploading" ng-click="uploadLibraries()" analytics-on="click" analytics-category="backup" analytics-event="clickBackup" analytics-label="{{$state.current.name}}" class="btn btn-link"> <i class="icon-cloud-upload"> </i>Backup</button>
+        <div class="btn-group pull-right"><a ui-sref="mine.add()" data-intro="Add new library to GLM manualy." data-step="2" tabindex="-1" class="btn btn-link"><i class="icon-plus-sign-alt"> </i>Add Library</a>
+          <button ng-if="gapiLoaded" data-intro="Backup library-list metadata to Google Drive. You can export libraries added to Library Manager as json." data-step="3" tabindex="-1" ng-disabled="uploading" ng-click="uploadLibraries()" analytics-on="click" analytics-category="backup" analytics-event="clickBackup" analytics-label="{{$state.current.name}}" class="btn btn-link"> <i class="icon-cloud-upload"> </i>Backup</button>
           <button ng-if="gapiLoaded" data-intro="Restore library-list metadata from Google Drive. You can import libraries from json." data-step="4" data-position="left" tabindex="-1" analytics-on="click" analytics-category="restore" analytics-event="clickRestore" analytics-label="{{$state.current.name}}" ng-click="$parent.isCollapsed = !$parent.isCollapsed" class="btn btn-link"> <i class="icon-cloud-download"> </i>Restore</button>
           <button ng-click="help()" analytics-on="click" analytics-category="help" analytics-event="showHelp" analytics-label="{{$state.current.name}}" class="btn btn-link"><i class="icon-question-sign"></i></button>
         </div>

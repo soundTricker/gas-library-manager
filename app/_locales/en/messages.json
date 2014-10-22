@@ -1,18 +1,18 @@
 {
   "appName": {
-    "message": "GAS Library Box",
+    "message": "GAS Library Manager",
     "description": "The name of the application"
   },
   "appDescription": {
-    "message": "Google Apps Script Library Box.",
+    "message": "Google Apps Script Library Manager.",
     "description": "The description of the application"
   },
   "saveButton" : {
-    "message" : "Save to Library Box",
+    "message" : "Save to Library Manager",
     "description" : "Save button label"
   },
   "saved" : {
-    "message" : "Saved $name$ to Library Box",
+    "message" : "Saved $name$ to Library Manager",
     "placeholders" : {
       "name" : {
         "content" : "$1",
@@ -39,7 +39,7 @@
     "message" : "Modify description"
   },
   "modifyTitle" : {
-    "message" : "Change $name$ Library description<br/><small><span class=\"label label-warning\">Warning</span> This setting will be effect to only Library Box, It's not effect to Apps Script Project.</small>",
+    "message" : "Change $name$ Library description<br/><small><span class=\"label label-warning\">Warning</span> This setting will be effect to only Library Manager, It's not effect to Apps Script Project.</small>",
     "placeholders" : {
       "name": {
         "content" : "$1"

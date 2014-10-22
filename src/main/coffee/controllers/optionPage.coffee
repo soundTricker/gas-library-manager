@@ -6,7 +6,7 @@ angular.module('LibraryBoxApp')
     (($scope , $state , $rootScope , $window , $q , $notify , storage, apiUrl, $analytics, $location) ->
       $rootScope.$state = $state
       $rootScope.$on "$stateChangeStart", ()-> $rootScope.isViewLoading = on
-      $rootScope.$on "$stateChangeSuccess", ()-> 
+      $rootScope.$on "$stateChangeSuccess", ()->
         if $state.is 'mine.detail'
           url = $analytics.settings.pageTracking.basePath + "/mine/" + $state.current.url
           $analytics.pageTrack(url)
@@ -31,7 +31,7 @@ angular.module('LibraryBoxApp')
               d = $q.defer()
               if base
                   gapi.client.load api, version, ((e)->
-                    $scope.$apply ()-> 
+                    $scope.$apply ()->
                       d.resolve api
                   ), base
               else
@@ -46,7 +46,7 @@ angular.module('LibraryBoxApp')
               loadApiDefer "oauth2", "v1"
               # loadApiDefer "libraries", "v1", apiUrl
               # loadApiDefer "members", "v1", apiUrl
-            ]).then ()-> 
+            ]).then ()->
                 $scope.authorize off
 
       $scope.authorize = (interactive)->
@@ -56,20 +56,20 @@ angular.module('LibraryBoxApp')
           if chrome.runtime.lastError
             console.log chrome.runtime.lastError
             $rootScope.loginStatus = "notAuthorized"
-            $notify.info "Please authorize App", "You have not authorized this app, In this state, GLB is limited."
+            $notify.info "Please authorize App", "You have not authorized this app, In this state, GLM is limited."
             return $scope.$apply()
 
           if !token?
             $rootScope.loginStatus = "notAuthorized"
-            $notify.info "Please authorize App", "You have not authorized this app, In this state, GLB is limited."
+            $notify.info "Please authorize App", "You have not authorized this app, In this state, GLM is limited."
             return $scope.$apply()
 
           gapi.client.oauth2.tokeninfo(access_token : token).execute (result)->
             if result.error
               gapi.auth.setToken access_token : ""
-              chrome.identity.removeCachedAuthToken token : token, ()-> 
+              chrome.identity.removeCachedAuthToken token : token, ()->
                 $rootScope.loginStatus = "notAuthorized"
-                $notify.info "Please authorize App", "You have not authorized this app, In this state, GLB is limited."
+                $notify.info "Please authorize App", "You have not authorized this app, In this state, GLM is limited."
                 return $scope.$apply()
 
           gapi.auth.setToken access_token : token

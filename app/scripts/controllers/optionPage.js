@@ -62,12 +62,12 @@
           if (chrome.runtime.lastError) {
             console.log(chrome.runtime.lastError);
             $rootScope.loginStatus = "notAuthorized";
-            $notify.info("Please authorize App", "You have not authorized this app, In this state, GLB is limited.");
+            $notify.info("Please authorize App", "You have not authorized this app, In this state, GLM is limited.");
             return $scope.$apply();
           }
           if (token == null) {
             $rootScope.loginStatus = "notAuthorized";
-            $notify.info("Please authorize App", "You have not authorized this app, In this state, GLB is limited.");
+            $notify.info("Please authorize App", "You have not authorized this app, In this state, GLM is limited.");
             return $scope.$apply();
           }
           gapi.client.oauth2.tokeninfo({
@@ -81,7 +81,7 @@
                 token: token
               }, function() {
                 $rootScope.loginStatus = "notAuthorized";
-                $notify.info("Please authorize App", "You have not authorized this app, In this state, GLB is limited.");
+                $notify.info("Please authorize App", "You have not authorized this app, In this state, GLM is limited.");
                 return $scope.$apply();
               });
             }
