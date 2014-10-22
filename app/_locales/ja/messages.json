@@ -1,6 +1,6 @@
 {
   "appName": {
-    "message": "GAS Library Box",
+    "message": "GAS Library Manager",
     "description": "The name of the application"
   },
   "appDescription": {
@@ -8,11 +8,11 @@
     "description": "The description of the application"
   },
   "saveButton" : {
-    "message" : "Library boxへ保存",
+    "message" : "Library Managerへ保存",
     "description" : "Save button label"
   },
   "saved" : {
-    "message" : "「$name$」をLibrary Boxに保存しました。",
+    "message" : "「$name$」をLibrary Managerに保存しました。",
     "placeholders" : {
       "name" : {
         "content" : "$1",
@@ -33,13 +33,13 @@
     "message" : "詳細"
   },
   "delete": {
-    "message" : "Library Boxから削除"
+    "message" : "Library Managerから削除"
   },
   "modify" : {
     "message" : "詳細を修正"
   },
   "modifyTitle" : {
-    "message" : "ライブラリ詳細修正<br/><small><span class=\"label label-warning\">注意</span> ここでの修正はLibrary Box内でのみ有効です。 GASプロジェクトには修正が反映されません。</small>"
+    "message" : "ライブラリ詳細修正<br/><small><span class=\"label label-warning\">注意</span> ここでの修正はLibrary Manager内でのみ有効です。 GASプロジェクトには修正が反映されません。</small>"
   },
   "name" : {
     "message" : "ライブラリ名"

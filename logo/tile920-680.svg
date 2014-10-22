@@ -36,7 +36,7 @@
      inkscape:window-width="1436"
      inkscape:window-height="856"
      inkscape:window-x="30"
-     inkscape:window-y="4"
+     inkscape:window-y="22"
      inkscape:window-maximized="0"
      showguides="false"
      inkscape:snap-global="true"
@@ -60,7 +60,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -82,7 +82,7 @@
        sodipodi:cy="466.6778"
        sodipodi:rx="382.26587"
        sodipodi:ry="372.73898"
-       d="m 896.7171,466.6778 a 382.26587,372.73898 0 1 1 -764.53174,0 382.26587,372.73898 0 1 1 764.53174,0 z"
+       d="m 896.7171,466.6778 c 0,205.85805 -171.14626,372.73898 -382.26587,372.73898 -211.11961,0 -382.26587,-166.88093 -382.26587,-372.73898 0,-205.85806 171.14626,-372.738988 382.26587,-372.738988 211.11961,0 382.26587,166.880928 382.26587,372.738988 z"
        transform="matrix(0.40458363,0,0,0.40458363,396.41483,116.00149)" />
     <path
        style="fill:#ffffff;fill-opacity:1;stroke:none"
@@ -138,13 +138,13 @@
          style="fill:#008cbd;fill-opacity:1;stroke:#666666;stroke-width:2.49154925;stroke-opacity:1">GAS</tspan><tspan
          sodipodi:role="line"
          x="475.18149"
-         y="-14.230153"
+         y="-14.230148"
          id="tspan2996"
          style="fill:#008cbd;fill-opacity:1;stroke:#666666;stroke-width:2.49154925;stroke-opacity:1">Library</tspan><tspan
          sodipodi:role="line"
          x="475.18149"
-         y="126.79691"
+         y="126.79692"
          id="tspan2998"
-         style="fill:#008cbd;fill-opacity:1;stroke:#666666;stroke-width:2.49154925;stroke-opacity:1">Box</tspan></text>
+         style="fill:#008cbd;fill-opacity:1;stroke:#666666;stroke-width:2.49154925;stroke-opacity:1">Manager</tspan></text>
   </g>
 </svg>

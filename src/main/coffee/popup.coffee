@@ -28,16 +28,24 @@ angular.module('LibraryBoxApp', ['ui.bootstrap', 'ui.directives'])
         @$scope.$watch "ctrl.currentPage", ()=> 
           @filtered = @chainFilter()
 
-
         @$scope.$watch "ctrl.filtered", ()=> 
           @$scope.noOfPages = Math.ceil @filter(@libraries,@search).length / @$scope.entryLimit
-        @$scope.setPage = (pageNo)=> @currentPage = pageNo
+        @$scope.setPage = (pageNo)=> 
+          @currentPage = pageNo
 
+      showSourcePage : ()=>
+        chrome.runtime.sendMessage action : "logEvent" , "event" : "viewSource" , "source" : "viewSourceLink", "from" : "popup"
 
-      showOptionPage : ()-> chrome.runtime.sendMessage action : "showOptionPage"
-      showMyLibrariesPage : (key)-> chrome.runtime.sendMessage {action : "showMyLibraryPage", key : key}
+      showOptionPage : ()=> 
+        chrome.runtime.sendMessage action : "logEvent", "event" : "showOptionPage" , "source" : "showOptionPage", "from" : "popup"
+        chrome.runtime.sendMessage action : "showOptionPage"
+
+      showMyLibrariesPage : (key)-> 
+        chrome.runtime.sendMessage action : "logEvent" , "event" : "viewMyLibraryPage" , "source" : "viewDetailLink", "from" : "popup"
+        chrome.runtime.sendMessage {action : "showMyLibraryPage", key : key}
       chainFilter : ()=>
         @limitTo( @startFrom( @filter(@libraries,@search), (@currentPage-1) * @$scope.entryLimit), @$scope.entryLimit)
+
       
   ]
 

@@ -23,6 +23,8 @@
         this.storage = storage;
         this.$filter = $filter;
         this.chainFilter = __bind(this.chainFilter, this);
+        this.showOptionPage = __bind(this.showOptionPage, this);
+        this.showSourcePage = __bind(this.showSourcePage, this);
         this.search = {
           $: ""
         };
@@ -49,13 +51,34 @@
         };
       }
 
+      PopupCtrl.prototype.showSourcePage = function() {
+        return chrome.runtime.sendMessage({
+          action: "logEvent",
+          "event": "viewSource",
+          "source": "viewSourceLink",
+          "from": "popup"
+        });
+      };
+
       PopupCtrl.prototype.showOptionPage = function() {
+        chrome.runtime.sendMessage({
+          action: "logEvent",
+          "event": "showOptionPage",
+          "source": "showOptionPage",
+          "from": "popup"
+        });
         return chrome.runtime.sendMessage({
           action: "showOptionPage"
         });
       };
 
       PopupCtrl.prototype.showMyLibrariesPage = function(key) {
+        chrome.runtime.sendMessage({
+          action: "logEvent",
+          "event": "viewMyLibraryPage",
+          "source": "viewDetailLink",
+          "from": "popup"
+        });
         return chrome.runtime.sendMessage({
           action: "showMyLibraryPage",
           key: key

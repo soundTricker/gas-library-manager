@@ -34,6 +34,24 @@
       libraries = libraries.sort(function(i1, i2) {
         return i1.label.toLowerCase() > i2.label.toLowerCase();
       });
+      $rootScope.$watch('libraries', function() {
+        libraries = (function() {
+          var _i, _len, _ref, _results;
+          _ref = $rootScope.libraries;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            item = _ref[_i];
+            if (!item.isExternal) {
+              _results.push(item);
+            }
+          }
+          return _results;
+        })();
+        libraries = libraries.sort(function(i1, i2) {
+          return i1.label.toLowerCase() > i2.label.toLowerCase();
+        });
+        return $scope.filtered = filter();
+      });
       filter = function() {
         return $filter('limitTo')($filter('startFrom')($filter('filter')(libraries, $scope.search), ($scope.currentPage - 1) * $scope.entryLimit), $scope.entryLimit);
       };
@@ -67,7 +85,7 @@
             'title': "gas-library-box-libraries.json",
             'mimeType': "application/json"
           };
-          multipartRequestBody = "" + delimiter + "\nContent-Type: application/json\n\n" + (JSON.stringify(metadata)) + "\n" + delimiter + "\nContent-Type: application/json\nContent-Transfer-Encoding: base64\n\n" + (btoa(json)) + "\n" + close_delim;
+          multipartRequestBody = "" + delimiter + "\nContent-Type: application/json\n\n" + (JSON.stringify(metadata)) + "\n" + delimiter + "\nContent-Type: application/json\nContent-Transfer-Encoding: base64\n\n" + (Base64.encode(json)) + "\n" + close_delim;
           return gapi.client.request({
             'path': '/upload/drive/v2/files',
             'method': 'POST',

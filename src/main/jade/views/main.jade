@@ -5,30 +5,40 @@ h1.page-header {{i18n("myLibraryList")}}
       ul.nav.nav-list.well.well-small(style='width: 268px;')
         li.nav-header List
         li
-          input.search-query(accesskey='f', type='search', ng-model='search.$', placeholder='{{i18n(\'search\')}}')
+          input.search-query(accesskey='f', type='search', ng-model='search.$', placeholder='{{i18n(\'search\')}}', analytics-on="focus",analytics-category="search", analytics-event="focusSearchBox", analytics-label="{{$state.current.name}}")
         li.divider
         li.muted(ng-if='filtered.length === 0') There is no library.
         li(ng-repeat='i in filtered track by $index', ng-class="{active : $state.params.key == i.key}")
           a(ng-href='#/mine/detail/{{i.key}}') {{i.label}}
         pagination.pagination-small(data-boundary-links='true', data-num-pages='noOfPages', data-current-page='currentPage', max-size='maxSize', data-previous-text='«', data-next-text='»')
   .span9.library-list(ng-if='$state.is(\'mine.detail\')', ui-view="mine")
-  .span12.library-list(ng-if='$state.is(\'mine\')')
-    .well.well-small
-      .pull-left Search: 
-             input.search-query(type='search', ng-model='search.$', placeholder='{{i18n(\'search\')}}')
-      .pull-right(ng-if='gapiLoaded')
+  .span12.library-list(ng-if='$state.is(\'mine.add\')', ui-view="mine")
+  .span12.library-list(ng-if='$state.is("mine")')
+    .well.well-small(ng-intro-method="help", ng-intro-options="options")
+      .pull-left(data-intro="Search your libraries. Please input any charactor",data-step="1") Search:
+        input.search-query(type='search', ng-model='search.$', placeholder='{{i18n(\'search\')}}', analytics-on="focus",analytics-category="search", analytics-event="focusSearchBox", analytics-label="{{$state.current.name}}")
+      .pull-right
         .btn-group.pull-right
-          button.btn.btn-link(tabindex="-1", ng-disabled='uploading', ng-click='uploadLibraries()') Export
-          button.btn.btn-link(tabindex="-1", ng-click='isCollapsed = !isCollapsed') Import
+          a.btn.btn-link(ui-sref='mine.add()', data-intro="Add new library to GLM manualy.",data-step="2", tabindex="-1")
+            i.icon-plus-sign-alt
+            | Add Library
+          button.btn.btn-link(ng-if='gapiLoaded', data-intro="Backup library-list metadata to Google Drive. You can export libraries added to Library Manager as json.",data-step="3", tabindex="-1", ng-disabled='uploading', ng-click='uploadLibraries()', analytics-on="click", analytics-category="backup", analytics-event="clickBackup", analytics-label="{{$state.current.name}}")
+            i.icon-cloud-upload
+            | Backup
+          button.btn.btn-link(ng-if='gapiLoaded', data-intro="Restore library-list metadata from Google Drive. You can import libraries from json.",data-step="4",data-position="left",tabindex="-1", analytics-on="click", analytics-category="restore", analytics-event="clickRestore", analytics-label="{{$state.current.name}}", ng-click='$parent.isCollapsed = !$parent.isCollapsed')
+            i.icon-cloud-download
+            | Restore
+          button.btn.btn-link(ng-click="help()", analytics-on="click", analytics-category="help", analytics-event="showHelp", analytics-label="{{$state.current.name}}")
+            i.icon-question-sign
         .clearfix
         div(collapse='isCollapsed')
           form.form-inline(name='importForm')
             input.input-xlarge(tabindex="-1", type='text', name='fileId', placeholder='input library file key of Google Drive', ng-model='fileId', required='required')
-            button.btn(tabindex="-1", ng-click='import(fileId)') Import
+            button.btn(tabindex="-1", ng-click='import(fileId)', ng-disabled="importing") Restore
       .clearfix
 
     .row-fluid
-      .span12
+      .span12(data-intro="The Library List, You can see detail if clicking.", data-step="5",data-position="top")
         table.table.table-hover
           thead
             tr
@@ -40,6 +50,6 @@ h1.page-header {{i18n("myLibraryList")}}
               td(colspan=3) There is no library.
             tr(ng-repeat='item in filtered track by $index', ng-controller='PrivateLibraryCtrl', ng-click="$state.go('mine.detail', {key : item.key})")
               td
-                a(ui-sref='mine.detail({key : item.key})') {{item.label}}
-              td(ng-bind-html='item.desc | escape | break2br') 
+                a(ui-sref='mine.detail({key : item.key})', analytics-on="click", analytics-category="viewDetailLink", analytics-event="viewDetailLink", analytics-label="{{$state.current.name}}") {{item.label}}
+              td(ng-bind-html='item.desc | escape | break2br')
               td {{item.registeredAt | date}} / {{item.modifiedAt | date}}

@@ -2,14 +2,15 @@ do($=jQuery, global=@) ->
   "use strict"
 
   $saveMessageBox = $ '<div>'
-
   $saveButton = $("<button type=\"button\" class=\"saveButton gwt-Button\">#{chrome.i18n.getMessage('saveButton')}</button>").click ()->
     $saveMessageBox.empty()
-    propertyRows = $('.properties-box').find "input.info-row"
-    item = 
+    $table = $($('.modal-dialog.properties-data-dialog .properties-data-dialog-table').get(0))
+    propertyRows = $table.find "input.editable-row-input"
+    projectKey = $table.find ".properties-data-dialog-table-row:nth-child(5)>td:nth-child(2)>div"
+    item =
       "label" : $(propertyRows.get(0)).val()
       "desc" : $(propertyRows.get(1)).val()
-      "key"  : $(propertyRows.get(2)).val()
+      "key"  : projectKey.text()
       "sourceUrl"  : location.href
 
     chrome.storage.local.get "libraries" , (res)->
@@ -29,14 +30,18 @@ do($=jQuery, global=@) ->
       chrome.storage.local.set {"libraries" : libraries} , ()->
         $saveMessageBox.text chrome.i18n.getMessage("saved", item.label)
 
+      chrome.runtime.sendMessage {action : "logEvent" , "event" : "saveLibrary" , "source" : "saveButton", "from" : "content_script"}
+    return false
+
   document.addEventListener "webkitAnimationStart", ((event) ->
     (global[event.animationName] || ()->@).apply(this,event)
 
   ), true
 
-  global.showProperteisBox = (event)-> 
+  global.showProperteisBox = (event)->
+    $saveMessageBox.empty()
     return if $(".saveButton").length > 0
-    $('.properties-box').closest('.dialogMiddle').find('.buttons').append($saveButton.clone(true)).append($saveMessageBox)
+    $('.modal-dialog.properties-data-dialog').find('.modal-dialog-buttons').append($saveButton.clone(true)).append($saveMessageBox)
 
   generateLinks = (item)->
     return $("<div>")
@@ -46,13 +51,17 @@ do($=jQuery, global=@) ->
       ))
       .append($("<a>" ,
         "href" : item.sourceUrl
+        "on" :
+          "click" : ()-> chrome.runtime.sendMessage {action : "logEvent" , "event" : "viewSource" , "source" : "viewSourceLink", "from" : "content_script"}
         "text" : "View source"
         "target" : "_blank"
       ).button())
-      .append($("<a>", 
+      .append($("<a>",
         "on" :
-          "click" : ()-> chrome.runtime.sendMessage {action : "showMyLibraryPage", key : item.value}
-        "href" : "javascript:" 
+          "click" : ()->
+            chrome.runtime.sendMessage {action : "logEvent" , "event" : "viewMyLibraryPage" , "source" : "viewDetailLink", "from" : "content_script"}
+            chrome.runtime.sendMessage {action : "showMyLibraryPage", key : item.value}
+        "href" : "javascript:"
         "text" : "View detail"
       ).button())
 
@@ -63,8 +72,6 @@ do($=jQuery, global=@) ->
       source = ({value:item.key, label:item.label ,desc : item.desc, sourceUrl : item.sourceUrl} for key, item of libraries when item.key)
 
       $info = $("<div>").appendTo $('div.dependency-dialog').closest(".maestro-dialog")
-
-
 
       $text = $('div.dependency-dialog input.gwt-TextBox.textbox').autocomplete(
         minLength : 2

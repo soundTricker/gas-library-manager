@@ -6,8 +6,8 @@
     return window.gapiIsLoaded();
   };
 
-  angular.module('LibraryBoxApp', ['ngSanitize', 'cgNotify', 'ui.bootstrap', 'ui.directives', 'ui.router', 'markdown']).constant("apiUrl", "https://gas-library-box.appspot.com/_ah/api").config([
-    "$stateProvider", "$urlRouterProvider", '$compileProvider', function($stateProvider, $urlRouterProvider, $compileProvider) {
+  angular.module('LibraryBoxApp', ['ngSanitize', 'cgNotify', 'ui.bootstrap', 'ui.directives', 'ui.router', 'markdown', "angular-intro", 'angulartics', 'angulartics.google.analytics', 'ui.utils', 'infinite-scroll']).constant("apiUrl", "https://gas-library-box.appspot.com/_ah/api").config([
+    "$stateProvider", "$urlRouterProvider", '$compileProvider', '$analyticsProvider', function($stateProvider, $urlRouterProvider, $compileProvider, $analyticsProvider) {
       $compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
       $urlRouterProvider.otherwise('/');
       return $stateProvider.state('top', {
@@ -40,6 +40,14 @@
               return storage.getLibrary($stateParams.key);
             }
           ]
+        }
+      }).state('mine.add', {
+        url: '/add',
+        views: {
+          mine: {
+            templateUrl: 'views/addLibrary.html',
+            controller: 'AddLibraryCtrl'
+          }
         }
       });
     }

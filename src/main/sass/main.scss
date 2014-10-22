@@ -1,11 +1,11 @@
 /* Will be compiled down to a single stylesheet with your sass files */
 
-@-webkit-keyframes showDependencyDialog {  
+@-webkit-keyframes showDependencyDialog {
   0% {opacity: 0;}
   100% {opacity: 1;}
 }
 
-@-webkit-keyframes showProperteisBox {  
+@-webkit-keyframes showProperteisBox {
   0% {opacity: 0;}
   100% {opacity: 1;}
 }
@@ -14,7 +14,7 @@ div.dependency-dialog input.gwt-TextBox.textbox {
   -webkit-animation: showDependencyDialog 0.001s 1;
 }
 
-div.properties-box .wrapper {
+div.properties-data-dialog .properties-data-dialog-panel {
   -webkit-animation: showProperteisBox 0.001s 1;
 }
 

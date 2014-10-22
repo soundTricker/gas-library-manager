@@ -40,3 +40,9 @@
   display: none;
   visibility: hidden;
 }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tominaga\/git\/gas-library-box\/src\/main\/sass\/options\.scss}line{font-family:\0000337}}
+.modal.file-choose-modal {
+  width: 800px;
+  margin-left: -400px;
+}
